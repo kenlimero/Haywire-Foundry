@@ -24,3 +24,6 @@ _bmad-output/
 # Environment
 .env
 .env.*
+
+# Divers
+src_images/

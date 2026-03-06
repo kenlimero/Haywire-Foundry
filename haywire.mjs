@@ -70,9 +70,10 @@ Hooks.once("init", () => {
 
   // Remplacer les conditions token par défaut par celles de Haywire
   CONFIG.statusEffects = [
-    { id: "downed", name: "HAYWIRE.Conditions.Downed", img: "icons/svg/skull.svg" },
-    { id: "hidden", name: "HAYWIRE.Conditions.Hidden", img: "icons/svg/mystery-man.svg" },
-    { id: "stunned", name: "HAYWIRE.Conditions.Stunned", img: "icons/svg/daze.svg" },
+    { id: "downed", name: "HAYWIRE.Conditions.Downed", img: "systems/haywire/assets/tokens/downed.webp" },
+    { id: "hidden", name: "HAYWIRE.Conditions.Hidden", img: "systems/haywire/assets/tokens/hidden.webp" },
+    { id: "injured", name: "HAYWIRE.Conditions.Injured", img: "systems/haywire/assets/tokens/injured.webp" },
+    { id: "overwatch", name: "HAYWIRE.Conditions.Overwatch", img: "systems/haywire/assets/tokens/overwatch.webp" },
     { id: "sup-1", name: "HAYWIRE.Suppression.1", img: "systems/haywire/assets/icons/sup-1.svg" },
     { id: "sup-2", name: "HAYWIRE.Suppression.2", img: "systems/haywire/assets/icons/sup-2.svg" },
     { id: "sup-3", name: "HAYWIRE.Suppression.3", img: "systems/haywire/assets/icons/sup-3.svg" },
@@ -91,4 +92,15 @@ Hooks.once("init", () => {
   ]);
 
   console.log("haywire | Système Haywire initialisé");
+});
+
+// Prototype token defaults pour les nouveaux Actors Soldier
+Hooks.on("preCreateActor", (actor) => {
+  if (actor.type !== "soldier") return;
+  actor.updateSource({
+    "prototypeToken.displayName": CONST.TOKEN_DISPLAY_MODES.HOVER,
+    "prototypeToken.displayBars": CONST.TOKEN_DISPLAY_MODES.HOVER,
+    "prototypeToken.bar1.attribute": "hitPoints",
+    "prototypeToken.disposition": CONST.TOKEN_DISPOSITIONS.FRIENDLY,
+  });
 });

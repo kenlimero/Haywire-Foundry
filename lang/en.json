@@ -41,7 +41,8 @@
       "Pinned": "Pinned",
       "Downed": "Downed",
       "Hidden": "Hidden",
-      "Stunned": "Stunned"
+      "Injured": "Injured",
+      "Overwatch": "Overwatch"
     },
     "NoClassAssigned": "No class assigned",
     "EquippedWeapons": "Equipped Weapons",

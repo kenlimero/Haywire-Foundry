@@ -41,7 +41,8 @@
       "Pinned": "Cloué",
       "Downed": "À terre",
       "Hidden": "Caché",
-      "Stunned": "Étourdi"
+      "Injured": "Blessé",
+      "Overwatch": "Surveillance"
     },
     "NoClassAssigned": "Aucune classe assignée",
     "EquippedWeapons": "Armes équipées",

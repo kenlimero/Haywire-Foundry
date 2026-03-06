@@ -1,7 +1,7 @@
 export class HaywireActor extends Actor {
 
   // Conditions synchro sheet ↔ token (hors suppressed/pinned qui sont gérés via suppression)
-  static TOKEN_CONDITIONS = ["downed", "hidden", "stunned"];
+  static TOKEN_CONDITIONS = ["downed", "hidden", "injured", "overwatch"];
 
   prepareBaseData() {
     super.prepareBaseData();
@@ -18,10 +18,18 @@ export class HaywireActor extends Actor {
     // Clamp HP to max
     system.hitPoints.value = Math.clamp(system.hitPoints.value, 0, system.hitPoints.max);
 
-    // Manage downed condition based on HP
+    // Legacy cleanup: remove "stunned" from actors created before condition rework
+    system.conditions.delete("stunned");
+
+    // Wound track: MAX HP → injured (1 HP) → downed (0 HP), mutually exclusive
     if (system.hitPoints.value <= 0) {
       system.conditions.add("downed");
+      system.conditions.delete("injured");
+    } else if (system.hitPoints.value < system.hitPoints.max) {
+      system.conditions.add("injured");
+      system.conditions.delete("downed");
     } else {
+      system.conditions.delete("injured");
       system.conditions.delete("downed");
     }
 
@@ -71,7 +79,7 @@ export class HaywireActor extends Actor {
       return;
     }
 
-    // Conditions Haywire standard (downed, hidden, stunned)
+    // Conditions Haywire standard (downed, hidden, injured, overwatch)
     if (!HaywireActor.TOKEN_CONDITIONS.includes(statusId)) {
       return super.toggleStatusEffect(statusId, options);
     }
@@ -86,8 +94,10 @@ export class HaywireActor extends Actor {
 
     const updateData = { "system.conditions": [...conditions] };
 
-    // Sync mécanique inverse : downed → HP=0
-    if (shouldBeActive && statusId === "downed") {
+    // Sync mécanique inverse : injured → HP=1, downed → HP=0
+    if (shouldBeActive && statusId === "injured") {
+      updateData["system.hitPoints.value"] = 1;
+    } else if (shouldBeActive && statusId === "downed") {
       updateData["system.hitPoints.value"] = 0;
     }
 
@@ -109,7 +119,7 @@ export class HaywireActor extends Actor {
   async _syncTokenConditions() {
     const toggles = [];
 
-    // Sync conditions standard (downed, hidden, stunned)
+    // Sync conditions standard (downed, hidden, injured, overwatch)
     for (const id of HaywireActor.TOKEN_CONDITIONS) {
       const hasCondition = this.system.conditions.has(id);
       const hasEffect = this.statuses.has(id);

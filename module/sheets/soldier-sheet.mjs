@@ -282,7 +282,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }));
 
     // Conditions disponibles pour ajout manuel
-    const HAYWIRE_CONDITIONS = ["suppressed", "pinned", "downed", "hidden", "stunned"];
+    const HAYWIRE_CONDITIONS = ["suppressed", "pinned", "downed", "hidden", "injured", "overwatch"];
     const currentConditions = [...context.system.conditions];
     context.availableConditions = HAYWIRE_CONDITIONS
       .filter(c => !currentConditions.includes(c))
