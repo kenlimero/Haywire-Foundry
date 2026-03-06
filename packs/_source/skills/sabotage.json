@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00029",
+  "name": "Sabotage",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "The saboteur has sabotaged a vehicle before going into the mission. The target enemy vehicle is disabled and all OPFOR models inside disembark. This skill can be used on any vehicle including new ones that arrive on a spawn point. This skill does not cost any AP but can only be used once per game."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

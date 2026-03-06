@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00032",
+  "name": "Strobes",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "The shield is equipped with powerful flashlights that can blind close enemy. OPFOR models located within 6\" and within a 90° angle of this unit are suppressed."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

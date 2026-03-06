@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00012",
+  "name": "Dialect",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "When within 1\" of a civilian model, reveal 1 placement token."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00009",
+  "name": "CQB Specialist",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "Once per turn, if this model kills an OPFOR model within 6\", he is granted a free combat action against another OPFOR model located up to 3\" from the first one."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

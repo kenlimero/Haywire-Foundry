@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00010",
+  "name": "Death From Above",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "Killing an enemy at a lower elevation allows you to take another shot at another model in LOS within 6\" of the first one. That 2nd shot use the Hard combat stat."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

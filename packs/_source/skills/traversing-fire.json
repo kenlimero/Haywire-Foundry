@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00036",
+  "name": "Traversing Fire",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "When firing a machine gun, this unit may spread the 2 combat dice on 2 different targets separated from up to 3\". This action cost 1AP."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00014",
+  "name": "Double Agent",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "Once per game, the designated OPFOR model (other than the enemy leader) joins your force. He can be located anywhere on the board and will remains undetected as long as he does not fire on any enemy target. This action cost 1AP."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

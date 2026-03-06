@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00040",
+  "name": "Threat Assessment",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "Overwatch can be activated even after using 2AP to do a move or sneak action."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00017",
+  "name": "Friends For Life",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "If the dog handler is hit by an OPFOR combat action and if the dog is in base contact with him, the dog is killed instead."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

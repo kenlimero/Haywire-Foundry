@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00016",
+  "name": "Field Surgeon",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "May heal 1 point of damage on any injured model. This action cost 2AP."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

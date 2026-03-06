@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00028",
+  "name": "Remote Sensing",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "If this unit is in base contact with a door, he may reveal what is inside following the threat inside building rule (1-14 = nobody, 15-17 = 1 civilian, 18-19 = 1 OPFOR, 20 = 2 OPFOR)."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

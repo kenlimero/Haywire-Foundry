@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00002",
+  "name": "Aim Assist",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "When this model is within 3\" of a sniper, the sniper receives another AP at the start of its activation."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

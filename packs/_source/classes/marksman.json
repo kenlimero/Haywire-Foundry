@@ -10,7 +10,9 @@
       "medium": 12,
       "hard": 16
     },
-    "skillIds": [],
+    "skillIds": [
+      "Compendium.haywire.skills.haywireSkill00031"
+    ],
     "defaultWeapons": [
       "Compendium.haywire.weapons.haywireWeapon00008",
       "Compendium.haywire.weapons.haywireWeapon00023",
@@ -29,7 +31,7 @@
   },
   "_stats": {
     "systemId": "haywire",
-    "systemVersion": "0.1.0",
+    "systemVersion": "0.4.0",
     "coreVersion": "13"
   }
 }

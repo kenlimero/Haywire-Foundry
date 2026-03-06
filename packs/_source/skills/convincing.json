@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00008",
+  "name": "Convincing",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "The target OPFOR model in LOS of the negotiator and within 12\" cannot fire this turn. This action cost 1AP."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

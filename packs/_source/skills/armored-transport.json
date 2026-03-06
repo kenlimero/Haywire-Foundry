@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00003",
+  "name": "Armored Transport",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "When a local fighter is deployed in a mission, the whole force may be deployed using technicals equipped with turrets on the back or up armored humvees."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

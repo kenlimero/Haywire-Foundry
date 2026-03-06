@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00024",
+  "name": "Lockpick",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "This unit may open any locked door without making any noise. This action cost 2AP and no roll is needed."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00037",
+  "name": "Undercover",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "The undercover agent starts the game with its weapon hidden and in civilian clothing undetected. He can only be detected when firing at an enemy model in LOS of another enemy or if an enemy is within 6\" of him and in LOS."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

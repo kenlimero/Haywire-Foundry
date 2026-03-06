@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00030",
+  "name": "Shockwave",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "When using explosive devices, models within 6\" of the point of impact and in LOS of that point are suppressed. They will start their next activation with a single AP."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00013",
+  "name": "Doorkicker",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "This unit is equipped with breaching charges. They can be used to open any door or create a 1\" hole in any wall and each costs 1AP to use. Models located on the other side of the point of breach and within 3\" are pinned."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

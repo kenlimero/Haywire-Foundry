@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00027",
+  "name": "Recon Drone",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "Deploys a small recon drone on the board in base contact with this unit. AP can then be used to move the drone up to 10\" per move action. The drone can reveal threat token in the same way as any models but is harder to detect. It can only be detected on a 17+. Deploying the drone cost 1AP and it can remain in flight for any number of turns. When not in use, the drone hovers in place."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

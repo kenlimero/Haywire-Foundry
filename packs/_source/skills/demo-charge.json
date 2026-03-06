@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00011",
+  "name": "Demo Charge",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "This unit is equipped with a demolition charge. He can use 1AP to place the charge and use another AP to detonate it using a remote trigger. Each action uses the interact rule. The charge has a 3\" blast radius and a 12 penetration. Anything within the blast radius is killed. No roll is needed to detonate the charge."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

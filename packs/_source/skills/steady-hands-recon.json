@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00039",
+  "name": "Steady Hands",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "If this model did not move this turn he may reroll 1 dice on any combat action."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

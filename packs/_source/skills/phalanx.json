@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00026",
+  "name": "Phalanx",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "This model carry a shield protecting him from fire in a 90° angle in front of him. Only a hard shot can hit this model from its front. This unit counts as cover for all other unit behind him."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

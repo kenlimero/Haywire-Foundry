@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00018",
+  "name": "Fur Missile",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "This model comes with a dog that stays in base contact with him. The dog can be sent to attack an OPFOR model up to 12\". The dog cannot kill any models but can inflict suppression points. On a 6+ the OPFOR model is suppressed, on a 10+ he is pinned. The dog comes back if the roll is below 6 or if the target is killed. OPFOR models may target the dog using a hand combat stat. This action cost 1AP."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

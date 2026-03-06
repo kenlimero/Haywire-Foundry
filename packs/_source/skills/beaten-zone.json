@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00004",
+  "name": "Beaten Zone",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "Fire at all visible OPFOR models. All enemy models in LOS receive 2 suppression points. This action cost 2AP."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

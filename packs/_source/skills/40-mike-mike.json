@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00001",
+  "name": "40 Mike Mike",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "When using a grenade launcher, cover is ignored when doing the combat roll."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}

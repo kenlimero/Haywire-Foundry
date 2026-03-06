@@ -1,0 +1,21 @@
+{
+  "_id": "haywireSkill00006",
+  "name": "Claymore Mine",
+  "type": "skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "This model may deploy a directional landmine that has a 90° cone angle and that can be remote detonated at any moment. Any models within the cone angle and within 6\" are hit on a 6+. Placing the mine cost 1AP. The mine can then be detonated using 1AP in the player phase or can also be detonated in the OPFOR phase if this unit is placed in overwatch."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.4.0",
+    "coreVersion": "13"
+  }
+}
