@@ -14,6 +14,10 @@ node_modules/
 # Build
 dist/
 
+# BMAD
+_bmad/
+_bmad-output/
+
 # Environment
 .env
 .env.*
