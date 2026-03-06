@@ -108,11 +108,9 @@
           <a class="haywire-item-link haywire-skill-name" data-action="openItem" data-item-uuid="{{this.uuid}}">{{this.name}}</a>
           <span class="haywire-skill-desc">{{this.description}}</span>
           {{#if ../isEditable}}
-            {{#unless this.fromClass}}
-              <button type="button" class="haywire-btn-delete" data-action="removeSkill" data-skill-uuid="{{this.uuid}}">
-                <i class="fas fa-trash"></i>
-              </button>
-            {{/unless}}
+            <button type="button" class="haywire-btn-delete" data-action="removeSkill" data-skill-uuid="{{this.uuid}}" data-from-class="{{this.fromClass}}">
+              <i class="fas fa-trash"></i>
+            </button>
           {{/if}}
         </div>
       {{/each}}
@@ -155,11 +153,9 @@
               {{/if}}
               {{#if ../isEditable}}
                 <td class="haywire-weapon-actions">
-                  {{#unless this.fromClass}}
-                    <button type="button" class="haywire-btn-delete" data-action="removeWeapon" data-weapon-uuid="{{this.uuid}}">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  {{/unless}}
+                  <button type="button" class="haywire-btn-delete" data-action="removeWeapon" data-weapon-uuid="{{this.uuid}}" data-from-class="{{this.fromClass}}">
+                    <i class="fas fa-trash"></i>
+                  </button>
                 </td>
               {{/if}}
             </tr>

@@ -51,14 +51,26 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static async #onRemoveWeapon(event, target) {
     const uuid = target.dataset.weaponUuid;
-    const weaponIds = this.actor.system.weaponIds.filter(id => id !== uuid);
-    await this.actor.update({ "system.weaponIds": weaponIds });
+    const isFromClass = target.dataset.fromClass === "true";
+    if (isFromClass) {
+      const excluded = [...this.actor.system.excludedWeaponIds, uuid];
+      await this.actor.update({ "system.excludedWeaponIds": excluded });
+    } else {
+      const weaponIds = this.actor.system.weaponIds.filter(id => id !== uuid);
+      await this.actor.update({ "system.weaponIds": weaponIds });
+    }
   }
 
   static async #onRemoveSkill(event, target) {
     const uuid = target.dataset.skillUuid;
-    const skillIds = this.actor.system.skillIds.filter(id => id !== uuid);
-    await this.actor.update({ "system.skillIds": skillIds });
+    const isFromClass = target.dataset.fromClass === "true";
+    if (isFromClass) {
+      const excluded = [...this.actor.system.excludedSkillIds, uuid];
+      await this.actor.update({ "system.excludedSkillIds": excluded });
+    } else {
+      const skillIds = this.actor.system.skillIds.filter(id => id !== uuid);
+      await this.actor.update({ "system.skillIds": skillIds });
+    }
   }
 
   static async #onRemoveCondition(event, target) {
@@ -135,7 +147,11 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   async #onDropClassItem(item) {
     const hadPreviousClass = !!this.actor.system.classId;
 
-    const updateData = { "system.classId": item.uuid };
+    const updateData = {
+      "system.classId": item.uuid,
+      "system.excludedWeaponIds": [],
+      "system.excludedSkillIds": [],
+    };
     if (item.system.imagePath) {
       updateData.img = item.system.imagePath;
       updateData["prototypeToken.texture.src"] = item.system.imagePath;
@@ -221,9 +237,11 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     this._classWeaponUuids = classItem?.system?.defaultWeapons ?? [];
     this._classSkillUuids = classItem?.system?.skillIds ?? [];
 
-    // Skills + Weapons — résolution parallèle par UUID
-    const classSkillIds = this._classSkillUuids;
-    const classWeaponIds = this._classWeaponUuids;
+    // Skills + Weapons — résolution parallèle par UUID (filtrage des exclus)
+    const excludedWeapons = context.system.excludedWeaponIds ?? [];
+    const excludedSkills = context.system.excludedSkillIds ?? [];
+    const classSkillIds = this._classSkillUuids.filter(id => !excludedSkills.includes(id));
+    const classWeaponIds = this._classWeaponUuids.filter(id => !excludedWeapons.includes(id));
     const allSkillUuids = [...classSkillIds, ...(context.system.skillIds ?? [])];
     const allWeaponUuids = [...classWeaponIds, ...context.system.weaponIds];
 
