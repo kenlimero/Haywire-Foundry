@@ -11,7 +11,14 @@
       "hard": 13
     },
     "skillIds": [],
-    "defaultWeapons": [],
+    "defaultWeapons": [
+      "Compendium.haywire.weapons.haywireWeapon00023",
+      "Compendium.haywire.weapons.haywireWeapon00006",
+      "Compendium.haywire.weapons.haywireWeapon00003",
+      "Compendium.haywire.weapons.haywireWeapon00002",
+      "Compendium.haywire.weapons.haywireWeapon00020",
+      "Compendium.haywire.weapons.haywireWeapon00022"
+    ],
     "imagePath": "systems/haywire/assets/cards/spotter.jpg"
   },
   "effects": [],

@@ -1,0 +1,26 @@
+{
+  "_id": "haywireWeapon00017",
+  "name": "Heavy AT",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "weaponType": "Primary",
+    "range": 0,
+    "rateOfFire": 1,
+    "penetration": 9,
+    "modifiers": 0,
+    "special": "Frag 2\". Penetration: 9+d6. Tank cannon."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

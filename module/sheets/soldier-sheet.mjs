@@ -37,7 +37,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const weaponUuid = target.dataset.weaponUuid;
     if (!weaponUuid) return;
 
-    const weapon = fromUuidSync(weaponUuid) ?? game.items.get(weaponUuid);
+    const weapon = await fromUuid(weaponUuid);
     if (!weapon) {
       ui.notifications.warn(game.i18n.localize("HAYWIRE.NoWeaponEquipped"));
       return;
@@ -68,7 +68,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static async #onOpenItem(event, target) {
     const uuid = target.dataset.itemUuid;
-    const item = fromUuidSync(uuid) ?? game.items.get(uuid);
+    const item = await fromUuid(uuid);
     if (!item) {
       console.warn(`haywire | SoldierSheet: item UUID "${uuid}" introuvable`);
       return;
@@ -111,8 +111,12 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /*  Drag & Drop — Références uniquement     */
   /* ---------------------------------------- */
 
-  async _onDropItem(event, item) {
+  async _onDropItem(event, data) {
     if (!this.isEditable) return null;
+
+    // Résoudre l'item depuis le UUID des données de drop
+    const item = await fromUuid(data.uuid);
+    if (!item) return null;
 
     if (item.type === "class") {
       return this.#onDropClassItem(item);
@@ -149,7 +153,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   async #onDropWeaponItem(item) {
     // Éviter les doublons (vérifier aussi les armes de la classe)
     const classId = this.actor.system.classId;
-    const classItem = classId ? (fromUuidSync(classId) ?? game.items.get(classId)) : null;
+    const classItem = classId ? (await fromUuid(classId)) : null;
     const classWeaponIds = classItem?.system?.defaultWeapons ?? [];
     if (classWeaponIds.includes(item.uuid)) return;
     if (this.actor.system.weaponIds.includes(item.uuid)) return;
@@ -161,7 +165,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   async #onDropSkillItem(item) {
     // Éviter les doublons (vérifier aussi les skills de la classe)
     const classId = this.actor.system.classId;
-    const classItem = classId ? (fromUuidSync(classId) ?? game.items.get(classId)) : null;
+    const classItem = classId ? (await fromUuid(classId)) : null;
     const classSkillIds = classItem?.system?.skillIds ?? [];
     if (classSkillIds.includes(item.uuid)) return;
     if (this.actor.system.skillIds.includes(item.uuid)) return;
@@ -209,9 +213,9 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.source = this.actor.toObject().system;
     context.isEditable = this.isEditable;
 
-    // Résolution classe par UUID
+    // Résolution classe par UUID (async pour charger les données complètes du compendium)
     const classId = context.system.classId;
-    const classItem = classId ? (fromUuidSync(classId) ?? game.items.get(classId)) : null;
+    const classItem = classId ? (await fromUuid(classId)) : null;
     if (classId && !classItem) {
       console.warn(`haywire | SoldierSheet: classId "${classId}" introuvable pour actor "${this.actor.name}"`);
     }
@@ -234,8 +238,9 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const classSkillIds = classItem?.system?.skillIds ?? [];
     const ownSkillIds = context.system.skillIds ?? [];
     const allSkillUuids = [...classSkillIds, ...ownSkillIds];
-    context.skills = allSkillUuids.map(uuid => {
-      const s = fromUuidSync(uuid) ?? game.items.get(uuid);
+    const resolvedSkills = await Promise.all(allSkillUuids.map(uuid => fromUuid(uuid)));
+    context.skills = allSkillUuids.map((uuid, i) => {
+      const s = resolvedSkills[i];
       return {
         uuid,
         name: s?.name ?? `[${uuid}]`,
@@ -250,11 +255,12 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       ...(classItem?.system?.defaultWeapons ?? []),
       ...context.system.weaponIds,
     ];
-    context.weapons = allWeaponUuids.map(uuid => {
-      const w = fromUuidSync(uuid) ?? game.items.get(uuid);
+    const resolvedWeapons = await Promise.all(allWeaponUuids.map(uuid => fromUuid(uuid)));
+    context.weapons = allWeaponUuids.map((uuid, i) => {
+      const w = resolvedWeapons[i];
       if (!w) return { uuid, name: `[${uuid}]`, weaponType: "?", range: 0, rateOfFire: 0, modifiers: 0, penetration: 0, missing: true };
       return {
-        uuid: w.uuid,
+        uuid,
         name: w.name,
         weaponType: game.i18n.localize(`HAYWIRE.WeaponType.${w.system.weaponType}`),
         range: w.system.range,

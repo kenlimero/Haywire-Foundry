@@ -11,7 +11,15 @@
       "hard": 13
     },
     "skillIds": [],
-    "defaultWeapons": [],
+    "defaultWeapons": [
+      "Compendium.haywire.weapons.haywireWeapon00006",
+      "Compendium.haywire.weapons.haywireWeapon00003",
+      "Compendium.haywire.weapons.haywireWeapon00002",
+      "Compendium.haywire.weapons.haywireWeapon00009",
+      "Compendium.haywire.weapons.haywireWeapon00011",
+      "Compendium.haywire.weapons.haywireWeapon00019",
+      "Compendium.haywire.weapons.haywireWeapon00022"
+    ],
     "imagePath": "systems/haywire/assets/cards/demolition.jpg"
   },
   "effects": [],

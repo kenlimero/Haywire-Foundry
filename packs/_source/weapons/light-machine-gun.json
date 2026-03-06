@@ -1,0 +1,26 @@
+{
+  "_id": "haywireWeapon00007",
+  "name": "Light Machine Gun",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "weaponType": "Primary",
+    "range": 0,
+    "rateOfFire": 2,
+    "penetration": 1,
+    "modifiers": 0,
+    "special": "Each dice inflicts 2 suppression points. M249, PKM."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

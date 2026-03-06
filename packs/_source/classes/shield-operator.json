@@ -11,7 +11,10 @@
       "hard": 13
     },
     "skillIds": [],
-    "defaultWeapons": [],
+    "defaultWeapons": [
+      "Compendium.haywire.weapons.haywireWeapon00003",
+      "Compendium.haywire.weapons.haywireWeapon00022"
+    ],
     "imagePath": "systems/haywire/assets/cards/shield-operator.jpg"
   },
   "effects": [],

@@ -1,0 +1,26 @@
+{
+  "_id": "haywireWeapon00010",
+  "name": "Grenade Launcher",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "weaponType": "Primary",
+    "range": 0,
+    "rateOfFire": 1,
+    "penetration": 2,
+    "modifiers": 0,
+    "special": "Frag 1.5\". Min range 6\". Using this weapon ends this model turn. M203, GM-94."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

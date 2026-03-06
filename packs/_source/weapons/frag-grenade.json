@@ -1,0 +1,26 @@
+{
+  "_id": "haywireWeapon00009",
+  "name": "Frag Grenade",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "weaponType": "Equipment",
+    "range": 12,
+    "rateOfFire": 1,
+    "penetration": 2,
+    "modifiers": 0,
+    "special": "Frag 1.5\". Hand grenade."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

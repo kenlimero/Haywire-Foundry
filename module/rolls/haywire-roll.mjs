@@ -43,7 +43,7 @@ export class HaywireRoll {
 
     // Résoudre les seuils de combat depuis la classe
     const classId = actor.system.classId;
-    const classItem = classId ? (fromUuidSync(classId) ?? game.items.get(classId)) : null;
+    const classItem = classId ? (await fromUuid(classId)) : null;
     const combatStats = classItem?.system?.combatStats ?? { easy: "—", medium: "—", hard: "—" };
 
     // Préparer les données du template

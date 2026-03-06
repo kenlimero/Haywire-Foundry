@@ -1,0 +1,26 @@
+{
+  "_id": "haywireWeapon00020",
+  "name": "Smoke Grenade",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "weaponType": "Equipment",
+    "range": 12,
+    "rateOfFire": 1,
+    "penetration": 0,
+    "modifiers": 0,
+    "special": "Blocks LOS. 3\" radius. Lasts 3 turns. Auto-deploys on impact."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

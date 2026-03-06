@@ -1,0 +1,26 @@
+{
+  "_id": "haywireWeapon00016",
+  "name": "Medium AT",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "weaponType": "Primary",
+    "range": 0,
+    "rateOfFire": 1,
+    "penetration": 5,
+    "modifiers": 0,
+    "special": "Frag 2\". Min range 6\". Penetration: 5+d6. Ends model turn. RPG-29, Carl-Gustav. Also FPV drone."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

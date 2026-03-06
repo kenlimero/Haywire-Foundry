@@ -1,0 +1,26 @@
+{
+  "_id": "haywireWeapon00004",
+  "name": "SMG",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "weaponType": "Secondary",
+    "range": 18,
+    "rateOfFire": 2,
+    "penetration": 0,
+    "modifiers": 0,
+    "special": "MP7, PP-19, UZI."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

@@ -11,7 +11,13 @@
       "hard": 16
     },
     "skillIds": [],
-    "defaultWeapons": [],
+    "defaultWeapons": [
+      "Compendium.haywire.weapons.haywireWeapon00008",
+      "Compendium.haywire.weapons.haywireWeapon00023",
+      "Compendium.haywire.weapons.haywireWeapon00003",
+      "Compendium.haywire.weapons.haywireWeapon00020",
+      "Compendium.haywire.weapons.haywireWeapon00022"
+    ],
     "imagePath": "systems/haywire/assets/cards/marksman.jpg"
   },
   "effects": [],

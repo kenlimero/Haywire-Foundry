@@ -1,0 +1,26 @@
+{
+  "_id": "haywireWeapon00013",
+  "name": "Heavy Sniper Rifle",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "weaponType": "Primary",
+    "range": 0,
+    "rateOfFire": 1,
+    "penetration": 2,
+    "modifiers": 0,
+    "special": "6\" to max range: 2xD20. Each dice inflicts 2 suppression points. Barrett M82, TAC-50."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

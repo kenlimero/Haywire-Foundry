@@ -11,7 +11,11 @@
       "hard": 13
     },
     "skillIds": [],
-    "defaultWeapons": [],
+    "defaultWeapons": [
+      "Compendium.haywire.weapons.haywireWeapon00003",
+      "Compendium.haywire.weapons.haywireWeapon00004",
+      "Compendium.haywire.weapons.haywireWeapon00002"
+    ],
     "imagePath": "systems/haywire/assets/cards/undercover-agent.jpg"
   },
   "effects": [],

@@ -11,7 +11,14 @@
       "hard": 16
     },
     "skillIds": [],
-    "defaultWeapons": [],
+    "defaultWeapons": [
+      "Compendium.haywire.weapons.haywireWeapon00006",
+      "Compendium.haywire.weapons.haywireWeapon00009",
+      "Compendium.haywire.weapons.haywireWeapon00020",
+      "Compendium.haywire.weapons.haywireWeapon00010",
+      "Compendium.haywire.weapons.haywireWeapon00014",
+      "Compendium.haywire.weapons.haywireWeapon00022"
+    ],
     "imagePath": "systems/haywire/assets/cards/grenadier.jpg"
   },
   "effects": [],
