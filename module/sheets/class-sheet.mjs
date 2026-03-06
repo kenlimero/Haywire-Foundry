@@ -48,9 +48,17 @@ export class ClassSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.item = this.item;
     context.system = this.item.system;
     context.isEditable = this.isEditable;
-    // Résoudre les UUIDs de skills en objets pour l'affichage
-    context.skills = (this.item.system.skillIds ?? []).map(uuid => {
-      const s = fromUuidSync(uuid) ?? game.items.get(uuid);
+    // Résoudre skills + armes en parallèle
+    const skillUuids = this.item.system.skillIds ?? [];
+    const weaponUuids = this.item.system.defaultWeapons ?? [];
+
+    const [resolvedSkills, resolvedWeapons] = await Promise.all([
+      Promise.all(skillUuids.map(uuid => fromUuid(uuid))),
+      Promise.all(weaponUuids.map(uuid => fromUuid(uuid))),
+    ]);
+
+    context.skills = skillUuids.map((uuid, i) => {
+      const s = resolvedSkills[i];
       return {
         uuid,
         name: s?.name ?? `[${uuid}]`,
@@ -59,9 +67,8 @@ export class ClassSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       };
     });
 
-    // Résoudre les UUIDs d'armes en objets pour l'affichage
-    context.defaultWeapons = (this.item.system.defaultWeapons ?? []).map(uuid => {
-      const w = fromUuidSync(uuid) ?? game.items.get(uuid);
+    context.defaultWeapons = weaponUuids.map((uuid, i) => {
+      const w = resolvedWeapons[i];
       return {
         uuid,
         name: w?.name ?? `[${uuid}]`,

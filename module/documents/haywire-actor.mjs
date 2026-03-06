@@ -3,10 +3,6 @@ export class HaywireActor extends Actor {
   // Conditions synchro sheet ↔ token (hors suppressed/pinned qui sont gérés via suppression)
   static TOKEN_CONDITIONS = ["downed", "hidden", "injured", "overwatch"];
 
-  prepareBaseData() {
-    super.prepareBaseData();
-  }
-
   prepareDerivedData() {
     super.prepareDerivedData();
     if (this.type === "soldier") this._prepareSoldierData();
@@ -59,7 +55,7 @@ export class HaywireActor extends Actor {
   async toggleStatusEffect(statusId, options = {}) {
     // Suppression levels (sup-1 à sup-6) : clic token → set suppression value
     if (statusId.startsWith("sup-")) {
-      const level = parseInt(statusId.split("-")[1]);
+      const level = parseInt(statusId.split("-")[1], 10);
       const newSuppression = this.system.suppression === level ? 0 : level;
       await this.update({ "system.suppression": newSuppression });
       return;

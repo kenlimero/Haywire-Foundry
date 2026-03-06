@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "haywire-foundryvtt",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Build tools for the Haywire FoundryVTT system",
   "scripts": {
     "build:classes": "node scripts/pack-classes.mjs",

@@ -135,27 +135,20 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   async #onDropClassItem(item) {
     const hadPreviousClass = !!this.actor.system.classId;
 
-    // 1. Stocker le UUID de la classe
-    await this.actor.update({ "system.classId": item.uuid });
-
-    // 2. Mettre à jour portrait et token avec l'image de la classe (update séparé)
+    const updateData = { "system.classId": item.uuid };
     if (item.system.imagePath) {
-      await this.actor.update({
-        img: item.system.imagePath,
-        "prototypeToken.texture.src": item.system.imagePath,
-      });
+      updateData.img = item.system.imagePath;
+      updateData["prototypeToken.texture.src"] = item.system.imagePath;
     }
+    await this.actor.update(updateData);
 
     const msgKey = hadPreviousClass ? "HAYWIRE.ClassReplaced" : "HAYWIRE.ClassAssigned";
     ui.notifications.info(game.i18n.format(msgKey, { name: item.name }));
   }
 
   async #onDropWeaponItem(item) {
-    // Éviter les doublons (vérifier aussi les armes de la classe)
-    const classId = this.actor.system.classId;
-    const classItem = classId ? (await fromUuid(classId)) : null;
-    const classWeaponIds = classItem?.system?.defaultWeapons ?? [];
-    if (classWeaponIds.includes(item.uuid)) return;
+    // Éviter les doublons (utilise le cache résolu au dernier render)
+    if (this._classWeaponUuids?.includes(item.uuid)) return;
     if (this.actor.system.weaponIds.includes(item.uuid)) return;
 
     const weaponIds = [...this.actor.system.weaponIds, item.uuid];
@@ -163,11 +156,8 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   async #onDropSkillItem(item) {
-    // Éviter les doublons (vérifier aussi les skills de la classe)
-    const classId = this.actor.system.classId;
-    const classItem = classId ? (await fromUuid(classId)) : null;
-    const classSkillIds = classItem?.system?.skillIds ?? [];
-    if (classSkillIds.includes(item.uuid)) return;
+    // Éviter les doublons (utilise le cache résolu au dernier render)
+    if (this._classSkillUuids?.includes(item.uuid)) return;
     if (this.actor.system.skillIds.includes(item.uuid)) return;
 
     const skillIds = [...this.actor.system.skillIds, item.uuid];
@@ -210,7 +200,6 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const context = await super._prepareContext(options);
     context.actor = this.actor;
     context.system = this.actor.system;
-    context.source = this.actor.toObject().system;
     context.isEditable = this.isEditable;
 
     // Résolution classe par UUID (async pour charger les données complètes du compendium)
@@ -224,25 +213,25 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.classImage = classItem?.system?.imagePath || null;
 
     // CombatStats dérivées live depuis la classe
-    if (classItem?.type === "class") {
-      context.combatStats = {
-        easy: classItem.system.combatStats.easy,
-        medium: classItem.system.combatStats.medium,
-        hard: classItem.system.combatStats.hard,
-      };
-    } else {
-      context.combatStats = context.system.combatStats;
-    }
+    context.combatStats = classItem?.type === "class"
+      ? classItem.system.combatStats
+      : context.system.combatStats;
 
     // Cache des UUIDs classe pour le hook synchrone #isRelevantItem
     this._classWeaponUuids = classItem?.system?.defaultWeapons ?? [];
     this._classSkillUuids = classItem?.system?.skillIds ?? [];
 
-    // Skills — classe + propres, résolues par UUID
+    // Skills + Weapons — résolution parallèle par UUID
     const classSkillIds = this._classSkillUuids;
-    const ownSkillIds = context.system.skillIds ?? [];
-    const allSkillUuids = [...classSkillIds, ...ownSkillIds];
-    const resolvedSkills = await Promise.all(allSkillUuids.map(uuid => fromUuid(uuid)));
+    const classWeaponIds = this._classWeaponUuids;
+    const allSkillUuids = [...classSkillIds, ...(context.system.skillIds ?? [])];
+    const allWeaponUuids = [...classWeaponIds, ...context.system.weaponIds];
+
+    const [resolvedSkills, resolvedWeapons] = await Promise.all([
+      Promise.all(allSkillUuids.map(uuid => fromUuid(uuid))),
+      Promise.all(allWeaponUuids.map(uuid => fromUuid(uuid))),
+    ]);
+
     context.skills = allSkillUuids.map((uuid, i) => {
       const s = resolvedSkills[i];
       return {
@@ -254,12 +243,6 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       };
     });
 
-    // Résolution armes par UUID — classe + propres
-    const allWeaponUuids = [
-      ...(classItem?.system?.defaultWeapons ?? []),
-      ...context.system.weaponIds,
-    ];
-    const resolvedWeapons = await Promise.all(allWeaponUuids.map(uuid => fromUuid(uuid)));
     context.weapons = allWeaponUuids.map((uuid, i) => {
       const w = resolvedWeapons[i];
       if (!w) return { uuid, name: `[${uuid}]`, weaponType: "?", range: 0, rateOfFire: 0, modifiers: 0, penetration: 0, missing: true };
@@ -271,25 +254,20 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         rateOfFire: w.system.rateOfFire,
         modifiers: w.system.modifiers,
         penetration: w.system.penetration,
-        fromClass: classItem?.system?.defaultWeapons?.includes(uuid) ?? false,
+        fromClass: classWeaponIds.includes(uuid),
       };
     });
 
     // Conditions
-    context.conditions = [...context.system.conditions].map(c => ({
-      key: c,
-      label: game.i18n.localize(`HAYWIRE.Conditions.${c.charAt(0).toUpperCase() + c.slice(1)}`),
-    }));
+    const conditionLabel = c => game.i18n.localize(`HAYWIRE.Conditions.${c.charAt(0).toUpperCase() + c.slice(1)}`);
+    const currentConditions = [...context.system.conditions];
+    context.conditions = currentConditions.map(c => ({ key: c, label: conditionLabel(c) }));
 
     // Conditions disponibles pour ajout manuel
     const HAYWIRE_CONDITIONS = ["suppressed", "pinned", "downed", "hidden", "injured", "overwatch"];
-    const currentConditions = [...context.system.conditions];
     context.availableConditions = HAYWIRE_CONDITIONS
       .filter(c => !currentConditions.includes(c))
-      .map(c => ({
-        key: c,
-        label: game.i18n.localize(`HAYWIRE.Conditions.${c.charAt(0).toUpperCase() + c.slice(1)}`),
-      }));
+      .map(c => ({ key: c, label: conditionLabel(c) }));
 
     return context;
   }

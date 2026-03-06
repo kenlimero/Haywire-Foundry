@@ -44,7 +44,7 @@
   {{!-- Suppression --}}
   <div class="haywire-sheet-suppression">
     <label>{{localize "HAYWIRE.SuppressionLabel"}}</label>
-    <input type="number" name="system.suppression" value="{{system.suppression}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+    <input type="number" name="system.suppression" value="{{system.suppression}}" min="0" max="6" {{#unless isEditable}}disabled{{/unless}} />
   </div>
 
   {{!-- Conditions avec gestion manuelle --}}

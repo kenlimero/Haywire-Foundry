@@ -34,7 +34,7 @@ function makeTable(name, img, rows) {
     sort: 0,
     ownership: { default: 0 },
     flags: {},
-    _stats: { systemId: "haywire", systemVersion: "0.2.0", coreVersion: "13" },
+    _stats: { systemId: "haywire", systemVersion: "0.3.0", coreVersion: "13" },
   };
 }
 

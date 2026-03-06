@@ -239,8 +239,12 @@
     background: #3a5a3a;
   }
 
-  .haywire-condition-stunned {
-    background: #5b3a7a;
+  .haywire-condition-injured {
+    background: #a04030;
+  }
+
+  .haywire-condition-overwatch {
+    background: #2a5a8a;
   }
 
   /* Condition remove button (inside badge) */
