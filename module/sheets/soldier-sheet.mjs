@@ -93,9 +93,9 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if (item.uuid === system.classId) return true;
     if (system.weaponIds.includes(item.uuid)) return true;
     if (system.skillIds.includes(item.uuid)) return true;
-    const classItem = system.classId ? fromUuidSync(system.classId) : null;
-    if (classItem?.system?.defaultWeapons?.includes(item.uuid)) return true;
-    if (classItem?.system?.skillIds?.includes(item.uuid)) return true;
+    // Utiliser le cache résolu au dernier render (évite fromUuidSync sur compendium)
+    if (this._classWeaponUuids?.includes(item.uuid)) return true;
+    if (this._classSkillUuids?.includes(item.uuid)) return true;
     return false;
   }
 
@@ -234,8 +234,12 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       context.combatStats = context.system.combatStats;
     }
 
+    // Cache des UUIDs classe pour le hook synchrone #isRelevantItem
+    this._classWeaponUuids = classItem?.system?.defaultWeapons ?? [];
+    this._classSkillUuids = classItem?.system?.skillIds ?? [];
+
     // Skills — classe + propres, résolues par UUID
-    const classSkillIds = classItem?.system?.skillIds ?? [];
+    const classSkillIds = this._classSkillUuids;
     const ownSkillIds = context.system.skillIds ?? [];
     const allSkillUuids = [...classSkillIds, ...ownSkillIds];
     const resolvedSkills = await Promise.all(allSkillUuids.map(uuid => fromUuid(uuid)));
