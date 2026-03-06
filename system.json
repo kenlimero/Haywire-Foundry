@@ -1,0 +1,86 @@
+{
+  "id": "haywire",
+  "title": "Haywire",
+  "description": "Système FoundryVTT pour le wargame tactique solo/coop HAYWIRE V2",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
+  },
+  "authors": [
+    {
+      "name": "Ricco"
+    }
+  ],
+  "esmodules": [
+    "haywire.mjs"
+  ],
+  "styles": [
+    "styles/haywire.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "lang/fr.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "soldier": {}
+    },
+    "Item": {
+      "class": {},
+      "weapon": {},
+      "skill": {}
+    }
+  },
+  "packs": [
+    {
+      "name": "classes",
+      "label": "HAYWIRE.CompendiumClasses",
+      "path": "packs/classes",
+      "type": "Item",
+      "system": "haywire",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "weapons",
+      "label": "HAYWIRE.CompendiumWeapons",
+      "path": "packs/weapons",
+      "type": "Item",
+      "system": "haywire",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "skills",
+      "label": "HAYWIRE.CompendiumSkills",
+      "path": "packs/skills",
+      "type": "Item",
+      "system": "haywire",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ],
+  "primaryTokenAttribute": "hitPoints",
+  "initiative": "1d20",
+  "grid": {
+    "distance": 1,
+    "units": ""
+  },
+  "socket": false
+}

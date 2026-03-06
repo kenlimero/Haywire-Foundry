@@ -1,0 +1,177 @@
+<section class="haywire-sheet-body">
+
+  {{!-- Header: nom éditable + image de carte de classe --}}
+  <div class="haywire-sheet-header">
+    <div class="haywire-sheet-name">
+      <input type="text" name="name" value="{{actor.name}}" class="haywire-name-input" {{#unless isEditable}}disabled{{/unless}} />
+    </div>
+    <div class="haywire-sheet-class-image">
+      {{#if classImage}}
+        <img src="{{classImage}}" alt="{{className}}" class="haywire-class-img"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <div class="haywire-placeholder" style="display:none;">
+          <i class="fas fa-image"></i>
+          <span>{{className}}</span>
+        </div>
+      {{else}}
+        <div class="haywire-placeholder">
+          <i class="fas fa-user-slash"></i>
+          <span>{{localize "HAYWIRE.NoClassAssigned"}}</span>
+          <small>{{localize "HAYWIRE.DragClassHint"}}</small>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- Stats: HP et AP --}}
+  <div class="haywire-sheet-stats">
+    <div class="haywire-stat">
+      <label>{{localize "HAYWIRE.HitPoints"}}</label>
+      <div class="haywire-stat-value">
+        <input type="number" name="system.hitPoints.value" value="{{system.hitPoints.value}}" min="0" max="{{system.hitPoints.max}}" {{#unless isEditable}}disabled{{/unless}} />
+        <span class="haywire-stat-separator">/</span>
+        <span class="haywire-stat-max">{{system.hitPoints.max}}</span>
+      </div>
+    </div>
+    <div class="haywire-stat">
+      <label>{{localize "HAYWIRE.ActionPoints"}}</label>
+      <div class="haywire-stat-value">
+        <span class="haywire-stat-derived">{{system.actionPoints}}</span>
+      </div>
+    </div>
+  </div>
+
+  {{!-- Suppression --}}
+  <div class="haywire-sheet-suppression">
+    <label>{{localize "HAYWIRE.SuppressionLabel"}}</label>
+    <input type="number" name="system.suppression" value="{{system.suppression}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+  </div>
+
+  {{!-- Conditions avec gestion manuelle --}}
+  <div class="haywire-sheet-conditions">
+    <label>{{localize "HAYWIRE.Conditions.Label"}}</label>
+    <div class="haywire-conditions-list">
+      {{#each conditions}}
+        <span class="haywire-condition-badge haywire-condition-{{this.key}}" data-condition="{{this.key}}">
+          {{this.label}}
+          {{#if ../isEditable}}
+            <button type="button" class="haywire-condition-remove" data-action="removeCondition">
+              <i class="fas fa-times"></i>
+            </button>
+          {{/if}}
+        </span>
+      {{/each}}
+    </div>
+    {{#if isEditable}}
+    {{#if availableConditions.length}}
+      <select class="haywire-condition-select">
+        <option value="">{{localize "HAYWIRE.SelectCondition"}}</option>
+        {{#each availableConditions}}
+          <option value="{{this.key}}">{{this.label}}</option>
+        {{/each}}
+      </select>
+    {{/if}}
+    {{/if}}
+  </div>
+
+  {{!-- Combat Stats (seuils) --}}
+  {{#if hasClass}}
+    <div class="haywire-sheet-combat">
+      <label>{{localize "HAYWIRE.CombatStats.Label"}}</label>
+      <div class="haywire-combat-thresholds">
+        <div class="haywire-threshold">
+          <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Easy"}}</span>
+          <span class="haywire-threshold-value">{{combatStats.easy}}</span>
+        </div>
+        <div class="haywire-threshold">
+          <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Medium"}}</span>
+          <span class="haywire-threshold-value">{{combatStats.medium}}</span>
+        </div>
+        <div class="haywire-threshold">
+          <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Hard"}}</span>
+          <span class="haywire-threshold-value">{{combatStats.hard}}</span>
+        </div>
+      </div>
+      <button type="button" class="haywire-roll-btn" data-action="rollD20">
+        <i class="fas fa-dice-d20"></i>
+        {{localize "HAYWIRE.RollD20"}}
+      </button>
+    </div>
+  {{/if}}
+
+  {{!-- Skills (classe + propres) --}}
+  <div class="haywire-sheet-section">
+    <label>{{localize "HAYWIRE.Skills"}}</label>
+    <div class="haywire-skills-list">
+      {{#each skills}}
+        <div class="haywire-skill-entry {{#if this.missing}}haywire-missing{{/if}}">
+          <a class="haywire-item-link haywire-skill-name" data-action="openItem" data-item-uuid="{{this.uuid}}">{{this.name}}</a>
+          <span class="haywire-skill-desc">{{this.description}}</span>
+          {{#if ../isEditable}}
+            {{#unless this.fromClass}}
+              <button type="button" class="haywire-btn-delete" data-action="removeSkill" data-skill-uuid="{{this.uuid}}">
+                <i class="fas fa-trash"></i>
+              </button>
+            {{/unless}}
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+    {{#if isEditable}}
+    <small class="haywire-no-items">{{localize "HAYWIRE.DragSkillHint"}}</small>
+    {{/if}}
+  </div>
+
+  {{!-- Armes équipées --}}
+  <div class="haywire-sheet-weapons">
+    <label>{{localize "HAYWIRE.EquippedWeapons"}}</label>
+    {{#if weapons.length}}
+      <table class="haywire-weapons-table">
+        <thead>
+          <tr>
+            <th>{{localize "HAYWIRE.Name"}}</th>
+            <th>{{localize "HAYWIRE.Type"}}</th>
+            <th>{{localize "HAYWIRE.Range"}}</th>
+            <th>{{localize "HAYWIRE.RateOfFire"}}</th>
+            <th>{{localize "HAYWIRE.Modifiers"}}</th>
+            {{#if hasClass}}<th></th>{{/if}}
+            {{#if isEditable}}<th></th>{{/if}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each weapons}}
+            <tr class="{{#if this.missing}}haywire-missing{{/if}}">
+              <td><a class="haywire-item-link" data-action="openItem" data-item-uuid="{{this.uuid}}">{{this.name}}</a></td>
+              <td>{{this.weaponType}}</td>
+              <td>{{this.range}}</td>
+              <td>{{this.rateOfFire}}</td>
+              <td>{{this.modifiers}}</td>
+              {{#if ../hasClass}}
+                <td class="haywire-weapon-actions">
+                  <button type="button" class="haywire-btn-shoot" data-action="rollShoot" data-weapon-uuid="{{this.uuid}}" title="{{localize 'HAYWIRE.RollShoot'}}">
+                    <i class="fas fa-crosshairs"></i>
+                  </button>
+                </td>
+              {{/if}}
+              {{#if ../isEditable}}
+                <td class="haywire-weapon-actions">
+                  {{#unless this.fromClass}}
+                    <button type="button" class="haywire-btn-delete" data-action="removeWeapon" data-weapon-uuid="{{this.uuid}}">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  {{/unless}}
+                </td>
+              {{/if}}
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <p class="haywire-no-items">{{localize "HAYWIRE.NoWeapons"}}</p>
+    {{/if}}
+    {{#if isEditable}}
+    <small class="haywire-no-items">{{localize "HAYWIRE.DragWeaponHint"}}</small>
+    {{/if}}
+  </div>
+
+</section>

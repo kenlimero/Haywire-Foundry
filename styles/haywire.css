@@ -1,0 +1,725 @@
+@layer haywire {
+  :root {
+    --haywire-color-primary: #4a5c3c;
+    --haywire-color-secondary: #8b7d5b;
+    --haywire-color-bg: #2a2a2a;
+    --haywire-color-text: #e0d8c8;
+    --haywire-color-danger: #c0392b;
+    --haywire-color-accent: #d4a017;
+    --haywire-color-success: #2ecc71;
+    --haywire-color-border: #555;
+    --haywire-font-heading: "Modesto Condensed", "Signika", sans-serif;
+  }
+
+  /* Sheet body */
+  .haywire-sheet-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--haywire-color-bg);
+    color: var(--haywire-color-text);
+    font-size: 0.875rem;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  /* Header: nom + image de classe */
+  .haywire-sheet-header {
+    display: flex;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .haywire-sheet-name {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .haywire-name-input {
+    width: 100%;
+    font-size: 1.5rem;
+    font-family: var(--haywire-font-heading);
+    font-weight: bold;
+    color: var(--haywire-color-accent);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--haywire-color-primary);
+    padding: 0.25rem 0;
+  }
+
+  .haywire-name-input:focus {
+    outline: none;
+    border-bottom-color: var(--haywire-color-accent);
+  }
+
+  .haywire-sheet-class-image {
+    width: 120px;
+    min-height: 120px;
+    flex-shrink: 0;
+    border: 2px solid var(--haywire-color-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .haywire-class-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Placeholder "Aucune classe assignée" */
+  .haywire-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.5rem;
+    color: var(--haywire-color-secondary);
+    gap: 0.25rem;
+  }
+
+  .haywire-placeholder i {
+    font-size: 1.5rem;
+    opacity: 0.6;
+  }
+
+  .haywire-placeholder span {
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+
+  .haywire-placeholder small {
+    font-size: 0.625rem;
+    opacity: 0.7;
+  }
+
+  /* Stats: HP / AP */
+  .haywire-sheet-stats {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .haywire-stat {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--haywire-color-border);
+    border-radius: 4px;
+    padding: 0.5rem;
+  }
+
+  .haywire-stat label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--haywire-color-secondary);
+    margin-bottom: 0.25rem;
+  }
+
+  .haywire-stat-value {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .haywire-stat-value input[type="number"] {
+    width: 3rem;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--haywire-color-text);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.15rem;
+  }
+
+  .haywire-stat-separator {
+    color: var(--haywire-color-secondary);
+    font-size: 1rem;
+  }
+
+  .haywire-stat-max {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--haywire-color-secondary);
+  }
+
+  .haywire-stat-derived {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--haywire-color-accent);
+  }
+
+  /* Suppression */
+  .haywire-sheet-suppression {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--haywire-color-border);
+    border-radius: 4px;
+    padding: 0.5rem;
+  }
+
+  .haywire-sheet-suppression label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--haywire-color-secondary);
+  }
+
+  .haywire-sheet-suppression input[type="number"] {
+    width: 3rem;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--haywire-color-text);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.15rem;
+  }
+
+  /* Conditions */
+  .haywire-sheet-conditions {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--haywire-color-border);
+    border-radius: 4px;
+    padding: 0.5rem;
+  }
+
+  .haywire-sheet-conditions > label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--haywire-color-secondary);
+    margin-bottom: 0.25rem;
+  }
+
+  .haywire-conditions-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .haywire-condition-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: var(--haywire-color-primary);
+    color: var(--haywire-color-text);
+  }
+
+  .haywire-condition-suppressed {
+    background: #7f6b2e;
+  }
+
+  .haywire-condition-pinned {
+    background: #8b4513;
+  }
+
+  .haywire-condition-downed {
+    background: var(--haywire-color-danger);
+  }
+
+  .haywire-condition-hidden {
+    background: #3a5a3a;
+  }
+
+  .haywire-condition-stunned {
+    background: #5b3a7a;
+  }
+
+  /* Condition remove button (inside badge) */
+  .haywire-condition-remove {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0 0 0 0.25rem;
+    font-size: 0.65rem;
+    opacity: 0.6;
+    line-height: 1;
+  }
+
+  .haywire-condition-remove:hover {
+    opacity: 1;
+  }
+
+  /* Condition select dropdown */
+  .haywire-condition-select {
+    margin-top: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--haywire-color-text);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.2rem 0.4rem;
+  }
+
+  /* Item name clickable link (weapons & skills) */
+  .haywire-item-link {
+    color: var(--haywire-color-text);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .haywire-item-link:hover {
+    color: var(--haywire-color-accent);
+    text-decoration: underline;
+  }
+
+  /* Combat Stats */
+  .haywire-sheet-combat {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--haywire-color-border);
+    border-radius: 4px;
+    padding: 0.5rem;
+  }
+
+  .haywire-sheet-combat > label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--haywire-color-secondary);
+    margin-bottom: 0.25rem;
+  }
+
+  .haywire-combat-thresholds {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .haywire-threshold {
+    flex: 1;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.35rem;
+  }
+
+  .haywire-threshold-label {
+    display: block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: var(--haywire-color-secondary);
+  }
+
+  .haywire-threshold-value {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--haywire-color-accent);
+  }
+
+  /* Roll D20 button */
+  .haywire-roll-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background: var(--haywire-color-primary);
+    color: var(--haywire-color-text);
+    border: 1px solid var(--haywire-color-accent);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: background 0.2s;
+  }
+
+  .haywire-roll-btn:hover {
+    background: var(--haywire-color-accent);
+    color: var(--haywire-color-bg);
+  }
+
+  .haywire-roll-btn i {
+    font-size: 1.1rem;
+  }
+
+  /* Armes équipées */
+  .haywire-sheet-weapons {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--haywire-color-border);
+    border-radius: 4px;
+    padding: 0.5rem;
+  }
+
+  .haywire-sheet-weapons > label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--haywire-color-secondary);
+    margin-bottom: 0.25rem;
+  }
+
+  .haywire-weapons-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+
+  .haywire-weapons-table th {
+    text-align: left;
+    padding: 0.25rem 0.5rem;
+    border-bottom: 1px solid var(--haywire-color-primary);
+    color: var(--haywire-color-accent);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .haywire-weapons-table td {
+    padding: 0.25rem 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--haywire-color-text);
+  }
+
+  .haywire-weapons-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .haywire-weapon-actions {
+    text-align: center;
+    width: 2rem;
+  }
+
+  .haywire-btn-delete {
+    background: none;
+    border: none;
+    color: var(--haywire-color-danger);
+    cursor: pointer;
+    padding: 0.15rem 0.3rem;
+    opacity: 0.6;
+  }
+
+  .haywire-btn-delete:hover {
+    opacity: 1;
+  }
+
+  .haywire-no-items {
+    color: var(--haywire-color-secondary);
+    font-style: italic;
+    font-size: 0.8rem;
+    margin: 0.25rem 0;
+  }
+
+  /* ===== Item Sheet Sections ===== */
+
+  .haywire-sheet-section {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--haywire-color-border);
+    border-radius: 4px;
+    padding: 0.5rem;
+  }
+
+  .haywire-sheet-section > label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--haywire-color-secondary);
+    margin-bottom: 0.25rem;
+  }
+
+  /* Image Picker (ClassSheet) */
+  .haywire-image-picker {
+    width: 120px;
+    min-height: 120px;
+    flex-shrink: 0;
+    border: 2px solid var(--haywire-color-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+
+  .haywire-image-picker:hover {
+    border-color: var(--haywire-color-accent);
+  }
+
+  .haywire-class-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Threshold input (editable combat stats on ClassSheet) */
+  .haywire-threshold-input {
+    width: 3rem;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--haywire-color-accent);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.15rem;
+  }
+
+  /* Skills List (ClassSheet) */
+  .haywire-skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .haywire-skill-entry {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .haywire-skill-name {
+    width: 35%;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--haywire-color-text);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.25rem 0.4rem;
+  }
+
+  .haywire-skill-desc {
+    flex: 1;
+    font-size: 0.8rem;
+    color: var(--haywire-color-text);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.25rem 0.4rem;
+  }
+
+  /* Default Weapons List (ClassSheet) */
+  .haywire-weapons-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .haywire-weapon-entry {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .haywire-weapon-name {
+    flex: 1;
+    font-size: 0.8rem;
+    color: var(--haywire-color-text);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.25rem 0.4rem;
+  }
+
+  /* Add / Remove Buttons */
+  .haywire-add-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    color: var(--haywire-color-text);
+    background: var(--haywire-color-primary);
+    border: 1px solid var(--haywire-color-border);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .haywire-add-button:hover {
+    background: var(--haywire-color-accent);
+    color: var(--haywire-color-bg);
+  }
+
+  .haywire-remove-button {
+    background: none;
+    border: none;
+    color: var(--haywire-color-danger);
+    cursor: pointer;
+    padding: 0.15rem 0.3rem;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .haywire-remove-button:hover {
+    opacity: 1;
+  }
+
+  /* Special text input (WeaponSheet) */
+  .haywire-special-input {
+    width: 100%;
+    font-size: 0.85rem;
+    color: var(--haywire-color-text);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.25rem 0.4rem;
+  }
+
+  /* Bouton de tir compact (dans la table des armes) */
+  .haywire-btn-shoot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    padding: 0;
+    background: var(--haywire-color-primary);
+    color: var(--haywire-color-accent);
+    border: 1px solid var(--haywire-color-accent);
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: background 0.2s;
+  }
+
+  .haywire-btn-shoot:hover {
+    background: var(--haywire-color-accent);
+    color: var(--haywire-color-bg);
+  }
+
+  /* Chat card — roll result */
+  .haywire-roll-result {
+    padding: 0.5rem;
+    background: var(--haywire-color-bg);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--haywire-color-text);
+  }
+
+  .haywire-roll-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--haywire-color-accent);
+  }
+
+  .haywire-roll-details {
+    margin-bottom: 0.5rem;
+  }
+
+  .haywire-roll-formula-line,
+  .haywire-roll-die-line,
+  .haywire-roll-modifier-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.15rem 0;
+  }
+
+  .haywire-roll-label {
+    color: var(--haywire-color-secondary);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .haywire-roll-value {
+    font-weight: bold;
+  }
+
+  .haywire-roll-total-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem;
+    margin: 0.5rem 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    border: 1px solid var(--haywire-color-accent);
+  }
+
+  .haywire-roll-total-label {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+  }
+
+  .haywire-roll-total-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--haywire-color-accent);
+  }
+
+  .haywire-roll-thresholds {
+    margin-top: 0.4rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .haywire-threshold-list {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.2rem;
+  }
+
+  .haywire-chat-threshold {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-weight: bold;
+  }
+
+  .haywire-chat-threshold-easy {
+    background: rgba(46, 204, 113, 0.2);
+    color: var(--haywire-color-success);
+  }
+
+  .haywire-chat-threshold-medium {
+    background: rgba(212, 160, 23, 0.2);
+    color: var(--haywire-color-accent);
+  }
+
+  .haywire-chat-threshold-hard {
+    background: rgba(192, 57, 43, 0.2);
+    color: var(--haywire-color-danger);
+  }
+
+  /* Référence manquante */
+  .haywire-missing {
+    opacity: 0.5;
+    font-style: italic;
+  }
+
+  /* Drag & Drop feedback */
+  .haywire-drop-target {
+    border-color: var(--haywire-color-accent) !important;
+    background: rgba(212, 160, 23, 0.15) !important;
+    box-shadow: 0 0 8px rgba(212, 160, 23, 0.3);
+  }
+
+  /* Item sheet select styling */
+  .haywire-stat select {
+    width: 100%;
+    font-size: 0.85rem;
+    color: var(--haywire-color-text);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.25rem 0.4rem;
+  }
+}

@@ -1,0 +1,16 @@
+<section class="haywire-sheet-body">
+
+  {{!-- Header: nom éditable --}}
+  <div class="haywire-sheet-header">
+    <div class="haywire-sheet-name">
+      <input type="text" name="name" value="{{item.name}}" class="haywire-name-input" {{#unless isEditable}}disabled{{/unless}} />
+    </div>
+  </div>
+
+  {{!-- Description --}}
+  <div class="haywire-sheet-section">
+    <label>{{localize "HAYWIRE.SkillDescription"}}</label>
+    <input type="text" name="system.description" value="{{system.description}}" class="haywire-special-input" {{#unless isEditable}}disabled{{/unless}} />
+  </div>
+
+</section>

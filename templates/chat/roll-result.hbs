@@ -1,0 +1,38 @@
+<div class="haywire-roll-result">
+  <div class="haywire-roll-header">
+    <i class="fas fa-crosshairs"></i>
+    <span class="haywire-roll-weapon-name">{{weaponName}}</span>
+  </div>
+
+  <div class="haywire-roll-details">
+    <div class="haywire-roll-formula-line">
+      <span class="haywire-roll-label">{{localize "HAYWIRE.RollFormula"}}</span>
+      <span class="haywire-roll-value">{{formula}}</span>
+    </div>
+
+    <div class="haywire-roll-die-line">
+      <span class="haywire-roll-label">{{localize "HAYWIRE.DieResult"}}</span>
+      <span class="haywire-roll-value">{{dieResult}}</span>
+    </div>
+    {{#if modifier}}
+    <div class="haywire-roll-modifier-line">
+      <span class="haywire-roll-label">{{localize "HAYWIRE.Modifiers"}}</span>
+      <span class="haywire-roll-value">{{modifierSign}}</span>
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="haywire-roll-total-section">
+    <span class="haywire-roll-total-label">{{localize "HAYWIRE.RollTotal"}}</span>
+    <span class="haywire-roll-total-value">{{total}}</span>
+  </div>
+
+  <div class="haywire-roll-thresholds">
+    <span class="haywire-roll-label">{{localize "HAYWIRE.Thresholds"}}</span>
+    <div class="haywire-threshold-list">
+      <span class="haywire-chat-threshold haywire-chat-threshold-easy">{{localize "HAYWIRE.CombatStats.Easy"}} {{thresholds.easy}}</span>
+      <span class="haywire-chat-threshold haywire-chat-threshold-medium">{{localize "HAYWIRE.CombatStats.Medium"}} {{thresholds.medium}}</span>
+      <span class="haywire-chat-threshold haywire-chat-threshold-hard">{{localize "HAYWIRE.CombatStats.Hard"}} {{thresholds.hard}}</span>
+    </div>
+  </div>
+</div>

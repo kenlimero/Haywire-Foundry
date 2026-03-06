@@ -1,0 +1,89 @@
+<section class="haywire-sheet-body">
+
+  {{!-- Header: nom éditable + image de carte --}}
+  <div class="haywire-sheet-header">
+    <div class="haywire-sheet-name">
+      <input type="text" name="name" value="{{item.name}}" class="haywire-name-input" {{#unless isEditable}}disabled{{/unless}} />
+    </div>
+    <div class="haywire-image-picker">
+      {{#if system.imagePath}}
+        <img src="{{system.imagePath}}" class="haywire-class-image" data-action="browse-image" />
+      {{else}}
+        <div class="haywire-placeholder" data-action="browse-image">
+          <i class="fas fa-image"></i>
+          <span>{{localize "HAYWIRE.ImagePath"}}</span>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- Tier --}}
+  <div class="haywire-sheet-stats">
+    <div class="haywire-stat">
+      <label>{{localize "HAYWIRE.Tier"}}</label>
+      <div class="haywire-stat-value">
+        <input type="number" name="system.tier" value="{{system.tier}}" min="1" max="3" {{#unless isEditable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </div>
+
+  {{!-- Combat Stats --}}
+  <div class="haywire-sheet-combat">
+    <label>{{localize "HAYWIRE.CombatStats.Label"}}</label>
+    <div class="haywire-combat-thresholds">
+      <div class="haywire-threshold">
+        <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Easy"}}</span>
+        <input type="number" name="system.combatStats.easy" value="{{system.combatStats.easy}}" min="1" class="haywire-threshold-input" {{#unless isEditable}}disabled{{/unless}} />
+      </div>
+      <div class="haywire-threshold">
+        <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Medium"}}</span>
+        <input type="number" name="system.combatStats.medium" value="{{system.combatStats.medium}}" min="1" class="haywire-threshold-input" {{#unless isEditable}}disabled{{/unless}} />
+      </div>
+      <div class="haywire-threshold">
+        <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Hard"}}</span>
+        <input type="number" name="system.combatStats.hard" value="{{system.combatStats.hard}}" min="1" class="haywire-threshold-input" {{#unless isEditable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </div>
+
+  {{!-- Skills --}}
+  <div class="haywire-sheet-section">
+    <label>{{localize "HAYWIRE.Skills"}}</label>
+    <div class="haywire-skills-list">
+      {{#each skills}}
+        <div class="haywire-skill-entry {{#if this.missing}}haywire-missing{{/if}}">
+          <span class="haywire-skill-name">{{this.name}}</span>
+          {{#if ../isEditable}}
+          <button type="button" class="haywire-remove-button" data-action="remove-skill" data-skill-uuid="{{this.uuid}}">
+            <i class="fas fa-trash"></i>
+          </button>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+    {{#if isEditable}}
+    <small class="haywire-no-items">{{localize "HAYWIRE.DragSkillHint"}}</small>
+    {{/if}}
+  </div>
+
+  {{!-- Default Weapons --}}
+  <div class="haywire-sheet-section">
+    <label>{{localize "HAYWIRE.DefaultWeapons"}}</label>
+    <div class="haywire-weapons-list">
+      {{#each defaultWeapons}}
+        <div class="haywire-weapon-entry {{#if this.missing}}haywire-missing{{/if}}">
+          <span class="haywire-weapon-name">{{this.name}}</span>
+          {{#if ../isEditable}}
+          <button type="button" class="haywire-remove-button" data-action="remove-weapon" data-weapon-uuid="{{this.uuid}}">
+            <i class="fas fa-trash"></i>
+          </button>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+    {{#if isEditable}}
+    <small class="haywire-no-items">{{localize "HAYWIRE.DragWeaponHint"}}</small>
+    {{/if}}
+  </div>
+
+</section>

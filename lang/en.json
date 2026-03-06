@@ -1,0 +1,94 @@
+{
+  "HAYWIRE": {
+    "System": "Haywire",
+    "CompendiumClasses": "Classes",
+    "CompendiumWeapons": "Weapons",
+    "SheetSoldier": "Soldier Sheet",
+    "SheetClass": "Class Sheet",
+    "SheetWeapon": "Weapon Sheet",
+    "Actor": {
+      "Soldier": "Soldier"
+    },
+    "Item": {
+      "Class": "Class",
+      "Weapon": "Weapon",
+      "Skill": "Skill"
+    },
+    "HitPoints": "Hit Points",
+    "ActionPoints": "Action Points",
+    "ClassId": "Assigned Class",
+    "Name": "Name",
+    "Tier": "Tier",
+    "ImagePath": "Card Image",
+    "Type": "Type",
+    "Range": "Range",
+    "RateOfFire": "Rate of Fire",
+    "Penetration": "Penetration",
+    "Modifiers": "Modifiers",
+    "Special": "Special",
+    "SuppressionLabel": "Suppression",
+    "CombatStats": {
+      "Label": "Combat Stats",
+      "Easy": "Easy",
+      "Medium": "Medium",
+      "Hard": "Hard"
+    },
+    "Skills": "Skills",
+    "DefaultWeapons": "Default Weapons",
+    "Conditions": {
+      "Label": "Conditions",
+      "Suppressed": "Suppressed",
+      "Pinned": "Pinned",
+      "Downed": "Downed",
+      "Hidden": "Hidden",
+      "Stunned": "Stunned"
+    },
+    "NoClassAssigned": "No class assigned",
+    "EquippedWeapons": "Equipped Weapons",
+    "NoWeapons": "No weapons equipped",
+    "DragClassHint": "Drag a class from the compendium",
+    "DragWeaponHint": "Drag a weapon here to add it",
+    "DragSkillHint": "Drag a skill here to add it",
+    "NoSkills": "No skills",
+    "SheetSkill": "Skill Sheet",
+    "CompendiumSkills": "Skills",
+    "SkillDescription": "Description",
+    "ClassAssigned": "Class assigned: {name}",
+    "ClassReplaced": "Class replaced: {name}",
+    "SelectCondition": "Select a condition...",
+    "InvalidDrop": "Only Class, Weapon, or Skill items can be dropped here",
+    "Suppression": {
+      "1": "Suppression 1",
+      "2": "Suppression 2",
+      "3": "Suppression 3 (Suppressed)",
+      "4": "Suppression 4",
+      "5": "Suppression 5",
+      "6": "Suppression 6 (Pinned)"
+    },
+    "RollD20": "D20 Roll",
+    "RollResult": "Result",
+    "RollShoot": "Shoot",
+    "NoWeaponEquipped": "No weapon equipped",
+    "ShootWith": "Shoot with {weapon}",
+    "RollFormula": "Formula",
+    "RollTotal": "Total",
+    "DieResult": "Die",
+    "Thresholds": "Thresholds",
+    "WeaponType": {
+      "Primary": "Primary",
+      "Secondary": "Secondary",
+      "Sidearm": "Sidearm",
+      "Equipment": "Equipment"
+    }
+  },
+  "TYPES": {
+    "Actor": {
+      "soldier": "Soldier"
+    },
+    "Item": {
+      "class": "Class",
+      "weapon": "Weapon",
+      "skill": "Skill"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+<section class="haywire-sheet-body">
+
+  {{!-- Header: nom éditable --}}
+  <div class="haywire-sheet-header">
+    <div class="haywire-sheet-name">
+      <input type="text" name="name" value="{{item.name}}" class="haywire-name-input" {{#unless isEditable}}disabled{{/unless}} />
+    </div>
+  </div>
+
+  {{!-- Stats row 1: Type, Range, RoF --}}
+  <div class="haywire-sheet-stats">
+    <div class="haywire-stat">
+      <label>{{localize "HAYWIRE.Type"}}</label>
+      <select name="system.weaponType" {{#unless isEditable}}disabled{{/unless}}>
+        {{#each weaponTypeChoices}}
+          <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="haywire-stat">
+      <label>{{localize "HAYWIRE.Range"}}</label>
+      <div class="haywire-stat-value">
+        <input type="number" name="system.range" value="{{system.range}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+      </div>
+    </div>
+    <div class="haywire-stat">
+      <label>{{localize "HAYWIRE.RateOfFire"}}</label>
+      <div class="haywire-stat-value">
+        <input type="number" name="system.rateOfFire" value="{{system.rateOfFire}}" min="1" {{#unless isEditable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </div>
+
+  {{!-- Stats row 2: Penetration, Modifiers, Special --}}
+  <div class="haywire-sheet-stats">
+    <div class="haywire-stat">
+      <label>{{localize "HAYWIRE.Penetration"}}</label>
+      <div class="haywire-stat-value">
+        <input type="number" name="system.penetration" value="{{system.penetration}}" min="0" {{#unless isEditable}}disabled{{/unless}} />
+      </div>
+    </div>
+    <div class="haywire-stat">
+      <label>{{localize "HAYWIRE.Modifiers"}}</label>
+      <div class="haywire-stat-value">
+        <input type="number" name="system.modifiers" value="{{system.modifiers}}" {{#unless isEditable}}disabled{{/unless}} />
+      </div>
+    </div>
+    <div class="haywire-stat">
+      <label>{{localize "HAYWIRE.Special"}}</label>
+      <input type="text" name="system.special" value="{{system.special}}" class="haywire-special-input" {{#unless isEditable}}disabled{{/unless}} />
+    </div>
+  </div>
+
+</section>

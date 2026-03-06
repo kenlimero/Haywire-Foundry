@@ -1,0 +1,94 @@
+{
+  "HAYWIRE": {
+    "System": "Haywire",
+    "CompendiumClasses": "Classes",
+    "CompendiumWeapons": "Armes",
+    "SheetSoldier": "Fiche Soldat",
+    "SheetClass": "Fiche Classe",
+    "SheetWeapon": "Fiche Arme",
+    "Actor": {
+      "Soldier": "Soldat"
+    },
+    "Item": {
+      "Class": "Classe",
+      "Weapon": "Arme",
+      "Skill": "Compétence"
+    },
+    "HitPoints": "Points de vie",
+    "ActionPoints": "Points d'action",
+    "ClassId": "Classe assignée",
+    "Name": "Nom",
+    "Tier": "Rang",
+    "ImagePath": "Image de carte",
+    "Type": "Type",
+    "Range": "Portée",
+    "RateOfFire": "Cadence de tir",
+    "Penetration": "Pénétration",
+    "Modifiers": "Modificateurs",
+    "Special": "Spécial",
+    "SuppressionLabel": "Suppression",
+    "CombatStats": {
+      "Label": "Stats de combat",
+      "Easy": "Facile",
+      "Medium": "Moyen",
+      "Hard": "Difficile"
+    },
+    "Skills": "Compétences",
+    "DefaultWeapons": "Armes par défaut",
+    "Conditions": {
+      "Label": "Conditions",
+      "Suppressed": "Supprimé",
+      "Pinned": "Cloué",
+      "Downed": "À terre",
+      "Hidden": "Caché",
+      "Stunned": "Étourdi"
+    },
+    "NoClassAssigned": "Aucune classe assignée",
+    "EquippedWeapons": "Armes équipées",
+    "NoWeapons": "Aucune arme équipée",
+    "DragClassHint": "Glissez une classe depuis le compendium",
+    "DragWeaponHint": "Glissez une arme ici pour l'ajouter",
+    "DragSkillHint": "Glissez une compétence ici pour l'ajouter",
+    "NoSkills": "Aucune compétence",
+    "SheetSkill": "Fiche Compétence",
+    "CompendiumSkills": "Compétences",
+    "SkillDescription": "Description",
+    "ClassAssigned": "Classe assignée : {name}",
+    "ClassReplaced": "Classe remplacée : {name}",
+    "SelectCondition": "Sélectionner une condition...",
+    "InvalidDrop": "Seuls les items Classe, Arme ou Compétence peuvent être déposés ici",
+    "Suppression": {
+      "1": "Suppression 1",
+      "2": "Suppression 2",
+      "3": "Suppression 3 (Supprimé)",
+      "4": "Suppression 4",
+      "5": "Suppression 5",
+      "6": "Suppression 6 (Cloué)"
+    },
+    "RollD20": "Jet de D20",
+    "RollResult": "Résultat",
+    "RollShoot": "Tir",
+    "NoWeaponEquipped": "Aucune arme équipée",
+    "ShootWith": "Tir avec {weapon}",
+    "RollFormula": "Formule",
+    "RollTotal": "Total",
+    "DieResult": "Dé",
+    "Thresholds": "Seuils",
+    "WeaponType": {
+      "Primary": "Primaire",
+      "Secondary": "Secondaire",
+      "Sidearm": "Arme de poing",
+      "Equipment": "Équipement"
+    }
+  },
+  "TYPES": {
+    "Actor": {
+      "soldier": "Soldat"
+    },
+    "Item": {
+      "class": "Classe",
+      "weapon": "Arme",
+      "skill": "Compétence"
+    }
+  }
+}
