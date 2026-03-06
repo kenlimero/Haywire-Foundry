@@ -18,6 +18,9 @@ dist/
 _bmad/
 _bmad-output/
 
+# Claude
+.claude/
+
 # Environment
 .env
 .env.*
