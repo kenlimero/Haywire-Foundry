@@ -8,9 +8,13 @@
     "verified": "13",
     "maximum": "13"
   },
+  "url": "https://github.com/kenlimero/Haywire-Foundry",
+  "manifest": "https://raw.githubusercontent.com/kenlimero/Haywire-Foundry/main/system.json",
+  "download": "https://github.com/kenlimero/Haywire-Foundry/archive/refs/tags/v0.1.0.zip",
   "authors": [
     {
-      "name": "Ricco"
+      "name": "Ricco",
+      "url": "https://github.com/kenlimero"
     }
   ],
   "esmodules": [
