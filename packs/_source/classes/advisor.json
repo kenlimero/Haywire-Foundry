@@ -2,7 +2,7 @@
   "_id": "haywireClass00013",
   "name": "Advisor",
   "type": "class",
-  "img": "systems/haywire/assets/cards/advisor.jpg",
+  "img": "systems/haywire/assets/classes/advisor.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -17,7 +17,7 @@
       "Compendium.haywire.weapons.haywireWeapon00002",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/advisor.jpg"
+    "imagePath": "systems/haywire/assets/classes/advisor.webp"
   },
   "effects": [],
   "flags": {},

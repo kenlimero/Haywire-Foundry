@@ -2,7 +2,7 @@
   "_id": "haywireClass00026",
   "name": "Machine Gunner",
   "type": "class",
-  "img": "systems/haywire/assets/cards/machine-gunner.jpg",
+  "img": "systems/haywire/assets/classes/machine-gunner.webp",
   "system": {
     "tier": 2,
     "combatStats": {
@@ -17,7 +17,7 @@
       "Compendium.haywire.weapons.haywireWeapon00020",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/machine-gunner.jpg"
+    "imagePath": "systems/haywire/assets/classes/machine-gunner.webp"
   },
   "effects": [],
   "flags": {},

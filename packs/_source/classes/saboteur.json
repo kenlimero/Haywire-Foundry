@@ -2,7 +2,7 @@
   "_id": "haywireClass00017",
   "name": "Saboteur",
   "type": "class",
-  "img": "systems/haywire/assets/cards/saboteur.jpg",
+  "img": "systems/haywire/assets/classes/saboteur.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -18,7 +18,7 @@
       "Compendium.haywire.weapons.haywireWeapon00009",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/saboteur.jpg"
+    "imagePath": "systems/haywire/assets/classes/saboteur.webp"
   },
   "effects": [],
   "flags": {},

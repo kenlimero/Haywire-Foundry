@@ -2,7 +2,7 @@
   "_id": "haywireClass00015",
   "name": "Undercover Agent",
   "type": "class",
-  "img": "systems/haywire/assets/cards/undercover-agent.jpg",
+  "img": "systems/haywire/assets/classes/undercover-agent.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -16,7 +16,7 @@
       "Compendium.haywire.weapons.haywireWeapon00004",
       "Compendium.haywire.weapons.haywireWeapon00002"
     ],
-    "imagePath": "systems/haywire/assets/cards/undercover-agent.jpg"
+    "imagePath": "systems/haywire/assets/classes/undercover-agent.webp"
   },
   "effects": [],
   "flags": {},

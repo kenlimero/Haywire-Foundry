@@ -2,7 +2,7 @@
   "_id": "haywireClass00016",
   "name": "Deniable Asset",
   "type": "class",
-  "img": "systems/haywire/assets/cards/deniable-asset.jpg",
+  "img": "systems/haywire/assets/classes/deniable-asset.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -18,7 +18,7 @@
       "Compendium.haywire.weapons.haywireWeapon00002",
       "Compendium.haywire.weapons.haywireWeapon00009"
     ],
-    "imagePath": "systems/haywire/assets/cards/deniable-asset.jpg"
+    "imagePath": "systems/haywire/assets/classes/deniable-asset.webp"
   },
   "effects": [],
   "flags": {},

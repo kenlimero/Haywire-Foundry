@@ -2,7 +2,7 @@
   "_id": "haywireClass00008",
   "name": "Support",
   "type": "class",
-  "img": "systems/haywire/assets/cards/support.jpg",
+  "img": "systems/haywire/assets/classes/support.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -18,7 +18,7 @@
       "Compendium.haywire.weapons.haywireWeapon00020",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/support.jpg"
+    "imagePath": "systems/haywire/assets/classes/support.webp"
   },
   "effects": [],
   "flags": {},

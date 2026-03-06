@@ -2,7 +2,7 @@
   "_id": "haywireClass00027",
   "name": "Marksman",
   "type": "class",
-  "img": "systems/haywire/assets/cards/marksman.jpg",
+  "img": "systems/haywire/assets/classes/marksman.webp",
   "system": {
     "tier": 2,
     "combatStats": {
@@ -18,7 +18,7 @@
       "Compendium.haywire.weapons.haywireWeapon00020",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/marksman.jpg"
+    "imagePath": "systems/haywire/assets/classes/marksman.webp"
   },
   "effects": [],
   "flags": {},

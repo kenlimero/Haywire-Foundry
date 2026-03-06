@@ -2,7 +2,7 @@
   "_id": "haywireClass00030",
   "name": "Interpreter",
   "type": "class",
-  "img": "systems/haywire/assets/cards/interpreter.jpg",
+  "img": "systems/haywire/assets/classes/interpreter.webp",
   "system": {
     "tier": 3,
     "combatStats": {
@@ -15,7 +15,7 @@
       "Compendium.haywire.weapons.haywireWeapon00006",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/interpreter.jpg"
+    "imagePath": "systems/haywire/assets/classes/interpreter.webp"
   },
   "effects": [],
   "flags": {},

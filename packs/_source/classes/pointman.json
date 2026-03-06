@@ -2,7 +2,7 @@
   "_id": "haywireClass00004",
   "name": "Pointman",
   "type": "class",
-  "img": "systems/haywire/assets/cards/pointman.jpg",
+  "img": "systems/haywire/assets/classes/pointman.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -19,7 +19,7 @@
       "Compendium.haywire.weapons.haywireWeapon00021",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/pointman.jpg"
+    "imagePath": "systems/haywire/assets/classes/pointman.webp"
   },
   "effects": [],
   "flags": {},

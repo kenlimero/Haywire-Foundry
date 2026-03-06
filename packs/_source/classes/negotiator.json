@@ -2,7 +2,7 @@
   "_id": "haywireClass00019",
   "name": "Negotiator",
   "type": "class",
-  "img": "systems/haywire/assets/cards/negotiator.jpg",
+  "img": "systems/haywire/assets/classes/negotiator.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -16,7 +16,7 @@
       "Compendium.haywire.weapons.haywireWeapon00003",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/negotiator.jpg"
+    "imagePath": "systems/haywire/assets/classes/negotiator.webp"
   },
   "effects": [],
   "flags": {},

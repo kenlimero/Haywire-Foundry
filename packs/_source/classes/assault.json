@@ -2,7 +2,7 @@
   "_id": "haywireClass00002",
   "name": "Assault",
   "type": "class",
-  "img": "systems/haywire/assets/cards/assault.jpg",
+  "img": "systems/haywire/assets/classes/assault.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -23,7 +23,7 @@
       "Compendium.haywire.weapons.haywireWeapon00010",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/assault.jpg"
+    "imagePath": "systems/haywire/assets/classes/assault.webp"
   },
   "effects": [],
   "flags": {},

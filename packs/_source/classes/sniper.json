@@ -2,7 +2,7 @@
   "_id": "haywireClass00010",
   "name": "Sniper",
   "type": "class",
-  "img": "systems/haywire/assets/cards/sniper.jpg",
+  "img": "systems/haywire/assets/classes/sniper.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -19,7 +19,7 @@
       "Compendium.haywire.weapons.haywireWeapon00020",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/sniper.jpg"
+    "imagePath": "systems/haywire/assets/classes/sniper.webp"
   },
   "effects": [],
   "flags": {},

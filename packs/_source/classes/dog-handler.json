@@ -2,7 +2,7 @@
   "_id": "haywireClass00006",
   "name": "Dog Handler",
   "type": "class",
-  "img": "systems/haywire/assets/cards/dog-handler.jpg",
+  "img": "systems/haywire/assets/classes/dog-handler.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -18,7 +18,7 @@
       "Compendium.haywire.weapons.haywireWeapon00020",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/dog-handler.jpg"
+    "imagePath": "systems/haywire/assets/classes/dog-handler.webp"
   },
   "effects": [],
   "flags": {},

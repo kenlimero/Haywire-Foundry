@@ -2,7 +2,7 @@
   "_id": "haywireClass00014",
   "name": "Drone Specialist",
   "type": "class",
-  "img": "systems/haywire/assets/cards/drone-specialist.jpg",
+  "img": "systems/haywire/assets/classes/drone-specialist.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -18,7 +18,7 @@
       "Compendium.haywire.weapons.haywireWeapon00020",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/drone-specialist.jpg"
+    "imagePath": "systems/haywire/assets/classes/drone-specialist.webp"
   },
   "effects": [],
   "flags": {},

@@ -2,7 +2,7 @@
   "_id": "haywireClass00024",
   "name": "Grenadier",
   "type": "class",
-  "img": "systems/haywire/assets/cards/grenadier.jpg",
+  "img": "systems/haywire/assets/classes/grenadier.webp",
   "system": {
     "tier": 2,
     "combatStats": {
@@ -19,7 +19,7 @@
       "Compendium.haywire.weapons.haywireWeapon00014",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/grenadier.jpg"
+    "imagePath": "systems/haywire/assets/classes/grenadier.webp"
   },
   "effects": [],
   "flags": {},

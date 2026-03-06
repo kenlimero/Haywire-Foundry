@@ -2,7 +2,7 @@
   "_id": "haywireClass00018",
   "name": "Shield Operator",
   "type": "class",
-  "img": "systems/haywire/assets/cards/shield-operator.jpg",
+  "img": "systems/haywire/assets/classes/shield-operator.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -15,7 +15,7 @@
       "Compendium.haywire.weapons.haywireWeapon00003",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/shield-operator.jpg"
+    "imagePath": "systems/haywire/assets/classes/shield-operator.webp"
   },
   "effects": [],
   "flags": {},

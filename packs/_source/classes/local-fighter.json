@@ -2,7 +2,7 @@
   "_id": "haywireClass00029",
   "name": "Local Fighter",
   "type": "class",
-  "img": "systems/haywire/assets/cards/local-fighter.jpg",
+  "img": "systems/haywire/assets/classes/local-fighter.webp",
   "system": {
     "tier": 3,
     "combatStats": {
@@ -19,7 +19,7 @@
       "Compendium.haywire.weapons.haywireWeapon00009",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/local-fighter.jpg"
+    "imagePath": "systems/haywire/assets/classes/local-fighter.webp"
   },
   "effects": [],
   "flags": {},

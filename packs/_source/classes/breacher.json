@@ -2,7 +2,7 @@
   "_id": "haywireClass00005",
   "name": "Breacher",
   "type": "class",
-  "img": "systems/haywire/assets/cards/breacher.jpg",
+  "img": "systems/haywire/assets/classes/breacher.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -19,7 +19,7 @@
       "Compendium.haywire.weapons.haywireWeapon00021",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/breacher.jpg"
+    "imagePath": "systems/haywire/assets/classes/breacher.webp"
   },
   "effects": [],
   "flags": {},

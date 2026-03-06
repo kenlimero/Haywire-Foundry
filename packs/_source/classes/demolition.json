@@ -2,7 +2,7 @@
   "_id": "haywireClass00007",
   "name": "Demolition",
   "type": "class",
-  "img": "systems/haywire/assets/cards/demolition.jpg",
+  "img": "systems/haywire/assets/classes/demolition.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -20,7 +20,7 @@
       "Compendium.haywire.weapons.haywireWeapon00019",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/demolition.jpg"
+    "imagePath": "systems/haywire/assets/classes/demolition.webp"
   },
   "effects": [],
   "flags": {},

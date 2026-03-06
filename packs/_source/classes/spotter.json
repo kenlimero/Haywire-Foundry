@@ -2,7 +2,7 @@
   "_id": "haywireClass00012",
   "name": "Spotter",
   "type": "class",
-  "img": "systems/haywire/assets/cards/spotter.jpg",
+  "img": "systems/haywire/assets/classes/spotter.webp",
   "system": {
     "tier": 1,
     "combatStats": {
@@ -19,7 +19,7 @@
       "Compendium.haywire.weapons.haywireWeapon00020",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/spotter.jpg"
+    "imagePath": "systems/haywire/assets/classes/spotter.webp"
   },
   "effects": [],
   "flags": {},

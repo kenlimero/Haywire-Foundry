@@ -102,7 +102,7 @@ export class ClassSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     this.element.querySelector("[data-action='browse-image']")?.addEventListener("click", async () => {
       const picker = new FilePicker({
         type: "image",
-        current: this.item.system.imagePath || "systems/haywire/assets/cards/",
+        current: this.item.system.imagePath || "systems/haywire/assets/classes/",
         callback: (path) => {
           this.item.update({ "system.imagePath": path });
         },

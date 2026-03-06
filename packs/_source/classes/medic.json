@@ -2,7 +2,7 @@
   "_id": "haywireClass00022",
   "name": "Medic",
   "type": "class",
-  "img": "systems/haywire/assets/cards/medic.jpg",
+  "img": "systems/haywire/assets/classes/medic.webp",
   "system": {
     "tier": 2,
     "combatStats": {
@@ -17,7 +17,7 @@
       "Compendium.haywire.weapons.haywireWeapon00020",
       "Compendium.haywire.weapons.haywireWeapon00022"
     ],
-    "imagePath": "systems/haywire/assets/cards/medic.jpg"
+    "imagePath": "systems/haywire/assets/classes/medic.webp"
   },
   "effects": [],
   "flags": {},
