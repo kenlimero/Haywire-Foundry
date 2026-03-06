@@ -1,0 +1,29 @@
+{
+  "_id": "haywireClass00030",
+  "name": "Interpreter",
+  "type": "class",
+  "img": "systems/haywire/assets/cards/interpreter.jpg",
+  "system": {
+    "tier": 3,
+    "combatStats": {
+      "easy": 11,
+      "medium": 15,
+      "hard": 18
+    },
+    "skillIds": [],
+    "defaultWeapons": [],
+    "imagePath": "systems/haywire/assets/cards/interpreter.jpg"
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

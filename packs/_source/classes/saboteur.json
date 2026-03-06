@@ -1,0 +1,29 @@
+{
+  "_id": "haywireClass00017",
+  "name": "Saboteur",
+  "type": "class",
+  "img": "systems/haywire/assets/cards/saboteur.jpg",
+  "system": {
+    "tier": 1,
+    "combatStats": {
+      "easy": 5,
+      "medium": 9,
+      "hard": 13
+    },
+    "skillIds": [],
+    "defaultWeapons": [],
+    "imagePath": "systems/haywire/assets/cards/saboteur.jpg"
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

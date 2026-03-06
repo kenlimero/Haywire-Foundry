@@ -1,0 +1,29 @@
+{
+  "_id": "haywireClass00008",
+  "name": "Support",
+  "type": "class",
+  "img": "systems/haywire/assets/cards/support.jpg",
+  "system": {
+    "tier": 1,
+    "combatStats": {
+      "easy": 5,
+      "medium": 9,
+      "hard": 13
+    },
+    "skillIds": [],
+    "defaultWeapons": [],
+    "imagePath": "systems/haywire/assets/cards/support.jpg"
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}

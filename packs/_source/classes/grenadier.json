@@ -1,0 +1,29 @@
+{
+  "_id": "haywireClass00024",
+  "name": "Grenadier",
+  "type": "class",
+  "img": "systems/haywire/assets/cards/grenadier.jpg",
+  "system": {
+    "tier": 2,
+    "combatStats": {
+      "easy": 8,
+      "medium": 12,
+      "hard": 16
+    },
+    "skillIds": [],
+    "defaultWeapons": [],
+    "imagePath": "systems/haywire/assets/cards/grenadier.jpg"
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "_stats": {
+    "systemId": "haywire",
+    "systemVersion": "0.1.0",
+    "coreVersion": "13"
+  }
+}
