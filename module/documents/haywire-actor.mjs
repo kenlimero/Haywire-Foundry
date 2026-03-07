@@ -91,11 +91,11 @@ export class HaywireActor extends Actor {
 
     const updateData = { "system.conditions": [...conditions] };
 
-    // Sync mécanique inverse : injured → HP=1, downed → HP=0
-    if (shouldBeActive && statusId === "injured") {
-      updateData["system.hitPoints.value"] = 1;
-    } else if (shouldBeActive && statusId === "downed") {
-      updateData["system.hitPoints.value"] = 0;
+    // Sync mécanique inverse : toggle condition ↔ HP
+    if (statusId === "injured") {
+      updateData["system.hitPoints.value"] = shouldBeActive ? 1 : this.system.hitPoints.max;
+    } else if (statusId === "downed") {
+      updateData["system.hitPoints.value"] = shouldBeActive ? 0 : 1;
     }
 
     await this.update(updateData);
