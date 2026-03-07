@@ -94,6 +94,14 @@ Hooks.once("init", () => {
   console.log("haywire | Système Haywire initialisé");
 });
 
+// Masquer le carré de fond derrière les icônes d'effets sur les tokens (garder uniquement le sprite rond)
+Hooks.on("refreshToken", (token) => {
+  if (!token.effects) return;
+  for (const child of token.effects.children) {
+    if (child instanceof PIXI.Graphics) child.visible = false;
+  }
+});
+
 // Prototype token defaults pour les nouveaux Actors Soldier
 Hooks.on("preCreateActor", (actor) => {
   if (actor.type !== "soldier") return;
