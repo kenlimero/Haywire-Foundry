@@ -60,4 +60,3 @@
 
 # Mécanisme de jeu
 [-] Implémenter les mécanismes de jeu
-   [-]  

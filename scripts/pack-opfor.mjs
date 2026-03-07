@@ -29,12 +29,15 @@ function makeTable(name, img, rows, folderId) {
   const _id = nextTableId();
   const results = rows.map(([lo, hi, text]) => ({
     _id: nextResultId(),
-    type: 0,
-    text,
-    img,
+    type: "text",
+    name: "",
+    img: null,
+    description: text,
+    weight: 1,
     range: [lo, hi],
     drawn: false,
-    weight: 1,
+    flags: {},
+    _stats: STATS,
   }));
   return {
     _id,
@@ -454,21 +457,25 @@ for (const [key, f] of Object.entries(FOLDERS)) {
   console.log(`Folder: ${f.name}${f.parent ? ` (child of ${f.parent})` : ""}`);
 }
 
+// Create sublevel for results (Foundry V13 embedded collection pattern)
+const resultsSublevel = db.sublevel("tables.results", { keyEncoding: "utf8", valueEncoding: "utf8" });
+
 console.log(`\nPacking ${allTables.length} tables...`);
 
 for (const table of allTables) {
   const key = `!tables!${table._id}`;
   const resultCount = table.results.length;
 
-  // Store results as separate sub-documents (Foundry V13 embedded collections)
+  // Write each result into the sublevel, keyed as "{tableId}.{resultId}"
+  const resultIds = [];
   for (const result of table.results) {
-    const resultKey = `!tables.results!${table._id}.${result._id}`;
-    result._key = resultKey;
-    await db.put(resultKey, JSON.stringify(result));
+    const resultKey = `${table._id}.${result._id}`;
+    await resultsSublevel.put(resultKey, JSON.stringify(result));
+    resultIds.push(result._id);
   }
 
-  // Store table document WITHOUT embedded results array
-  const tableDoc = { ...table, results: [], _key: key };
+  // Store table document with results as array of IDs (not full objects)
+  const tableDoc = { ...table, results: resultIds, _key: key };
   await db.put(key, JSON.stringify(tableDoc));
   console.log(`  ${key} → ${table.name} (${resultCount} results)`);
 }
