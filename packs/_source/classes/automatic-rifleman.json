@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00025",
+  "_id": "hwCls00000000025",
   "name": "Automatic Rifleman",
   "type": "class",
   "img": "systems/haywire/assets/classes/automatic-rifleman.webp",
@@ -11,12 +11,12 @@
       "hard": 16
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00034"
+      "Compendium.haywire.skills.hwSkl00000000034"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00007",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00020"
+      "Compendium.haywire.weapons.hwWpn00000000007",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000020"
     ],
     "imagePath": "systems/haywire/assets/classes/automatic-rifleman.webp"
   },

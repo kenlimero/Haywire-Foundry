@@ -17,7 +17,8 @@ for (const file of files) {
   const raw = await readFile(join(INPUT, file), "utf8");
   const data = JSON.parse(raw);
   const key = `!items!${data._id}`;
-  await db.put(key, raw);
+  data._key = key;
+  await db.put(key, JSON.stringify(data));
   console.log(`  ${key} → ${data.name}`);
 }
 

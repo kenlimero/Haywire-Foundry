@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00027",
+  "_id": "hwCls00000000027",
   "name": "Marksman",
   "type": "class",
   "img": "systems/haywire/assets/classes/marksman.webp",
@@ -11,14 +11,14 @@
       "hard": 16
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00031"
+      "Compendium.haywire.skills.hwSkl00000000031"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00008",
-      "Compendium.haywire.weapons.haywireWeapon00023",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00020",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000008",
+      "Compendium.haywire.weapons.hwWpn00000000023",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000020",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/marksman.webp"
   },

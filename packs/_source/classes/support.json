@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00008",
+  "_id": "hwCls00000000008",
   "name": "Support",
   "type": "class",
   "img": "systems/haywire/assets/classes/support.webp",
@@ -11,14 +11,14 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00034"
+      "Compendium.haywire.skills.hwSkl00000000034"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00007",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00002",
-      "Compendium.haywire.weapons.haywireWeapon00020",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000007",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000002",
+      "Compendium.haywire.weapons.hwWpn00000000020",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/support.webp"
   },

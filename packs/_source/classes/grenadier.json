@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00024",
+  "_id": "hwCls00000000024",
   "name": "Grenadier",
   "type": "class",
   "img": "systems/haywire/assets/classes/grenadier.webp",
@@ -11,15 +11,15 @@
       "hard": 16
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00001"
+      "Compendium.haywire.skills.hwSkl00000000001"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00009",
-      "Compendium.haywire.weapons.haywireWeapon00020",
-      "Compendium.haywire.weapons.haywireWeapon00010",
-      "Compendium.haywire.weapons.haywireWeapon00014",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000009",
+      "Compendium.haywire.weapons.hwWpn00000000020",
+      "Compendium.haywire.weapons.hwWpn00000000010",
+      "Compendium.haywire.weapons.hwWpn00000000014",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/grenadier.webp"
   },

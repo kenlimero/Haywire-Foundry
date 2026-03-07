@@ -30,13 +30,15 @@ export class ClassSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const item = await fromUuid(data.uuid);
     if (!item) return;
 
+    // IMPORTANT : utiliser data.uuid car item.uuid est cassé pour les compendiums (_id: null)
+    const uuid = data.uuid;
     if (item.type === "weapon") {
-      if (this.item.system.defaultWeapons.includes(item.uuid)) return;
-      const weapons = [...this.item.system.defaultWeapons, item.uuid];
+      if (this.item.system.defaultWeapons.includes(uuid)) return;
+      const weapons = [...this.item.system.defaultWeapons, uuid];
       await this.item.update({ "system.defaultWeapons": weapons });
     } else if (item.type === "skill") {
-      if (this.item.system.skillIds.includes(item.uuid)) return;
-      const skills = [...this.item.system.skillIds, item.uuid];
+      if (this.item.system.skillIds.includes(uuid)) return;
+      const skills = [...this.item.system.skillIds, uuid];
       await this.item.update({ "system.skillIds": skills });
     } else {
       console.warn(`haywire | ClassSheet: ${game.i18n.localize("HAYWIRE.InvalidDrop")} (type: ${item.type})`);

@@ -127,28 +127,30 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if (!this.isEditable) return null;
 
     // Résoudre l'item depuis le UUID des données de drop
-    const item = await fromUuid(data.uuid);
+    // IMPORTANT : garder data.uuid car item.uuid est cassé pour les compendiums (_id: null)
+    const uuid = data.uuid;
+    const item = await fromUuid(uuid);
     if (!item) return null;
 
     if (item.type === "class") {
-      return this.#onDropClassItem(item);
+      return this.#onDropClassItem(item, uuid);
     }
     if (item.type === "weapon") {
-      return this.#onDropWeaponItem(item);
+      return this.#onDropWeaponItem(item, uuid);
     }
     if (item.type === "skill") {
-      return this.#onDropSkillItem(item);
+      return this.#onDropSkillItem(item, uuid);
     }
 
     console.warn(`haywire | SoldierSheet: ${game.i18n.localize("HAYWIRE.InvalidDrop")} (type: ${item.type})`);
     return null;
   }
 
-  async #onDropClassItem(item) {
+  async #onDropClassItem(item, uuid) {
     const hadPreviousClass = !!this.actor.system.classId;
 
     const updateData = {
-      "system.classId": item.uuid,
+      "system.classId": uuid,
       "system.excludedWeaponIds": [],
       "system.excludedSkillIds": [],
     };
@@ -162,21 +164,21 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     ui.notifications.info(game.i18n.format(msgKey, { name: item.name }));
   }
 
-  async #onDropWeaponItem(item) {
+  async #onDropWeaponItem(_item, uuid) {
     // Éviter les doublons (utilise le cache résolu au dernier render)
-    if (this._classWeaponUuids?.includes(item.uuid)) return;
-    if (this.actor.system.weaponIds.includes(item.uuid)) return;
+    if (this._classWeaponUuids?.includes(uuid)) return;
+    if (this.actor.system.weaponIds.includes(uuid)) return;
 
-    const weaponIds = [...this.actor.system.weaponIds, item.uuid];
+    const weaponIds = [...this.actor.system.weaponIds, uuid];
     await this.actor.update({ "system.weaponIds": weaponIds });
   }
 
-  async #onDropSkillItem(item) {
+  async #onDropSkillItem(_item, uuid) {
     // Éviter les doublons (utilise le cache résolu au dernier render)
-    if (this._classSkillUuids?.includes(item.uuid)) return;
-    if (this.actor.system.skillIds.includes(item.uuid)) return;
+    if (this._classSkillUuids?.includes(uuid)) return;
+    if (this.actor.system.skillIds.includes(uuid)) return;
 
-    const skillIds = [...this.actor.system.skillIds, item.uuid];
+    const skillIds = [...this.actor.system.skillIds, uuid];
     await this.actor.update({ "system.skillIds": skillIds });
   }
 

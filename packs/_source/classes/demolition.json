@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00007",
+  "_id": "hwCls00000000007",
   "name": "Demolition",
   "type": "class",
   "img": "systems/haywire/assets/classes/demolition.webp",
@@ -11,17 +11,17 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00030",
-      "Compendium.haywire.skills.haywireSkill00011"
+      "Compendium.haywire.skills.hwSkl00000000030",
+      "Compendium.haywire.skills.hwSkl00000000011"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00002",
-      "Compendium.haywire.weapons.haywireWeapon00009",
-      "Compendium.haywire.weapons.haywireWeapon00011",
-      "Compendium.haywire.weapons.haywireWeapon00019",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000002",
+      "Compendium.haywire.weapons.hwWpn00000000009",
+      "Compendium.haywire.weapons.hwWpn00000000011",
+      "Compendium.haywire.weapons.hwWpn00000000019",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/demolition.webp"
   },

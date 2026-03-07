@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00023",
+  "_id": "hwCls00000000023",
   "name": "Rifleman",
   "type": "class",
   "img": "systems/haywire/assets/classes/rifleman.webp",
@@ -11,13 +11,13 @@
       "hard": 16
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00019"
+      "Compendium.haywire.skills.hwSkl00000000019"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00009",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000009",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/rifleman.webp"
   },

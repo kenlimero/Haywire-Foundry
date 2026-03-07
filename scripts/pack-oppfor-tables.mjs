@@ -6,8 +6,8 @@ const OUTPUT = "packs/oppfor-tables";
 // ─── ID generators ───────────────────────────────────────────────────────────
 let tableCounter = 0;
 let resultCounter = 0;
-const nextTableId = () => `haywireTable${String(++tableCounter).padStart(5, "0")}`;
-const nextResultId = () => `haywireReslt${String(++resultCounter).padStart(5, "0")}`;
+const nextTableId = () => `hwTbl${String(++tableCounter).padStart(11, "0")}`;
+const nextResultId = () => `hwRes${String(++resultCounter).padStart(11, "0")}`;
 
 // ─── Helper to build a RollTable document ────────────────────────────────────
 function makeTable(name, img, rows) {
@@ -422,11 +422,12 @@ for (const table of allTables) {
   // Store results as separate sub-documents (Foundry V13 embedded collections)
   for (const result of table.results) {
     const resultKey = `!tables.results!${table._id}.${result._id}`;
+    result._key = resultKey;
     await db.put(resultKey, JSON.stringify(result));
   }
 
   // Store table document WITHOUT embedded results array
-  const tableDoc = { ...table, results: [] };
+  const tableDoc = { ...table, results: [], _key: key };
   await db.put(key, JSON.stringify(tableDoc));
   console.log(`  ${key} → ${table.name} (${resultCount} results)`);
 }

@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00026",
+  "_id": "hwCls00000000026",
   "name": "Machine Gunner",
   "type": "class",
   "img": "systems/haywire/assets/classes/machine-gunner.webp",
@@ -11,14 +11,14 @@
       "hard": 16
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00036",
-      "Compendium.haywire.skills.haywireSkill00004"
+      "Compendium.haywire.skills.hwSkl00000000036",
+      "Compendium.haywire.skills.hwSkl00000000004"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00007",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00020",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000007",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000020",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/machine-gunner.webp"
   },

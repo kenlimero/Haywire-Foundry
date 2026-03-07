@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00010",
+  "_id": "hwCls00000000010",
   "name": "Sniper",
   "type": "class",
   "img": "systems/haywire/assets/classes/sniper.webp",
@@ -11,16 +11,16 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00010",
-      "Compendium.haywire.skills.haywireSkill00006"
+      "Compendium.haywire.skills.hwSkl00000000010",
+      "Compendium.haywire.skills.hwSkl00000000006"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00008",
-      "Compendium.haywire.weapons.haywireWeapon00023",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00002",
-      "Compendium.haywire.weapons.haywireWeapon00020",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000008",
+      "Compendium.haywire.weapons.hwWpn00000000023",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000002",
+      "Compendium.haywire.weapons.hwWpn00000000020",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/sniper.webp"
   },

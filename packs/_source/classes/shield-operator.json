@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00018",
+  "_id": "hwCls00000000018",
   "name": "Shield Operator",
   "type": "class",
   "img": "systems/haywire/assets/classes/shield-operator.webp",
@@ -11,12 +11,12 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00026",
-      "Compendium.haywire.skills.haywireSkill00032"
+      "Compendium.haywire.skills.hwSkl00000000026",
+      "Compendium.haywire.skills.hwSkl00000000032"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/shield-operator.webp"
   },

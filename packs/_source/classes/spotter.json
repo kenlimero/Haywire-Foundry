@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00012",
+  "_id": "hwCls00000000012",
   "name": "Spotter",
   "type": "class",
   "img": "systems/haywire/assets/classes/spotter.webp",
@@ -11,16 +11,16 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00002",
-      "Compendium.haywire.skills.haywireSkill00020"
+      "Compendium.haywire.skills.hwSkl00000000002",
+      "Compendium.haywire.skills.hwSkl00000000020"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00023",
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00002",
-      "Compendium.haywire.weapons.haywireWeapon00020",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000023",
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000002",
+      "Compendium.haywire.weapons.hwWpn00000000020",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/spotter.webp"
   },

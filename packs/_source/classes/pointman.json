@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00004",
+  "_id": "hwCls00000000004",
   "name": "Pointman",
   "type": "class",
   "img": "systems/haywire/assets/classes/pointman.webp",
@@ -11,16 +11,16 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00009",
-      "Compendium.haywire.skills.haywireSkill00007"
+      "Compendium.haywire.skills.hwSkl00000000009",
+      "Compendium.haywire.skills.hwSkl00000000007"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00004",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00002",
-      "Compendium.haywire.weapons.haywireWeapon00021",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000004",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000002",
+      "Compendium.haywire.weapons.hwWpn00000000021",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/pointman.webp"
   },

@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00011",
+  "_id": "hwCls00000000011",
   "name": "Recon",
   "type": "class",
   "img": "systems/haywire/assets/classes/recon.webp",
@@ -11,18 +11,18 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00039",
-      "Compendium.haywire.skills.haywireSkill00022"
+      "Compendium.haywire.skills.hwSkl00000000039",
+      "Compendium.haywire.skills.hwSkl00000000022"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00023",
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00004",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00002",
-      "Compendium.haywire.weapons.haywireWeapon00020",
-      "Compendium.haywire.weapons.haywireWeapon00021",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000023",
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000004",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000002",
+      "Compendium.haywire.weapons.hwWpn00000000020",
+      "Compendium.haywire.weapons.hwWpn00000000021",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/recon.webp"
   },

@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00029",
+  "_id": "hwCls00000000029",
   "name": "Local Fighter",
   "type": "class",
   "img": "systems/haywire/assets/classes/local-fighter.webp",
@@ -11,15 +11,15 @@
       "hard": 18
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00003"
+      "Compendium.haywire.skills.hwSkl00000000003"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00008",
-      "Compendium.haywire.weapons.haywireWeapon00023",
-      "Compendium.haywire.weapons.haywireWeapon00007",
-      "Compendium.haywire.weapons.haywireWeapon00009",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000008",
+      "Compendium.haywire.weapons.hwWpn00000000023",
+      "Compendium.haywire.weapons.hwWpn00000000007",
+      "Compendium.haywire.weapons.hwWpn00000000009",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/local-fighter.webp"
   },

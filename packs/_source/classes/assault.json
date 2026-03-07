@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00002",
+  "_id": "hwCls00000000002",
   "name": "Assault",
   "type": "class",
   "img": "systems/haywire/assets/classes/assault.webp",
@@ -11,20 +11,20 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00019",
-      "Compendium.haywire.skills.haywireSkill00001"
+      "Compendium.haywire.skills.hwSkl00000000019",
+      "Compendium.haywire.skills.hwSkl00000000001"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00004",
-      "Compendium.haywire.weapons.haywireWeapon00005",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00002",
-      "Compendium.haywire.weapons.haywireWeapon00009",
-      "Compendium.haywire.weapons.haywireWeapon00021",
-      "Compendium.haywire.weapons.haywireWeapon00020",
-      "Compendium.haywire.weapons.haywireWeapon00010",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000004",
+      "Compendium.haywire.weapons.hwWpn00000000005",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000002",
+      "Compendium.haywire.weapons.hwWpn00000000009",
+      "Compendium.haywire.weapons.hwWpn00000000021",
+      "Compendium.haywire.weapons.hwWpn00000000020",
+      "Compendium.haywire.weapons.hwWpn00000000010",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/assault.webp"
   },

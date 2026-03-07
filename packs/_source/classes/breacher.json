@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00005",
+  "_id": "hwCls00000000005",
   "name": "Breacher",
   "type": "class",
   "img": "systems/haywire/assets/classes/breacher.webp",
@@ -11,16 +11,16 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00013",
-      "Compendium.haywire.skills.haywireSkill00028"
+      "Compendium.haywire.skills.hwSkl00000000013",
+      "Compendium.haywire.skills.hwSkl00000000028"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00005",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00002",
-      "Compendium.haywire.weapons.haywireWeapon00021",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000005",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000002",
+      "Compendium.haywire.weapons.hwWpn00000000021",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/breacher.webp"
   },

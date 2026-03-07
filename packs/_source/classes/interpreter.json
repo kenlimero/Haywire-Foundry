@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00030",
+  "_id": "hwCls00000000030",
   "name": "Interpreter",
   "type": "class",
   "img": "systems/haywire/assets/classes/interpreter.webp",
@@ -11,11 +11,11 @@
       "hard": 18
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00012"
+      "Compendium.haywire.skills.hwSkl00000000012"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/interpreter.webp"
   },

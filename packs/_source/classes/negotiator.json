@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00019",
+  "_id": "hwCls00000000019",
   "name": "Negotiator",
   "type": "class",
   "img": "systems/haywire/assets/classes/negotiator.webp",
@@ -11,13 +11,13 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00008",
-      "Compendium.haywire.skills.haywireSkill00021"
+      "Compendium.haywire.skills.hwSkl00000000008",
+      "Compendium.haywire.skills.hwSkl00000000021"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/negotiator.webp"
   },

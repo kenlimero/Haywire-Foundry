@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00022",
+  "_id": "hwCls00000000022",
   "name": "Medic",
   "type": "class",
   "img": "systems/haywire/assets/classes/medic.webp",
@@ -11,13 +11,13 @@
       "hard": 16
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00016"
+      "Compendium.haywire.skills.hwSkl00000000016"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00020",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000020",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/medic.webp"
   },

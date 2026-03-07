@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00015",
+  "_id": "hwCls00000000015",
   "name": "Undercover Agent",
   "type": "class",
   "img": "systems/haywire/assets/classes/undercover-agent.webp",
@@ -11,13 +11,13 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00037",
-      "Compendium.haywire.skills.haywireSkill00024"
+      "Compendium.haywire.skills.hwSkl00000000037",
+      "Compendium.haywire.skills.hwSkl00000000024"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00004",
-      "Compendium.haywire.weapons.haywireWeapon00002"
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000004",
+      "Compendium.haywire.weapons.hwWpn00000000002"
     ],
     "imagePath": "systems/haywire/assets/classes/undercover-agent.webp"
   },

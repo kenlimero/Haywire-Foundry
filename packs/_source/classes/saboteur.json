@@ -1,5 +1,5 @@
 {
-  "_id": "haywireClass00017",
+  "_id": "hwCls00000000017",
   "name": "Saboteur",
   "type": "class",
   "img": "systems/haywire/assets/classes/saboteur.webp",
@@ -11,15 +11,15 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.haywireSkill00029",
-      "Compendium.haywire.skills.haywireSkill00038"
+      "Compendium.haywire.skills.hwSkl00000000029",
+      "Compendium.haywire.skills.hwSkl00000000038"
     ],
     "defaultWeapons": [
-      "Compendium.haywire.weapons.haywireWeapon00006",
-      "Compendium.haywire.weapons.haywireWeapon00003",
-      "Compendium.haywire.weapons.haywireWeapon00002",
-      "Compendium.haywire.weapons.haywireWeapon00009",
-      "Compendium.haywire.weapons.haywireWeapon00022"
+      "Compendium.haywire.weapons.hwWpn00000000006",
+      "Compendium.haywire.weapons.hwWpn00000000003",
+      "Compendium.haywire.weapons.hwWpn00000000002",
+      "Compendium.haywire.weapons.hwWpn00000000009",
+      "Compendium.haywire.weapons.hwWpn00000000022"
     ],
     "imagePath": "systems/haywire/assets/classes/saboteur.webp"
   },
