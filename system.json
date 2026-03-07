@@ -110,10 +110,5 @@
     "units": ""
   },
   "socket": false,
-  "media": [
-    {
-      "type": "cover",
-      "url": "systems/haywire/assets/haywire-cover.webp"
-    }
-  ]
+  "background": "systems/haywire/assets/haywire-cover.webp"
 }
