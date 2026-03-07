@@ -63,8 +63,8 @@ Hooks.once("init", () => {
   // Token bar attributes
   CONFIG.Actor.trackableAttributes = {
     soldier: {
-      bar: ["hitPoints"],
-      value: ["actionPoints"],
+      bar: ["hitPoints", "actionPoints"],
+      value: [],
     },
   };
 
@@ -108,8 +108,8 @@ Hooks.on("preCreateActor", (actor) => {
   actor.updateSource({
     "prototypeToken.actorLink": true,
     "prototypeToken.displayName": CONST.TOKEN_DISPLAY_MODES.HOVER,
-    "prototypeToken.displayBars": CONST.TOKEN_DISPLAY_MODES.HOVER,
-    "prototypeToken.bar1.attribute": "hitPoints",
+    "prototypeToken.displayBars": CONST.TOKEN_DISPLAY_MODES.ALWAYS,
+    "prototypeToken.bar1.attribute": "actionPoints",
     "prototypeToken.disposition": CONST.TOKEN_DISPOSITIONS.FRIENDLY,
   });
 });

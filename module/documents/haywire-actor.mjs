@@ -45,7 +45,8 @@ export class HaywireActor extends Actor {
     let apPenalty = 0;
     if (system.conditions.has("pinned")) apPenalty = 2;
     else if (system.conditions.has("suppressed")) apPenalty = 1;
-    system.actionPoints = Math.max(0, system.hitPoints.value - apPenalty);
+    system.actionPoints.max = system.hitPoints.max;
+    system.actionPoints.value = Math.max(0, system.hitPoints.value - apPenalty);
   }
 
   /* ---------------------------------------- */
