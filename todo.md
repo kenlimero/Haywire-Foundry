@@ -48,7 +48,7 @@
 [-] importé l'unités, créait un répertoire dans Actor avec le nom de l'unité et les différents actor avec des classes.
 
 # system
-[-] mettre une image sur le système
+[x] mettre une image sur le système 
 [P] setting :
     [x] afficher la fiche de soldier type founcdry ou juste l'image - un paramètre pour soldier et un autre pour opfor.
     [-] afficher la fiche de opfor type founcdry ou juste l'image - un paramètre pour soldier et un autre pour opfor.
