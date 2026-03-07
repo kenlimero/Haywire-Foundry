@@ -90,9 +90,21 @@ Hooks.once("init", () => {
     { id: "sup-6", name: "HAYWIRE.Suppression.6", img: "systems/haywire/assets/icons/sup-6.svg" },
   ];
 
+  // Setting : vue carte pour soldier sheet
+  game.settings.register("haywire", "soldierCardView", {
+    name: "HAYWIRE.Settings.CardView",
+    hint: "HAYWIRE.Settings.CardViewHint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: false,
+    requiresReload: false,
+  });
+
   // Pré-chargement templates
   foundry.applications.handlebars.loadTemplates([
     "systems/haywire/templates/actor/soldier-sheet.hbs",
+    "systems/haywire/templates/actor/soldier-card.hbs",
     "systems/haywire/templates/actor/opfor-unit-sheet.hbs",
     "systems/haywire/templates/item/class-sheet.hbs",
     "systems/haywire/templates/item/weapon-sheet.hbs",

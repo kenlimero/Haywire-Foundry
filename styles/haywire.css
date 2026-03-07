@@ -727,6 +727,41 @@
     padding: 0.25rem 0.4rem;
   }
 
+  /* Soldier Card View */
+  .haywire-card-body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .haywire-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .haywire-card-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--haywire-color-secondary);
+    background: var(--haywire-color-bg);
+    gap: 0.5rem;
+  }
+
+  .haywire-card-placeholder i {
+    font-size: 3rem;
+    opacity: 0.4;
+  }
+
+  .haywire-card-placeholder span {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
   /* OPFOR Unit Sheet */
   .opfor-unit-card {
     position: relative;

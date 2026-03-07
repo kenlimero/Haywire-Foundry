@@ -8,6 +8,9 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     sheet: {
       template: "systems/haywire/templates/actor/soldier-sheet.hbs",
     },
+    card: {
+      template: "systems/haywire/templates/actor/soldier-card.hbs",
+    },
   };
 
   static DEFAULT_OPTIONS = {
@@ -26,6 +29,16 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       rollShoot: SoldierSheet.#onRollShoot,
     },
   };
+
+  _configureRenderOptions(options) {
+    super._configureRenderOptions(options);
+    const cardView = game.settings.get("haywire", "soldierCardView");
+    if (cardView) {
+      options.parts = ["card"];
+    } else {
+      options.parts = ["sheet"];
+    }
+  }
 
   static async #onEditPortrait(event, target) {
     const tokenizer = game.modules.get("vtta-tokenizer");
@@ -210,6 +223,14 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   _onRender(context, options) {
     super._onRender(context, options);
 
+    // Ajuster la taille selon le mode carte/sheet
+    const cardView = game.settings.get("haywire", "soldierCardView");
+    if (cardView) {
+      this.setPosition({ width: 400, height: 600 });
+    } else {
+      this.setPosition({ width: 650, height: 550 });
+    }
+
     const dropZone = this.element.querySelector(".haywire-sheet-class-image");
     if (dropZone) {
       dropZone.addEventListener("dragover", (e) => {
@@ -254,6 +275,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.classImage = actorHasCustomImg
       ? this.actor.img
       : (classItem?.system?.imagePath || null);
+    context.classCardImage = classItem?.system?.imagePath || null;
 
     // CombatStats dérivées live depuis la classe
     context.combatStats = classItem?.type === "class"

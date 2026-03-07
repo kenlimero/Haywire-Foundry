@@ -78,6 +78,10 @@
     "RollTotal": "Total",
     "DieResult": "Dé",
     "Thresholds": "Seuils",
+    "Settings": {
+      "CardView": "Vue carte soldat",
+      "CardViewHint": "Affiche l'image de la carte de classe au lieu de la fiche interactive"
+    },
     "WeaponType": {
       "Primary": "Primaire",
       "Secondary": "Secondaire",

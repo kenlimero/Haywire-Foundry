@@ -1,0 +1,10 @@
+<section class="haywire-card-body">
+  {{#if classCardImage}}
+    <img src="{{classCardImage}}" alt="{{className}}" class="haywire-card-img" />
+  {{else}}
+    <div class="haywire-card-placeholder">
+      <i class="fas fa-user-slash"></i>
+      <span>{{localize "HAYWIRE.NoClassAssigned"}}</span>
+    </div>
+  {{/if}}
+</section>
