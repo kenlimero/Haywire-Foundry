@@ -5,7 +5,7 @@
 [P] créer les OPPFOR.
     [P] créer les compendiums
         [x] Units
-        [-] threat level et reinforcement
+        [x] threat level et reinforcement
     [x] créer les différentes actorsheet image
     [x] créer les différentes actorsheet modif
     [x] la taille de la sheet n'est pas bonne

@@ -2,7 +2,7 @@
   "id": "haywire",
   "title": "Haywire",
   "description": "Système FoundryVTT pour le wargame tactique solo/coop HAYWIRE V2",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
@@ -10,7 +10,7 @@
   },
   "url": "https://github.com/kenlimero/Haywire-Foundry",
   "manifest": "https://raw.githubusercontent.com/kenlimero/Haywire-Foundry/main/system.json",
-  "download": "https://github.com/kenlimero/Haywire-Foundry/archive/refs/tags/v0.6.0.zip",
+  "download": "https://github.com/kenlimero/Haywire-Foundry/archive/refs/tags/v0.6.1.zip",
   "authors": [
     {
       "name": "Ricco",
@@ -109,5 +109,11 @@
     "distance": 1,
     "units": ""
   },
-  "socket": false
+  "socket": false,
+  "media": [
+    {
+      "type": "cover",
+      "url": "systems/haywire/assets/haywire-cover.webp"
+    }
+  ]
 }
