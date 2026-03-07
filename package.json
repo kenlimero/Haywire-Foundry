@@ -7,7 +7,8 @@
     "build:classes": "node scripts/pack-classes.mjs",
     "build:weapons": "node scripts/pack-weapons.mjs",
     "build:skills": "node scripts/pack-skills.mjs",
-    "build:oppfor-tables": "node scripts/pack-oppfor-tables.mjs"
+    "build:opfor": "node scripts/pack-opfor.mjs",
+    "build:opfor-units": "node scripts/pack-opfor-units.mjs"
   },
   "devDependencies": {
     "classic-level": "^3.0.0"

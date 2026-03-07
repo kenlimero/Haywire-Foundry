@@ -5,6 +5,7 @@ import { SoldierModel } from "./module/models/soldier-model.mjs";
 import { ClassModel } from "./module/models/class-model.mjs";
 import { WeaponModel } from "./module/models/weapon-model.mjs";
 import { SkillModel } from "./module/models/skill-model.mjs";
+import { OpforUnitModel } from "./module/models/opfor-unit-model.mjs";
 
 // Documents
 import { HaywireActor } from "./module/documents/haywire-actor.mjs";
@@ -18,6 +19,7 @@ import { SoldierSheet } from "./module/sheets/soldier-sheet.mjs";
 import { ClassSheet } from "./module/sheets/class-sheet.mjs";
 import { WeaponSheet } from "./module/sheets/weapon-sheet.mjs";
 import { SkillSheet } from "./module/sheets/skill-sheet.mjs";
+import { OpforUnitSheet } from "./module/sheets/opfor-unit-sheet.mjs";
 
 Hooks.once("init", () => {
   // Expose API for third-party modules
@@ -31,6 +33,7 @@ Hooks.once("init", () => {
   // Data models — clés = noms des sous-types dans system.json > documentTypes
   CONFIG.Actor.dataModels = {
     soldier: SoldierModel,
+    "opfor-unit": OpforUnitModel,
   };
   CONFIG.Item.dataModels = {
     class: ClassModel,
@@ -59,6 +62,11 @@ Hooks.once("init", () => {
     makeDefault: true,
     label: "HAYWIRE.SheetSkill",
   });
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(Actor, "haywire", OpforUnitSheet, {
+    types: ["opfor-unit"],
+    makeDefault: true,
+    label: "HAYWIRE.SheetOpforUnit",
+  });
 
   // Token bar attributes
   CONFIG.Actor.trackableAttributes = {
@@ -85,6 +93,7 @@ Hooks.once("init", () => {
   // Pré-chargement templates
   foundry.applications.handlebars.loadTemplates([
     "systems/haywire/templates/actor/soldier-sheet.hbs",
+    "systems/haywire/templates/actor/opfor-unit-sheet.hbs",
     "systems/haywire/templates/item/class-sheet.hbs",
     "systems/haywire/templates/item/weapon-sheet.hbs",
     "systems/haywire/templates/item/skill-sheet.hbs",

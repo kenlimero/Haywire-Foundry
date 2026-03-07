@@ -3,7 +3,9 @@
     "System": "Haywire",
     "CompendiumClasses": "Classes",
     "CompendiumWeapons": "Weapons",
-    "CompendiumOppforTables": "OPFOR Tables",
+    "CompendiumOpfor": "OPFOR",
+    "CompendiumOpforUnits": "OPFOR Units",
+    "SheetOpforUnit": "OPFOR Unit Sheet",
     "SheetSoldier": "Soldier Sheet",
     "SheetClass": "Class Sheet",
     "SheetWeapon": "Weapon Sheet",
@@ -85,7 +87,8 @@
   },
   "TYPES": {
     "Actor": {
-      "soldier": "Soldier"
+      "soldier": "Soldier",
+      "opfor-unit": "OPFOR Unit"
     },
     "Item": {
       "class": "Class",
