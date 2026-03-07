@@ -98,6 +98,7 @@ Hooks.once("init", () => {
 Hooks.on("preCreateActor", (actor) => {
   if (actor.type !== "soldier") return;
   actor.updateSource({
+    "prototypeToken.actorLink": true,
     "prototypeToken.displayName": CONST.TOKEN_DISPLAY_MODES.HOVER,
     "prototypeToken.displayBars": CONST.TOKEN_DISPLAY_MODES.HOVER,
     "prototypeToken.bar1.attribute": "hitPoints",
