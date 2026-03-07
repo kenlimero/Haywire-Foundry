@@ -21,10 +21,25 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       removeSkill: SoldierSheet.#onRemoveSkill,
       removeCondition: SoldierSheet.#onRemoveCondition,
       openItem: SoldierSheet.#onOpenItem,
+      editPortrait: SoldierSheet.#onEditPortrait,
       rollD20: SoldierSheet.#onRollD20,
       rollShoot: SoldierSheet.#onRollShoot,
     },
   };
+
+  static async #onEditPortrait(event, target) {
+    const fp = new FilePicker({
+      type: "image",
+      current: this.actor.img,
+      callback: async (path) => {
+        await this.actor.update({
+          img: path,
+          "prototypeToken.texture.src": path,
+        });
+      },
+    });
+    fp.render(true);
+  }
 
   static async #onRollD20(event, target) {
     await HaywireRoll.d20({

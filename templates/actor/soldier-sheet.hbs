@@ -8,13 +8,14 @@
     <div class="haywire-sheet-class-image">
       {{#if classImage}}
         <img src="{{classImage}}" alt="{{className}}" class="haywire-class-img"
+             {{#if isEditable}}data-action="editPortrait" style="cursor:pointer;"{{/if}}
              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
         <div class="haywire-placeholder" style="display:none;">
           <i class="fas fa-image"></i>
           <span>{{className}}</span>
         </div>
       {{else}}
-        <div class="haywire-placeholder">
+        <div class="haywire-placeholder" {{#if isEditable}}data-action="editPortrait" style="cursor:pointer;"{{/if}}>
           <i class="fas fa-user-slash"></i>
           <span>{{localize "HAYWIRE.NoClassAssigned"}}</span>
           <small>{{localize "HAYWIRE.DragClassHint"}}</small>
