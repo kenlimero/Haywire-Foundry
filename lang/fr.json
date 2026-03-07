@@ -80,7 +80,9 @@
     "Thresholds": "Seuils",
     "Settings": {
       "CardView": "Vue carte soldat",
-      "CardViewHint": "Affiche l'image de la carte de classe au lieu de la fiche interactive"
+      "CardViewHint": "Affiche l'image de la carte de classe au lieu de la fiche interactive",
+      "ShowCard": "Vue carte",
+      "ShowSheet": "Vue fiche"
     },
     "WeaponType": {
       "Primary": "Primaire",

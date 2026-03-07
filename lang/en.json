@@ -80,7 +80,9 @@
     "Thresholds": "Thresholds",
     "Settings": {
       "CardView": "Soldier Card View",
-      "CardViewHint": "Display the class card image instead of the interactive soldier sheet"
+      "CardViewHint": "Display the class card image instead of the interactive soldier sheet",
+      "ShowCard": "Card View",
+      "ShowSheet": "Sheet View"
     },
     "WeaponType": {
       "Primary": "Primary",

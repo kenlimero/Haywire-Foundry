@@ -27,8 +27,27 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       editPortrait: SoldierSheet.#onEditPortrait,
       rollD20: SoldierSheet.#onRollD20,
       rollShoot: SoldierSheet.#onRollShoot,
+      toggleCardView: SoldierSheet.#onToggleCardView,
     },
   };
+
+  _getHeaderControls() {
+    const controls = super._getHeaderControls();
+    const cardView = game.settings.get("haywire", "soldierCardView");
+    controls.unshift({
+      icon: cardView ? "fas fa-sheet-plastic" : "fas fa-id-card",
+      label: cardView ? "HAYWIRE.Settings.ShowSheet" : "HAYWIRE.Settings.ShowCard",
+      action: "toggleCardView",
+    });
+    return controls;
+  }
+
+  static async #onToggleCardView() {
+    const current = game.settings.get("haywire", "soldierCardView");
+    await game.settings.set("haywire", "soldierCardView", !current);
+    await this.close();
+    this.render({ force: true });
+  }
 
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
