@@ -28,6 +28,12 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   };
 
   static async #onEditPortrait(event, target) {
+    const tokenizer = game.modules.get("vtta-tokenizer");
+    if (tokenizer?.active) {
+      tokenizer.api.tokenizeActor(this.actor);
+      return;
+    }
+
     const fp = new FilePicker({
       type: "image",
       current: this.actor.img,
@@ -243,7 +249,11 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }
     context.hasClass = !!classItem;
     context.className = classItem?.name ?? null;
-    context.classImage = classItem?.system?.imagePath || null;
+    const defaultImg = "icons/svg/mystery-man.svg";
+    const actorHasCustomImg = this.actor.img && this.actor.img !== defaultImg;
+    context.classImage = actorHasCustomImg
+      ? this.actor.img
+      : (classItem?.system?.imagePath || null);
 
     // CombatStats dérivées live depuis la classe
     context.combatStats = classItem?.type === "class"
