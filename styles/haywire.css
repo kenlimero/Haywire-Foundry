@@ -795,4 +795,102 @@
     background: var(--haywire-color-accent);
     color: var(--haywire-color-bg);
   }
+
+  /* ============================================ */
+  /*  Token Hover Overlay                         */
+  /* ============================================ */
+
+  #haywire-token-overlay {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    max-width: 350px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  #haywire-token-overlay.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #haywire-token-overlay img {
+    display: block;
+    max-width: 350px;
+    max-height: 500px;
+    border-radius: 6px;
+    border: 2px solid var(--haywire-color-accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+  }
+
+  #haywire-token-overlay.opfor {
+    max-width: min(700px, calc(100vw - 2rem));
+  }
+
+  #haywire-token-overlay img.haywire-overlay-opfor {
+    max-width: min(700px, calc(100vw - 2rem));
+  }
+
+  .haywire-overlay-stats {
+    background: var(--haywire-color-bg);
+    border: 2px solid var(--haywire-color-accent);
+    border-radius: 6px;
+    padding: 0.75rem;
+    color: var(--haywire-color-text);
+    font-size: 0.8rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .haywire-overlay-header {
+    font-family: var(--haywire-font-heading);
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--haywire-color-accent);
+    border-bottom: 1px solid var(--haywire-color-border);
+    padding-bottom: 0.25rem;
+  }
+
+  .haywire-overlay-bars {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .haywire-overlay-stat {
+    font-weight: bold;
+  }
+
+  .haywire-overlay-conditions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .haywire-overlay-combat {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .haywire-overlay-weapons {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+  }
+
+  .haywire-overlay-weapons th {
+    text-align: left;
+    color: var(--haywire-color-secondary);
+    border-bottom: 1px solid var(--haywire-color-border);
+    padding: 0.15rem 0.3rem;
+  }
+
+  .haywire-overlay-weapons td {
+    padding: 0.15rem 0.3rem;
+  }
 }

@@ -14,6 +14,9 @@ import { HaywireItem } from "./module/documents/haywire-item.mjs";
 // Rolls
 import { HaywireRoll } from "./module/rolls/haywire-roll.mjs";
 
+// Token overlay
+import { TokenOverlay } from "./module/token-overlay.mjs";
+
 // Sheets
 import { SoldierSheet } from "./module/sheets/soldier-sheet.mjs";
 import { ClassSheet } from "./module/sheets/class-sheet.mjs";
@@ -121,6 +124,12 @@ Hooks.on("refreshToken", (token) => {
   for (const child of token.effects.children) {
     if (child instanceof PIXI.Graphics) child.visible = false;
   }
+});
+
+// Overlay au survol d'un token
+Hooks.on("hoverToken", (token, hovered) => {
+  if (hovered) TokenOverlay.show(token);
+  else TokenOverlay.hide();
 });
 
 // Prototype token defaults pour les nouveaux Actors Soldier
