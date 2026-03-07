@@ -10,7 +10,7 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static DEFAULT_OPTIONS = {
     classes: ["haywire", "actor", "opfor-unit"],
-    position: { width: 480, height: 670 },
+    position: { width: 750, height: 556 },
     form: { submitOnChange: true, closeOnSubmit: false },
     window: { resizable: true },
   };
