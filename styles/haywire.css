@@ -729,16 +729,35 @@
 
   /* OPFOR Unit Sheet */
   .opfor-unit-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
     height: 100%;
-    background: #1a1a1a;
+    background-color: #1a1a1a;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
-  .opfor-unit-image {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+  .opfor-unit-roll-btn {
+    position: absolute;
+    top: 12%;
+    left: 15%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    padding: 0;
+    background: var(--haywire-color-primary);
+    color: var(--haywire-color-text);
+    border: 1px solid var(--haywire-color-accent);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+  }
+
+  .opfor-unit-roll-btn:hover {
+    background: var(--haywire-color-accent);
+    color: var(--haywire-color-bg);
   }
 }

@@ -1,3 +1,5 @@
+import { HaywireRoll } from "../rolls/haywire-roll.mjs";
+
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 
@@ -13,7 +15,17 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     position: { width: 750, height: 556 },
     form: { submitOnChange: true, closeOnSubmit: false },
     window: { resizable: true },
+    actions: {
+      rollD20: OpforUnitSheet.#onRollD20,
+    },
   };
+
+  static async #onRollD20(event, target) {
+    await HaywireRoll.d20({
+      actor: this.actor,
+      label: game.i18n.localize("HAYWIRE.RollD20"),
+    });
+  }
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
