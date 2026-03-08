@@ -7,7 +7,7 @@
     "build:classes": "node scripts/pack-classes.mjs",
     "build:weapons": "node scripts/pack-weapons.mjs",
     "build:skills": "node scripts/pack-skills.mjs",
-    "build:opfor": "node scripts/pack-opfor.mjs",
+    "build:opfor-tables": "node scripts/pack-opfor-tables.mjs",
     "build:opfor-units": "node scripts/pack-opfor-units.mjs"
   },
   "devDependencies": {

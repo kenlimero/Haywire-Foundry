@@ -3,7 +3,7 @@
     "System": "Haywire",
     "CompendiumClasses": "Classes",
     "CompendiumWeapons": "Armes",
-    "CompendiumOpfor": "OPFOR",
+    "CompendiumOpforTables": "Tables OPFOR",
     "CompendiumOpforUnits": "Unités OPFOR",
     "SheetOpforUnit": "Fiche Unité OPFOR",
     "SheetSoldier": "Fiche Soldat",

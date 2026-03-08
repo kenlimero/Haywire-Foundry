@@ -1,7 +1,7 @@
 import { ClassicLevel } from "classic-level";
 import { rm } from "fs/promises";
 
-const OUTPUT = "packs/opfor";
+const OUTPUT = "packs/opfor-tables";
 
 // ─── ID generators ───────────────────────────────────────────────────────────
 let tableCounter = 0;

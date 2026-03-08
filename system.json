@@ -81,9 +81,9 @@
       }
     },
     {
-      "name": "opfor",
-      "label": "HAYWIRE.CompendiumOpfor",
-      "path": "packs/opfor",
+      "name": "opfor-tables",
+      "label": "HAYWIRE.CompendiumOpforTables",
+      "path": "packs/opfor-tables",
       "type": "RollTable",
       "system": "haywire",
       "ownership": {
