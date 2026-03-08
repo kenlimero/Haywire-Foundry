@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000001",
+  "name": "Armored",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "This unit is always equipped with a body armor."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

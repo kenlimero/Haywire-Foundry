@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000005",
+  "name": "Bodyguards",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "Basic troops that spawn with this leader stay within 6\" of him and use the leader's behavior."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

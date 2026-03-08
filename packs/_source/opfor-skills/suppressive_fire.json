@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000012",
+  "name": "Suppressive Fire",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "When this unit fires at an enemy, the target and all models located within 1.5\" of the target are pinned."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

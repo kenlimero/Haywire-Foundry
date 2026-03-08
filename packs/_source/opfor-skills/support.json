@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000004",
+  "name": "Support",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "Once the alert is raised, this unit will call in support during each spawn phase. Roll a D20 on the faction support table and apply the effect immediately. This action doesn't cost any AP."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

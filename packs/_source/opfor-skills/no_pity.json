@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000014",
+  "name": "No Pity",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "Once alerted, if this unit ends its movement within 3\" of a civilian, he is automatically moved in base contact with him instead and he will kill that civilian."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

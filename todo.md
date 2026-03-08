@@ -4,17 +4,19 @@
     [x] ajouter les skills aux classes par des liens UUID.
 
 # OPFOR
-[P] créer les OPPFOR.
-    [P] créer les compendiums
+[x] créer les OPPFOR.
+    [x] créer les compendiums
         [x] Units
         [x] threat level et reinforcement
     [x] créer les différentes actorsheet image
     [x] créer les différentes actorsheet modif
     [x] la taille de la sheet n'est pas bonne
-    [-] actorsheet modifiable avec skills et équipements
-    [-] créer les actions
-    [-] créer leurs tables de threath level et reinforcement
-    [-] ajouter un bouton pour switcher entre la carte et la feuille.
+    [x] actorsheet modifiable avec skills et équipements
+    [x] créer leurs tables de threath level et reinforcement
+    [x] ajouter un bouton pour switcher entre la carte et la feuille.
+    [x] rendre les behavior éditable
+    [x] lock la fiche contre les modif
+    [x] ajout de faction dans la carte
 
 # Actorsheet
 [x] une fois une classe drag and drop dans l'actorsheet, pouvoir supprimer et modifier l'équipement sans modifier la classe dans item.
@@ -22,6 +24,7 @@
 [x] Persistance des états sur l'actor.
 [x] Modifier le token dans l'actorsheet. Par défaut, c'est celui de la classe mais on pourrait vouloir le personnaliser.
 [x] Compatibilité avec tokenizer.
+[-] lock la fiche contre les modif
 
 # Token
 [x] conditions rondes mais carré autour quand posé.
@@ -58,6 +61,9 @@
         [–] opfor
         [-] skill
         [-] weapons
+[P] gestion des decks :
+    [x] créer les decks et l'affichage.
+    [-] trouver un moyen de faire automatiquement.
 
 # Mécanisme de jeu
 [-] Implémenter les mécanismes de jeu

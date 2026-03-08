@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000017",
+  "name": "Motivation",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "Models within 6\" of this unit may reroll one dice per turn."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

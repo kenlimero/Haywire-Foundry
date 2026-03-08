@@ -2,7 +2,7 @@
   "id": "haywire",
   "title": "Haywire",
   "description": "Système FoundryVTT pour le wargame tactique solo/coop HAYWIRE V2",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
@@ -43,7 +43,8 @@
     "Item": {
       "class": {},
       "weapon": {},
-      "skill": {}
+      "skill": {},
+      "opfor-skill": {}
     }
   },
   "packs": [
@@ -107,6 +108,17 @@
       "label": "HAYWIRE.CompendiumOpforSupport",
       "path": "packs/opfor-support",
       "type": "JournalEntry",
+      "system": "haywire",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "opfor-skills",
+      "label": "HAYWIRE.CompendiumOpforSkills",
+      "path": "packs/opfor-skills",
+      "type": "Item",
       "system": "haywire",
       "ownership": {
         "PLAYER": "OBSERVER",

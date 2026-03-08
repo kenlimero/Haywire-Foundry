@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000003",
+  "name": "High Ground",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "When this unit is revealed, place him instead on the highest point on the board that is not yet occupied. He is facing the threat token that has been revealed or the spawn point from where the enemy arrives if he spawn in the spawn phase."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

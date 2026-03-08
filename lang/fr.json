@@ -6,8 +6,10 @@
     "CompendiumOpforTables": "Tables OPFOR",
     "CompendiumOpforUnits": "Unités OPFOR",
     "CompendiumOpforSupport": "Cartes Support OPFOR",
+    "CompendiumOpforSkills": "Compétences OPFOR",
     "CompendiumDecks": "Decks de Cartes",
     "SheetOpforUnit": "Fiche Unité OPFOR",
+    "SheetOpforSkill": "Fiche Compétence OPFOR",
     "SheetSoldier": "Fiche Soldat",
     "SheetClass": "Fiche Classe",
     "SheetWeapon": "Fiche Arme",
@@ -63,6 +65,10 @@
     "ClassReplaced": "Classe remplacée : {name}",
     "SelectCondition": "Sélectionner une condition...",
     "InvalidDrop": "Seuls les items Classe, Arme ou Compétence peuvent être déposés ici",
+    "OpforInvalidDrop": "Seuls les items Arme ou Compétence OPFOR peuvent être déposés ici",
+    "Behavior": "Comportement",
+    "Faction": "Faction",
+    "DragOpforSkillHint": "Glissez une compétence OPFOR ici pour l'ajouter",
     "Suppression": {
       "1": "Suppression 1",
       "2": "Suppression 2",
@@ -80,11 +86,15 @@
     "RollTotal": "Total",
     "DieResult": "Dé",
     "Thresholds": "Seuils",
+    "Lock": "Verrouiller",
+    "Unlock": "Déverrouiller",
     "Settings": {
       "CardView": "Vue carte soldat",
       "CardViewHint": "Affiche l'image de la carte de classe au lieu de la fiche interactive",
       "ShowCard": "Vue carte",
-      "ShowSheet": "Vue fiche"
+      "ShowSheet": "Vue fiche",
+      "OpforCardView": "Vue carte OPFOR",
+      "OpforCardViewHint": "Affiche l'image de la carte au lieu de la fiche interactive de l'unité OPFOR"
     },
     "WeaponType": {
       "Primary": "Primaire",
@@ -101,7 +111,8 @@
     "Item": {
       "class": "Classe",
       "weapon": "Arme",
-      "skill": "Compétence"
+      "skill": "Compétence",
+      "opfor-skill": "Compétence OPFOR"
     }
   }
 }

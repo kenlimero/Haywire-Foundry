@@ -41,10 +41,16 @@ export class HaywireRoll {
     const roll = new Roll(formula, { mod });
     await roll.evaluate();
 
-    // Résoudre les seuils de combat depuis la classe
+    // Résoudre les seuils de combat depuis la classe (soldier) ou directement (opfor-unit)
+    let combatStats = { easy: "—", medium: "—", hard: "—" };
+    if (actor.system.combatStats?.easy) {
+      combatStats = actor.system.combatStats;
+    }
     const classId = actor.system.classId;
-    const classItem = classId ? (await fromUuid(classId)) : null;
-    const combatStats = classItem?.system?.combatStats ?? { easy: "—", medium: "—", hard: "—" };
+    if (classId) {
+      const classItem = await fromUuid(classId);
+      if (classItem?.system?.combatStats) combatStats = classItem.system.combatStats;
+    }
 
     // Préparer les données du template
     const templateData = {

@@ -1,5 +1,152 @@
-<div class="opfor-unit-card" style="background-image: url('{{system.cardImage}}');">
-  <button type="button" class="opfor-unit-roll-btn" data-action="rollD20" title="Roll D20">
-    <i class="fas fa-dice-d20"></i>
-  </button>
-</div>
+<section class="haywire-sheet-body opfor-sheet-body">
+
+  <div class="opfor-sheet-columns">
+
+    {{!-- Left column: Stats, Skills, Equipment --}}
+    <div class="opfor-sheet-left">
+
+      {{!-- Header: nom éditable + faction --}}
+      <div class="haywire-sheet-header">
+        <div class="haywire-sheet-name">
+          <input type="text" name="name" value="{{actor.name}}" class="haywire-name-input" {{#unless isEditable}}disabled{{/unless}} />
+        </div>
+        <div class="opfor-faction">
+          <input type="text" name="system.faction" value="{{faction}}" class="opfor-faction-input" placeholder="{{localize 'HAYWIRE.Faction'}}" {{#unless isEditable}}disabled{{/unless}} />
+        </div>
+      </div>
+
+      {{!-- Combat Stats --}}
+      <div class="haywire-sheet-combat">
+        <label>{{localize "HAYWIRE.CombatStats.Label"}}</label>
+        <div class="haywire-combat-thresholds">
+          <div class="haywire-threshold">
+            <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Easy"}}</span>
+            <span class="haywire-threshold-value">
+              {{#if isEditable}}
+                <input type="number" name="system.combatStats.easy" value="{{combatStats.easy}}" min="1" />
+              {{else}}
+                {{combatStats.easy}}
+              {{/if}}
+            </span>
+          </div>
+          <div class="haywire-threshold">
+            <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Medium"}}</span>
+            <span class="haywire-threshold-value">
+              {{#if isEditable}}
+                <input type="number" name="system.combatStats.medium" value="{{combatStats.medium}}" min="1" />
+              {{else}}
+                {{combatStats.medium}}
+              {{/if}}
+            </span>
+          </div>
+          <div class="haywire-threshold">
+            <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Hard"}}</span>
+            <span class="haywire-threshold-value">
+              {{#if isEditable}}
+                <input type="number" name="system.combatStats.hard" value="{{combatStats.hard}}" min="1" />
+              {{else}}
+                {{combatStats.hard}}
+              {{/if}}
+            </span>
+          </div>
+        </div>
+        <button type="button" class="haywire-roll-btn" data-action="rollD20">
+          <i class="fas fa-dice-d20"></i>
+          {{localize "HAYWIRE.RollD20"}}
+        </button>
+      </div>
+
+      {{!-- Skills --}}
+      <div class="haywire-sheet-section">
+        <label>{{localize "HAYWIRE.Skills"}}</label>
+        <div class="haywire-skills-list">
+          {{#each skills}}
+            <div class="haywire-skill-entry {{#if this.missing}}haywire-missing{{/if}}">
+              <a class="haywire-item-link haywire-skill-name" data-action="openItem" data-item-uuid="{{this.uuid}}">{{this.name}}</a>
+              <span class="haywire-skill-desc">{{this.description}}</span>
+              {{#if ../isEditable}}
+                <button type="button" class="haywire-btn-delete" data-action="removeSkill" data-skill-uuid="{{this.uuid}}">
+                  <i class="fas fa-trash"></i>
+                </button>
+              {{/if}}
+            </div>
+          {{/each}}
+        </div>
+        {{#if isEditable}}
+          <small class="haywire-no-items">{{localize "HAYWIRE.DragOpforSkillHint"}}</small>
+        {{/if}}
+      </div>
+
+      {{!-- Weapons --}}
+      <div class="haywire-sheet-weapons">
+        <label>{{localize "HAYWIRE.EquippedWeapons"}}</label>
+        {{#if hasWeapons}}
+          <table class="haywire-weapons-table">
+            <thead>
+              <tr>
+                <th>{{localize "HAYWIRE.Name"}}</th>
+                <th>{{localize "HAYWIRE.Type"}}</th>
+                <th>{{localize "HAYWIRE.Range"}}</th>
+                <th>{{localize "HAYWIRE.RateOfFire"}}</th>
+                <th>{{localize "HAYWIRE.Modifiers"}}</th>
+                <th></th>
+                {{#if isEditable}}<th></th>{{/if}}
+              </tr>
+            </thead>
+            <tbody>
+              {{#each weapons}}
+                <tr class="{{#if this.missing}}haywire-missing{{/if}}">
+                  <td><a class="haywire-item-link" data-action="openItem" data-item-uuid="{{this.uuid}}">{{this.name}}</a></td>
+                  <td>{{this.weaponType}}</td>
+                  <td>{{this.range}}</td>
+                  <td>{{this.rateOfFire}}</td>
+                  <td>{{this.modifiers}}</td>
+                  <td class="haywire-weapon-actions">
+                    <button type="button" class="haywire-btn-shoot" data-action="rollShoot" data-weapon-uuid="{{this.uuid}}" title="{{localize 'HAYWIRE.RollShoot'}}">
+                      <i class="fas fa-crosshairs"></i>
+                    </button>
+                  </td>
+                  {{#if ../isEditable}}
+                    <td class="haywire-weapon-actions">
+                      <button type="button" class="haywire-btn-delete" data-action="removeWeapon" data-weapon-uuid="{{this.uuid}}">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  {{/if}}
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        {{else}}
+          <p class="haywire-no-items">{{localize "HAYWIRE.NoWeapons"}}</p>
+        {{/if}}
+        {{#if isEditable}}
+          <small class="haywire-no-items">{{localize "HAYWIRE.DragWeaponHint"}}</small>
+        {{/if}}
+      </div>
+    </div>
+
+    {{!-- Right column: Behavior --}}
+    <div class="opfor-sheet-right">
+      <label>
+        {{localize "HAYWIRE.Behavior"}}
+        {{#if isEditable}}
+          <button type="button" class="haywire-btn-inline" data-action="editBehavior" title="{{localize 'HAYWIRE.Behavior'}}">
+            <i class="fas {{#if editingBehavior}}fa-eye{{else}}fa-pencil{{/if}}"></i>
+          </button>
+        {{/if}}
+      </label>
+      {{#if editingBehavior}}
+        <div class="opfor-behavior-content opfor-behavior-editing">
+          {{formInput fields.behavior value=behavior name="system.behavior"}}
+        </div>
+      {{else}}
+        <div class="opfor-behavior-content">
+          {{{behavior}}}
+        </div>
+      {{/if}}
+    </div>
+
+  </div>
+
+</section>

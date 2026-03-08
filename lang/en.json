@@ -6,8 +6,10 @@
     "CompendiumOpforTables": "OPFOR Tables",
     "CompendiumOpforUnits": "OPFOR Units",
     "CompendiumOpforSupport": "OPFOR Support Cards",
+    "CompendiumOpforSkills": "OPFOR Skills",
     "CompendiumDecks": "Card Decks",
     "SheetOpforUnit": "OPFOR Unit Sheet",
+    "SheetOpforSkill": "OPFOR Skill Sheet",
     "SheetSoldier": "Soldier Sheet",
     "SheetClass": "Class Sheet",
     "SheetWeapon": "Weapon Sheet",
@@ -63,6 +65,10 @@
     "ClassReplaced": "Class replaced: {name}",
     "SelectCondition": "Select a condition...",
     "InvalidDrop": "Only Class, Weapon, or Skill items can be dropped here",
+    "OpforInvalidDrop": "Only Weapon or OPFOR Skill items can be dropped here",
+    "Behavior": "Behavior",
+    "Faction": "Faction",
+    "DragOpforSkillHint": "Drag an OPFOR skill here to add it",
     "Suppression": {
       "1": "Suppression 1",
       "2": "Suppression 2",
@@ -80,11 +86,15 @@
     "RollTotal": "Total",
     "DieResult": "Die",
     "Thresholds": "Thresholds",
+    "Lock": "Lock",
+    "Unlock": "Unlock",
     "Settings": {
       "CardView": "Soldier Card View",
       "CardViewHint": "Display the class card image instead of the interactive soldier sheet",
       "ShowCard": "Card View",
-      "ShowSheet": "Sheet View"
+      "ShowSheet": "Sheet View",
+      "OpforCardView": "OPFOR Card View",
+      "OpforCardViewHint": "Display the card image instead of the interactive OPFOR unit sheet"
     },
     "WeaponType": {
       "Primary": "Primary",
@@ -101,7 +111,8 @@
     "Item": {
       "class": "Class",
       "weapon": "Weapon",
-      "skill": "Skill"
+      "skill": "Skill",
+      "opfor-skill": "OPFOR Skill"
     }
   }
 }

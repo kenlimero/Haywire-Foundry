@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000007",
+  "name": "Call of the Mob",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "As long as this unit is present on the board. Spawn 1 additional basic troop on a random spawn point at the start of each spawn phase. This skill accumulates if multiple units with this skill are present on the board."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

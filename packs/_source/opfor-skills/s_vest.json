@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000013",
+  "name": "S-Vest",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "If this unit ends its turn within 3\" of an enemy model, he triggers his explosive vest. The vest uses the Frag 3\" rule. When targeting this unit, if the shot kills the target, roll a D20. On a 15+ the vest detonates."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000011",
+  "name": "Machete",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "If this model starts his turn within 12\" of an enemy model, he uses both of his AP to move in base to base contact and he is granted a third AP to do a combat action in melee. This unit is equipped with a machete allowing him to roll 2D20 when doing a combat roll in melee. A successful melee combat roll automatically kills the target (not put in a downed state)."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

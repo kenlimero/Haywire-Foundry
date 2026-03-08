@@ -9,6 +9,7 @@
     "build:skills": "node scripts/pack-skills.mjs",
     "build:opfor-tables": "node scripts/pack-opfor-tables.mjs",
     "build:opfor-units": "node scripts/pack-opfor-units.mjs",
+    "build:opfor-skills": "node scripts/pack-opfor-skills.mjs",
     "build:opfor-support": "node scripts/pack-opfor-support.mjs",
     "build:decks": "node scripts/pack-decks.mjs"
   },

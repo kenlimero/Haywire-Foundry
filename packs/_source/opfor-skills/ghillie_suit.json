@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000018",
+  "name": "Ghillie Suit",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "This unit is equipped with a ghillie suit making him harder to shoot at. Always use the hard combat stat when targeting this unit."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

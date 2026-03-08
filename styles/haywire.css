@@ -796,6 +796,148 @@
     color: var(--haywire-color-bg);
   }
 
+  /* OPFOR Sheet — Two-column layout */
+  .opfor-sheet-body {
+    overflow-y: auto;
+  }
+
+  .opfor-sheet-columns {
+    display: flex;
+    gap: 0.75rem;
+    height: 100%;
+  }
+
+  .opfor-sheet-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .opfor-sheet-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--haywire-color-border);
+    border-radius: 4px;
+    padding: 0.5rem;
+    overflow-y: auto;
+  }
+
+  .opfor-sheet-right > label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--haywire-color-secondary);
+    margin-bottom: 0.25rem;
+  }
+
+  .opfor-faction {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .opfor-faction-input {
+    font-size: 0.85rem;
+    color: var(--haywire-color-secondary);
+    font-style: italic;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--haywire-color-border);
+    padding: 0.25rem 0.4rem;
+    text-align: right;
+    width: 6.5rem;
+  }
+
+  .opfor-faction-input:focus {
+    outline: none;
+    border-bottom-color: var(--haywire-color-accent);
+    color: var(--haywire-color-text);
+  }
+
+  .opfor-faction-input:disabled {
+    border-bottom-color: transparent;
+  }
+
+  .opfor-behavior-content {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .opfor-behavior-editing {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .opfor-behavior-editing .editor {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .opfor-behavior-editing .editor .editor-content {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .haywire-btn-inline {
+    background: none;
+    border: none;
+    color: var(--haywire-color-secondary);
+    cursor: pointer;
+    padding: 0 0.25rem;
+    font-size: 0.65rem;
+    opacity: 0.7;
+  }
+
+  .haywire-btn-inline:hover {
+    opacity: 1;
+    color: var(--haywire-color-accent);
+  }
+
+  .opfor-behavior-content h4 {
+    color: var(--haywire-color-accent);
+    font-size: 0.85rem;
+    margin: 0.5rem 0 0.25rem 0;
+    font-weight: bold;
+  }
+
+  .opfor-behavior-content .opfor-behavior-step:first-child h4 {
+    margin-top: 0;
+  }
+
+  .opfor-behavior-content p {
+    margin: 0.15rem 0;
+    padding-left: 0.5rem;
+  }
+
+  .opfor-behavior-content strong {
+    color: var(--haywire-color-text);
+  }
+
+  .opfor-sheet-left .haywire-threshold-value input[type="number"] {
+    width: 3rem;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--haywire-color-accent);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--haywire-color-primary);
+    border-radius: 3px;
+    padding: 0.15rem;
+  }
+
   /* ============================================ */
   /*  Token Hover Overlay                         */
   /* ============================================ */

@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000009",
+  "name": "Return Fire",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "The first time this unit is targeted on each turn while being alerted, if he has not been killed, automatically fire back at the model shooting at him (if within weapons range)."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

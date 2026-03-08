@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000006",
+  "name": "Fragmentation",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "This unit is equipped with a frag grenade. When throwing a frag, if multiple enemies are visible, aim in the middle of them. Frag grenade can only be used once, after that proceed always to the next step when an enemy is in LOS."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

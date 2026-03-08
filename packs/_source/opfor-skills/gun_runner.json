@@ -1,0 +1,15 @@
+{
+  "_id": "hwOsk00000000008",
+  "name": "Gun Runner",
+  "type": "opfor-skill",
+  "img": "icons/svg/lightning.svg",
+  "system": {
+    "description": "If this unit used his 2AP to do 2 move actions, he is granted a free combat action."
+  },
+  "effects": [],
+  "flags": {},
+  "folder": null,
+  "sort": 0,
+  "ownership": { "default": 0 },
+  "_stats": { "systemId": "haywire", "systemVersion": "0.8.0", "coreVersion": "13" }
+}

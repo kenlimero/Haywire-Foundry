@@ -6,6 +6,7 @@ import { ClassModel } from "./module/models/class-model.mjs";
 import { WeaponModel } from "./module/models/weapon-model.mjs";
 import { SkillModel } from "./module/models/skill-model.mjs";
 import { OpforUnitModel } from "./module/models/opfor-unit-model.mjs";
+import { OpforSkillModel } from "./module/models/opfor-skill-model.mjs";
 
 // Documents
 import { HaywireActor } from "./module/documents/haywire-actor.mjs";
@@ -23,6 +24,7 @@ import { ClassSheet } from "./module/sheets/class-sheet.mjs";
 import { WeaponSheet } from "./module/sheets/weapon-sheet.mjs";
 import { SkillSheet } from "./module/sheets/skill-sheet.mjs";
 import { OpforUnitSheet } from "./module/sheets/opfor-unit-sheet.mjs";
+import { OpforSkillSheet } from "./module/sheets/opfor-skill-sheet.mjs";
 
 Hooks.once("init", () => {
   // Expose API for third-party modules
@@ -42,6 +44,7 @@ Hooks.once("init", () => {
     class: ClassModel,
     weapon: WeaponModel,
     skill: SkillModel,
+    "opfor-skill": OpforSkillModel,
   };
 
   // Sheets — V13 utilise le namespace complet
@@ -64,6 +67,11 @@ Hooks.once("init", () => {
     types: ["skill"],
     makeDefault: true,
     label: "HAYWIRE.SheetSkill",
+  });
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, "haywire", OpforSkillSheet, {
+    types: ["opfor-skill"],
+    makeDefault: true,
+    label: "HAYWIRE.SheetOpforSkill",
   });
   foundry.applications.apps.DocumentSheetConfig.registerSheet(Actor, "haywire", OpforUnitSheet, {
     types: ["opfor-unit"],
@@ -93,6 +101,17 @@ Hooks.once("init", () => {
     { id: "sup-6", name: "HAYWIRE.Suppression.6", img: "systems/haywire/assets/icons/sup-6.svg" },
   ];
 
+  // Setting : vue carte pour opfor-unit sheet
+  game.settings.register("haywire", "opforCardView", {
+    name: "HAYWIRE.Settings.OpforCardView",
+    hint: "HAYWIRE.Settings.OpforCardViewHint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true,
+    requiresReload: false,
+  });
+
   // Setting : vue carte pour soldier sheet
   game.settings.register("haywire", "soldierCardView", {
     name: "HAYWIRE.Settings.CardView",
@@ -109,6 +128,8 @@ Hooks.once("init", () => {
     "systems/haywire/templates/actor/soldier-sheet.hbs",
     "systems/haywire/templates/actor/soldier-card.hbs",
     "systems/haywire/templates/actor/opfor-unit-sheet.hbs",
+    "systems/haywire/templates/actor/opfor-unit-card.hbs",
+    "systems/haywire/templates/item/opfor-skill-sheet.hbs",
     "systems/haywire/templates/item/class-sheet.hbs",
     "systems/haywire/templates/item/weapon-sheet.hbs",
     "systems/haywire/templates/item/skill-sheet.hbs",
