@@ -969,7 +969,8 @@
     object-fit: contain;
   }
 
-  #haywire-token-overlay.opfor {
+  #haywire-token-overlay.opfor,
+  #haywire-token-overlay.opfor-wide {
     max-width: min(700px, calc(100vw - 2rem));
   }
 
@@ -1063,6 +1064,45 @@
   .haywire-overlay-skill-desc {
     color: var(--haywire-color-secondary);
     font-size: 0.7rem;
+  }
+
+  .haywire-overlay-two-col {
+    flex-direction: row;
+  }
+
+  .haywire-overlay-col {
+    flex: 1;
+    min-width: 0;
+  }
+
+  #haywire-token-overlay .haywire-overlay-behavior > label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--haywire-color-accent);
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+
+  .haywire-overlay-behavior-content {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--haywire-color-secondary);
+  }
+
+  .haywire-overlay-behavior-content h1,
+  .haywire-overlay-behavior-content h2,
+  .haywire-overlay-behavior-content h3,
+  .haywire-overlay-behavior-content h4,
+  .haywire-overlay-behavior-content h5,
+  .haywire-overlay-behavior-content h6 {
+    font-size: 0.8rem;
+    color: var(--haywire-color-accent);
+    margin: 0.4rem 0 0.2rem;
+  }
+
+  .haywire-overlay-behavior-content p {
+    margin: 0.15rem 0;
   }
 
   /* ============================================ */

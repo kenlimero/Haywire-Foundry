@@ -32,10 +32,13 @@ export class TokenOverlay {
     }
 
     el.innerHTML = html;
-    const isOpforCard = actor.type === "opfor-unit"
+    const isOpfor = actor.type === "opfor-unit";
+    const isOpforCard = isOpfor
       && (actor.getFlag("haywire", "cardView") ?? true)
       && !!actor.system.cardImage;
+    const isOpforWide = isOpfor && !isOpforCard && !!actor.system.behavior?.trim();
     el.classList.toggle("opfor", isOpforCard);
+    el.classList.toggle("opfor-wide", isOpforWide);
     el.classList.add("visible");
   }
 
@@ -97,13 +100,25 @@ export class TokenOverlay {
       .map(s => `<div class="haywire-overlay-skill"><strong>${s.name}</strong><br/><span class="haywire-overlay-skill-desc">${s.system?.description ?? ""}</span></div>`)
       .join("");
 
-    return `
-      <div class="haywire-overlay-stats">
+    // Behavior
+    const behavior = system.behavior?.trim();
+
+    const leftCol = `
+      <div class="haywire-overlay-col">
         <div class="haywire-overlay-header">${actor.name}${system.faction ? ` <span class="haywire-overlay-faction">${system.faction}</span>` : ""}</div>
         ${combatHtml}
         ${skillHtml ? `<div class="haywire-overlay-section"><label>${i18n("HAYWIRE.Skills")}</label>${skillHtml}</div>` : ""}
         ${weaponRows ? `<table class="haywire-overlay-weapons"><thead><tr><th>${i18n("HAYWIRE.Name")}</th><th>${i18n("HAYWIRE.Type")}</th><th>${i18n("HAYWIRE.Range")}</th><th>${i18n("HAYWIRE.RateOfFire")}</th><th>${i18n("HAYWIRE.Modifiers")}</th></tr></thead><tbody>${weaponRows}</tbody></table>` : ""}
       </div>`;
+
+    const rightCol = behavior
+      ? `<div class="haywire-overlay-col haywire-overlay-behavior">
+          <label>${i18n("HAYWIRE.Behavior")}</label>
+          <div class="haywire-overlay-behavior-content">${behavior}</div>
+        </div>`
+      : "";
+
+    return `<div class="haywire-overlay-stats ${behavior ? "haywire-overlay-two-col" : ""}">${leftCol}${rightCol}</div>`;
   }
 
   /* ---- Soldier ---- */
