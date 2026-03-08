@@ -1036,6 +1036,35 @@
     padding: 0.15rem 0.3rem;
   }
 
+  .haywire-overlay-faction {
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: var(--haywire-color-secondary);
+  }
+
+  .haywire-overlay-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .haywire-overlay-section label {
+    font-weight: bold;
+    color: var(--haywire-color-secondary);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .haywire-overlay-skill {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .haywire-overlay-skill-desc {
+    color: var(--haywire-color-secondary);
+    font-size: 0.7rem;
+  }
+
   /* ============================================ */
   /*  Card Draw Chat Message                      */
   /* ============================================ */

@@ -2,7 +2,8 @@
  * Token hover overlay — affiche un résumé de l'actor au survol d'un token.
  * - Soldier (card view) : image de classe
  * - Soldier (sheet view) : stats compactes
- * - OPFOR : cardImage
+ * - OPFOR (card view) : cardImage
+ * - OPFOR (sheet view) : stats compactes (combat stats, armes, skills)
  */
 export class TokenOverlay {
   static #el = null;
@@ -20,7 +21,7 @@ export class TokenOverlay {
 
     let html = "";
     if (actor.type === "opfor-unit") {
-      html = this.#renderOpfor(actor);
+      html = await this.#renderOpfor(actor);
     } else if (actor.type === "soldier") {
       html = await this.#renderSoldier(actor);
     }
@@ -31,7 +32,10 @@ export class TokenOverlay {
     }
 
     el.innerHTML = html;
-    el.classList.toggle("opfor", actor.type === "opfor-unit");
+    const isOpforCard = actor.type === "opfor-unit"
+      && (actor.getFlag("haywire", "cardView") ?? true)
+      && !!actor.system.cardImage;
+    el.classList.toggle("opfor", isOpforCard);
     el.classList.add("visible");
   }
 
@@ -53,10 +57,53 @@ export class TokenOverlay {
 
   /* ---- OPFOR ---- */
 
-  static #renderOpfor(actor) {
-    const img = actor.system.cardImage;
-    if (!img) return "";
-    return `<img src="${img}" alt="${actor.name}" class="haywire-overlay-opfor" />`;
+  static async #renderOpfor(actor) {
+    const hasCard = !!actor.system.cardImage;
+    const cardView = hasCard && (actor.getFlag("haywire", "cardView") ?? true);
+
+    if (cardView) {
+      return `<img src="${actor.system.cardImage}" alt="${actor.name}" class="haywire-overlay-opfor" />`;
+    }
+    return this.#renderOpforStats(actor);
+  }
+
+  static async #renderOpforStats(actor) {
+    const system = actor.system;
+    const i18n = key => game.i18n.localize(key);
+
+    // Combat stats
+    const combatStats = system.combatStats;
+    const combatHtml = combatStats
+      ? `<div class="haywire-overlay-combat">
+          <div class="haywire-threshold"><span class="haywire-threshold-label">${i18n("HAYWIRE.CombatStats.Easy")}</span><span class="haywire-threshold-value">${combatStats.easy}</span></div>
+          <div class="haywire-threshold"><span class="haywire-threshold-label">${i18n("HAYWIRE.CombatStats.Medium")}</span><span class="haywire-threshold-value">${combatStats.medium}</span></div>
+          <div class="haywire-threshold"><span class="haywire-threshold-label">${i18n("HAYWIRE.CombatStats.Hard")}</span><span class="haywire-threshold-value">${combatStats.hard}</span></div>
+        </div>`
+      : "";
+
+    // Weapons
+    const weaponUuids = system.weaponIds ?? [];
+    const weapons = await Promise.all(weaponUuids.map(uuid => fromUuid(uuid)));
+    const weaponRows = weapons
+      .filter(w => w)
+      .map(w => `<tr><td>${w.name}</td><td>${i18n(`HAYWIRE.WeaponType.${w.system.weaponType}`)}</td><td>${w.system.range}</td><td>${w.system.rateOfFire}</td><td>${w.system.modifiers}</td></tr>`)
+      .join("");
+
+    // Skills
+    const skillUuids = system.opforSkillIds ?? [];
+    const skills = await Promise.all(skillUuids.map(uuid => fromUuid(uuid)));
+    const skillHtml = skills
+      .filter(s => s)
+      .map(s => `<div class="haywire-overlay-skill"><strong>${s.name}</strong><br/><span class="haywire-overlay-skill-desc">${s.system?.description ?? ""}</span></div>`)
+      .join("");
+
+    return `
+      <div class="haywire-overlay-stats">
+        <div class="haywire-overlay-header">${actor.name}${system.faction ? ` <span class="haywire-overlay-faction">${system.faction}</span>` : ""}</div>
+        ${combatHtml}
+        ${skillHtml ? `<div class="haywire-overlay-section"><label>${i18n("HAYWIRE.Skills")}</label>${skillHtml}</div>` : ""}
+        ${weaponRows ? `<table class="haywire-overlay-weapons"><thead><tr><th>${i18n("HAYWIRE.Name")}</th><th>${i18n("HAYWIRE.Type")}</th><th>${i18n("HAYWIRE.Range")}</th><th>${i18n("HAYWIRE.RateOfFire")}</th><th>${i18n("HAYWIRE.Modifiers")}</th></tr></thead><tbody>${weaponRows}</tbody></table>` : ""}
+      </div>`;
   }
 
   /* ---- Soldier ---- */
@@ -92,6 +139,12 @@ export class TokenOverlay {
     const allWeaponUuids = [...classWeaponIds, ...system.weaponIds];
     const weapons = await Promise.all(allWeaponUuids.map(uuid => fromUuid(uuid)));
 
+    // Résoudre les skills
+    const excludedSkills = system.excludedSkillIds ?? [];
+    const classSkillIds = (classItem?.system?.skillIds ?? []).filter(id => !excludedSkills.includes(id));
+    const allSkillUuids = [...classSkillIds, ...(system.skillIds ?? [])];
+    const skills = await Promise.all(allSkillUuids.map(uuid => fromUuid(uuid)));
+
     // Conditions
     const conditions = [...system.conditions];
     const conditionLabel = c => game.i18n.localize(`HAYWIRE.Conditions.${c.charAt(0).toUpperCase() + c.slice(1)}`);
@@ -105,6 +158,11 @@ export class TokenOverlay {
 
     const conditionBadges = conditions
       .map(c => `<span class="haywire-condition-badge haywire-condition-${c}">${conditionLabel(c)}</span>`)
+      .join("");
+
+    const skillHtml = skills
+      .filter(s => s)
+      .map(s => `<div class="haywire-overlay-skill"><strong>${s.name}</strong><br/><span class="haywire-overlay-skill-desc">${s.system?.description ?? ""}</span></div>`)
       .join("");
 
     const combatHtml = combatStats
@@ -124,6 +182,7 @@ export class TokenOverlay {
         </div>
         ${conditions.length ? `<div class="haywire-overlay-conditions">${conditionBadges}</div>` : ""}
         ${combatHtml}
+        ${skillHtml ? `<div class="haywire-overlay-section"><label>${i18n("HAYWIRE.Skills")}</label>${skillHtml}</div>` : ""}
         ${weaponRows ? `<table class="haywire-overlay-weapons"><thead><tr><th>${i18n("HAYWIRE.Name")}</th><th>${i18n("HAYWIRE.Type")}</th><th>${i18n("HAYWIRE.Range")}</th><th>${i18n("HAYWIRE.RateOfFire")}</th><th>${i18n("HAYWIRE.Modifiers")}</th></tr></thead><tbody>${weaponRows}</tbody></table>` : ""}
       </div>`;
   }
