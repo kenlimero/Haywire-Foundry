@@ -12,6 +12,11 @@ export class OpforUnitModel extends foundry.abstract.TypeDataModel {
       }),
       opforSkillIds: new fields.ArrayField(new fields.StringField()),
       weaponIds: new fields.ArrayField(new fields.StringField()),
+      conditions: new fields.SetField(
+        new fields.StringField({ required: true, blank: false }),
+        { required: true, initial: [] },
+      ),
+      suppression: new fields.NumberField({ required: true, integer: true, min: 0, max: 6, initial: 0 }),
       behavior: new fields.HTMLField({ required: true, initial: "" }),
     };
   }

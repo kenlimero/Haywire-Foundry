@@ -85,6 +85,10 @@ Hooks.once("init", () => {
       bar: ["hitPoints", "actionPoints"],
       value: [],
     },
+    "opfor-unit": {
+      bar: [],
+      value: ["suppression"],
+    },
   };
 
   // Remplacer les conditions token par défaut par celles de Haywire

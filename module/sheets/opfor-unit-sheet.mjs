@@ -24,6 +24,7 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       rollShoot: OpforUnitSheet.#onRollShoot,
       removeWeapon: OpforUnitSheet.#onRemoveWeapon,
       removeSkill: OpforUnitSheet.#onRemoveSkill,
+      removeCondition: OpforUnitSheet.#onRemoveCondition,
       openItem: OpforUnitSheet.#onOpenItem,
       toggleCardView: OpforUnitSheet.#onToggleCardView,
       editBehavior: OpforUnitSheet.#onEditBehavior,
@@ -105,6 +106,11 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const uuid = target.dataset.weaponUuid;
     const weaponIds = this.actor.system.weaponIds.filter(id => id !== uuid);
     await this.actor.update({ "system.weaponIds": weaponIds });
+  }
+
+  static async #onRemoveCondition(event, target) {
+    const condition = target.closest("[data-condition]").dataset.condition;
+    await this.actor.toggleStatusEffect(condition, { active: false });
   }
 
   static async #onRemoveSkill(event, target) {
@@ -198,6 +204,16 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     } else {
       this.setPosition({ width: 860, height: 600 });
     }
+
+    const conditionSelect = this.element.querySelector(".haywire-condition-select");
+    if (conditionSelect) {
+      conditionSelect.addEventListener("change", async (e) => {
+        if (!this.isEditable) return;
+        const condition = e.target.value;
+        if (!condition) return;
+        await this.actor.toggleStatusEffect(condition, { active: true });
+      });
+    }
   }
 
   async _prepareContext(options) {
@@ -243,6 +259,16 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     context.hasWeapons = context.weapons.length > 0;
     context.hasSkills = context.skills.length > 0;
+
+    // Conditions
+    const conditionLabel = c => game.i18n.localize(`HAYWIRE.Conditions.${c.charAt(0).toUpperCase() + c.slice(1)}`);
+    const currentConditions = [...this.actor.system.conditions];
+    context.conditions = currentConditions.map(c => ({ key: c, label: conditionLabel(c) }));
+
+    const HAYWIRE_CONDITIONS = ["suppressed", "pinned", "downed", "hidden", "injured", "overwatch"];
+    context.availableConditions = HAYWIRE_CONDITIONS
+      .filter(c => !currentConditions.includes(c))
+      .map(c => ({ key: c, label: conditionLabel(c) }));
 
     return context;
   }

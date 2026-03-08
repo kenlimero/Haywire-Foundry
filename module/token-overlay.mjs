@@ -103,9 +103,17 @@ export class TokenOverlay {
     // Behavior
     const behavior = system.behavior?.trim();
 
+    // Conditions
+    const conditions = [...system.conditions];
+    const conditionLabel = c => game.i18n.localize(`HAYWIRE.Conditions.${c.charAt(0).toUpperCase() + c.slice(1)}`);
+    const conditionBadges = conditions
+      .map(c => `<span class="haywire-condition-badge haywire-condition-${c}">${conditionLabel(c)}</span>`)
+      .join("");
+
     const leftCol = `
       <div class="haywire-overlay-col">
         <div class="haywire-overlay-header">${actor.name}${system.faction ? ` <span class="haywire-overlay-faction">${system.faction}</span>` : ""}</div>
+        ${conditions.length ? `<div class="haywire-overlay-conditions">${conditionBadges}</div>` : ""}
         ${combatHtml}
         ${skillHtml ? `<div class="haywire-overlay-section"><label>${i18n("HAYWIRE.Skills")}</label>${skillHtml}</div>` : ""}
         ${weaponRows ? `<table class="haywire-overlay-weapons"><thead><tr><th>${i18n("HAYWIRE.Name")}</th><th>${i18n("HAYWIRE.Type")}</th><th>${i18n("HAYWIRE.Range")}</th><th>${i18n("HAYWIRE.RateOfFire")}</th><th>${i18n("HAYWIRE.Modifiers")}</th></tr></thead><tbody>${weaponRows}</tbody></table>` : ""}

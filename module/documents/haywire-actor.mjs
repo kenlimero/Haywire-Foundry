@@ -6,6 +6,7 @@ export class HaywireActor extends Actor {
   prepareDerivedData() {
     super.prepareDerivedData();
     if (this.type === "soldier") this._prepareSoldierData();
+    else if (this.type === "opfor-unit") this._prepareOpforData();
   }
 
   _prepareSoldierData() {
@@ -29,7 +30,24 @@ export class HaywireActor extends Actor {
       system.conditions.delete("downed");
     }
 
-    // Apply suppression → conditions (pinned supersedes suppressed)
+    // Suppression → conditions
+    this._prepareSuppression();
+
+    // AP = HP - pénalité conditions (suppressed: -1, pinned: -2)
+    let apPenalty = 0;
+    if (system.conditions.has("pinned")) apPenalty = 2;
+    else if (system.conditions.has("suppressed")) apPenalty = 1;
+    system.actionPoints.max = system.hitPoints.max;
+    system.actionPoints.value = Math.max(0, system.hitPoints.value - apPenalty);
+  }
+
+  _prepareOpforData() {
+    this._prepareSuppression();
+  }
+
+  /** Apply suppression level → conditions (pinned supersedes suppressed) */
+  _prepareSuppression() {
+    const system = this.system;
     if (system.suppression >= 6) {
       system.conditions.add("pinned");
       system.conditions.delete("suppressed");
@@ -40,13 +58,6 @@ export class HaywireActor extends Actor {
       system.conditions.delete("pinned");
       system.conditions.delete("suppressed");
     }
-
-    // AP = HP - pénalité conditions (suppressed: -1, pinned: -2)
-    let apPenalty = 0;
-    if (system.conditions.has("pinned")) apPenalty = 2;
-    else if (system.conditions.has("suppressed")) apPenalty = 1;
-    system.actionPoints.max = system.hitPoints.max;
-    system.actionPoints.value = Math.max(0, system.hitPoints.value - apPenalty);
   }
 
   /* ---------------------------------------- */
@@ -91,11 +102,13 @@ export class HaywireActor extends Actor {
 
     const updateData = { "system.conditions": [...conditions] };
 
-    // Sync mécanique inverse : toggle condition ↔ HP
-    if (statusId === "injured") {
-      updateData["system.hitPoints.value"] = shouldBeActive ? 1 : this.system.hitPoints.max;
-    } else if (statusId === "downed") {
-      updateData["system.hitPoints.value"] = shouldBeActive ? 0 : 1;
+    // Sync mécanique inverse : toggle condition ↔ HP (soldats uniquement)
+    if (this.type === "soldier") {
+      if (statusId === "injured") {
+        updateData["system.hitPoints.value"] = shouldBeActive ? 1 : this.system.hitPoints.max;
+      } else if (statusId === "downed") {
+        updateData["system.hitPoints.value"] = shouldBeActive ? 0 : 1;
+      }
     }
 
     await this.update(updateData);
@@ -103,7 +116,7 @@ export class HaywireActor extends Actor {
 
   _onUpdate(changed, options, userId) {
     super._onUpdate(changed, options, userId);
-    if (this.type !== "soldier" || userId !== game.user.id) return;
+    if (!["soldier", "opfor-unit"].includes(this.type) || userId !== game.user.id) return;
 
     // Sync token seulement si conditions ou suppression ont changé
     const s = changed.system;
