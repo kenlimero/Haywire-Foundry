@@ -8,7 +8,9 @@
     "build:weapons": "node scripts/pack-weapons.mjs",
     "build:skills": "node scripts/pack-skills.mjs",
     "build:opfor-tables": "node scripts/pack-opfor-tables.mjs",
-    "build:opfor-units": "node scripts/pack-opfor-units.mjs"
+    "build:opfor-units": "node scripts/pack-opfor-units.mjs",
+    "build:opfor-support": "node scripts/pack-opfor-support.mjs",
+    "build:decks": "node scripts/pack-decks.mjs"
   },
   "devDependencies": {
     "classic-level": "^3.0.0"

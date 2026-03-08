@@ -132,6 +132,47 @@ Hooks.on("hoverToken", (token, hovered) => {
   else TokenOverlay.hide();
 });
 
+// ─── Card draw display in chat ──────────────────────────────────────────────
+function _postCardChatMessage(origin, cards, action) {
+  for (const cardData of cards) {
+    const faceImg = cardData.faces?.[0]?.img ?? cardData.face?.img ?? origin.img;
+    const cardName = cardData.name ?? "???";
+    ChatMessage.create({
+      content: `<div class="haywire-card-chat">
+        <div class="haywire-card-chat-header">
+          <i class="fas fa-cards"></i> ${origin.name} — ${action}
+        </div>
+        <img class="haywire-card-chat-img" src="${faceImg}" alt="${cardName}" data-action="showCard" data-src="${faceImg}" data-title="${cardName}"/>
+        <div class="haywire-card-chat-name">${cardName}</div>
+      </div>`,
+      speaker: { alias: origin.name },
+    });
+  }
+}
+
+// dealCards: deck → hand(s) via Deal
+Hooks.on("dealCards", (origin, destinations, context) => {
+  const cards = context.toCreate?.flat() ?? [];
+  _postCardChatMessage(origin, cards, "Deal");
+});
+
+// passCards: covers draw, play, pass, discard
+Hooks.on("passCards", (origin, destination, context) => {
+  const cards = context.toCreate ?? [];
+  _postCardChatMessage(origin, cards, context.action ?? "Draw");
+});
+
+// Click on card image in chat → open ImagePopout
+Hooks.on("renderChatMessageHTML", (message, html) => {
+  html.querySelectorAll("img[data-action='showCard']")?.forEach(img => {
+    img.style.cursor = "pointer";
+    img.addEventListener("click", () => {
+      const popout = new ImagePopout({ src: img.dataset.src, uuid: null, caption: "", window: { title: img.dataset.title } });
+        popout.render(true).then(() => popout.setPosition({ width: 556, height: 450 }));
+    });
+  });
+});
+
 // Prototype token defaults pour les nouveaux Actors Soldier
 Hooks.on("preCreateActor", (actor) => {
   if (actor.type !== "soldier") return;

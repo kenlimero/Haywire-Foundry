@@ -1,7 +1,9 @@
+# Classes
 [x] les skills ne sont pas implémentées
     [x] lister les skills et faire le compedium avec. Prendre les images de classes pour faire les skills. Si elle existe déjà ne pas la faire.
     [x] ajouter les skills aux classes par des liens UUID.
 
+# OPFOR
 [P] créer les OPPFOR.
     [P] créer les compendiums
         [x] Units
@@ -33,6 +35,8 @@
 [-] créer les groupes d'intervention. Composé de plusieurs classes se sont des équipes prêtent à l'action.
 ## Weapons
 [?] Weapons/equipements : supprimer les doublons.
+## Gestion des véhicules
+[-] Implémenter le compendium de véhicules
 
 # Combat
 [-] Déterminer les actions de combat
@@ -40,14 +44,11 @@
     [-] OPPFOR
 [-] faire l'affichage en overlay de l'actorsheet de l'actor dont c'est le tour pour déclencher ses actions.
 
-# Gestion des véhicules
-[-] Implémenter le compendium de véhicules
-
 # Gestion des Unités
 [-] Faire une sheet pour les unités et y mettre les UUID des classes
 [-] importé l'unités, créait un répertoire dans Actor avec le nom de l'unité et les différents actor avec des classes.
 
-# system
+# System
 [x] mettre une image sur le système 
 [P] setting :
     [x] afficher la fiche de soldier type founcdry ou juste l'image - un paramètre pour soldier et un autre pour opfor.

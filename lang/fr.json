@@ -5,6 +5,8 @@
     "CompendiumWeapons": "Armes",
     "CompendiumOpforTables": "Tables OPFOR",
     "CompendiumOpforUnits": "Unités OPFOR",
+    "CompendiumOpforSupport": "Cartes Support OPFOR",
+    "CompendiumDecks": "Decks de Cartes",
     "SheetOpforUnit": "Fiche Unité OPFOR",
     "SheetSoldier": "Fiche Soldat",
     "SheetClass": "Fiche Classe",

@@ -2,7 +2,7 @@
   "id": "haywire",
   "title": "Haywire",
   "description": "Système FoundryVTT pour le wargame tactique solo/coop HAYWIRE V2",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
@@ -10,7 +10,7 @@
   },
   "url": "https://github.com/kenlimero/Haywire-Foundry",
   "manifest": "https://raw.githubusercontent.com/kenlimero/Haywire-Foundry/main/system.json",
-  "download": "https://github.com/kenlimero/Haywire-Foundry/archive/refs/tags/v0.6.1.zip",
+  "download": "https://github.com/kenlimero/Haywire-Foundry/archive/refs/tags/v0.7.0.zip",
   "authors": [
     {
       "name": "Ricco",
@@ -96,6 +96,28 @@
       "label": "HAYWIRE.CompendiumOpforUnits",
       "path": "packs/opfor-units",
       "type": "Actor",
+      "system": "haywire",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "opfor-support",
+      "label": "HAYWIRE.CompendiumOpforSupport",
+      "path": "packs/opfor-support",
+      "type": "JournalEntry",
+      "system": "haywire",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "decks",
+      "label": "HAYWIRE.CompendiumDecks",
+      "path": "packs/decks",
+      "type": "Cards",
       "system": "haywire",
       "ownership": {
         "PLAYER": "OBSERVER",
