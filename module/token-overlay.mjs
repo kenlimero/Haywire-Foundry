@@ -62,7 +62,7 @@ export class TokenOverlay {
   /* ---- Soldier ---- */
 
   static async #renderSoldier(actor) {
-    const cardView = game.settings.get("haywire", "soldierCardView");
+    const cardView = actor.getFlag("haywire", "cardView") ?? false;
 
     if (cardView) {
       return this.#renderSoldierCard(actor);

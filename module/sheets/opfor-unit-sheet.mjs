@@ -41,7 +41,7 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       action: "toggleLock",
     });
     if (this.actor.system.cardImage) {
-      const cardView = game.settings.get("haywire", "opforCardView");
+      const cardView = this.actor.getFlag("haywire", "cardView") ?? true;
       controls.unshift({
         icon: cardView ? "fas fa-sheet-plastic" : "fas fa-id-card",
         label: cardView ? "HAYWIRE.Settings.ShowSheet" : "HAYWIRE.Settings.ShowCard",
@@ -58,8 +58,8 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   static async #onToggleCardView() {
-    const current = game.settings.get("haywire", "opforCardView");
-    await game.settings.set("haywire", "opforCardView", !current);
+    const current = this.actor.getFlag("haywire", "cardView") ?? true;
+    await this.actor.setFlag("haywire", "cardView", !current);
     await this.close();
     this.render({ force: true });
   }
@@ -74,7 +74,7 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
     const hasCard = !!this.actor.system.cardImage;
-    const cardView = hasCard && game.settings.get("haywire", "opforCardView");
+    const cardView = hasCard && (this.actor.getFlag("haywire", "cardView") ?? true);
     options.parts = cardView ? ["card"] : ["sheet"];
   }
 
@@ -192,7 +192,7 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     super._onRender(context, options);
 
     const hasCard = !!this.actor.system.cardImage;
-    const cardView = hasCard && game.settings.get("haywire", "opforCardView");
+    const cardView = hasCard && (this.actor.getFlag("haywire", "cardView") ?? true);
     if (cardView) {
       this.setPosition({ width: 750, height: 556 });
     } else {

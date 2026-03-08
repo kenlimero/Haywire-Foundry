@@ -25,7 +25,7 @@
 [x] Persistance des états sur l'actor.
 [x] Modifier le token dans l'actorsheet. Par défaut, c'est celui de la classe mais on pourrait vouloir le personnaliser.
 [x] Compatibilité avec tokenizer.
-[-] lock la fiche contre les modif
+[x] lock la fiche contre les modif
 
 # Token
 [x] conditions rondes mais carré autour quand posé.
@@ -55,7 +55,9 @@
 # System
 [x] mettre une image sur le système 
 [P] setting :
-    [x] afficher la fiche de soldier type founcdry ou juste l'image - un paramètre pour soldier et un autre pour opfor.
+    [P] afficher la fiche de soldier type founcdry ou juste l'image - un paramètre pour soldier et un autre pour opfor.
+        [x] les sheet affichent unitairement html ou carte
+        [-] refaire les settings globaux
     [-] afficher la fiche de opfor type founcdry ou juste l'image - un paramètre pour soldier et un autre pour opfor.
     [-] configuration du répertoire d'importation pour tous les types :
         [-] soldier

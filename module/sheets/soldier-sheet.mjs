@@ -41,7 +41,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       label: this._locked ? "HAYWIRE.Unlock" : "HAYWIRE.Lock",
       action: "toggleLock",
     });
-    const cardView = game.settings.get("haywire", "soldierCardView");
+    const cardView = this.actor.getFlag("haywire", "cardView") ?? false;
     controls.unshift({
       icon: cardView ? "fas fa-sheet-plastic" : "fas fa-id-card",
       label: cardView ? "HAYWIRE.Settings.ShowSheet" : "HAYWIRE.Settings.ShowCard",
@@ -56,20 +56,16 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   static async #onToggleCardView() {
-    const current = game.settings.get("haywire", "soldierCardView");
-    await game.settings.set("haywire", "soldierCardView", !current);
+    const current = this.actor.getFlag("haywire", "cardView") ?? false;
+    await this.actor.setFlag("haywire", "cardView", !current);
     await this.close();
     this.render({ force: true });
   }
 
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
-    const cardView = game.settings.get("haywire", "soldierCardView");
-    if (cardView) {
-      options.parts = ["card"];
-    } else {
-      options.parts = ["sheet"];
-    }
+    const cardView = this.actor.getFlag("haywire", "cardView") ?? false;
+    options.parts = cardView ? ["card"] : ["sheet"];
   }
 
   static async #onEditPortrait(event, target) {
@@ -262,7 +258,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     super._onRender(context, options);
 
     // Ajuster la taille selon le mode carte/sheet
-    const cardView = game.settings.get("haywire", "soldierCardView");
+    const cardView = this.actor.getFlag("haywire", "cardView") ?? false;
     if (cardView) {
       this.setPosition({ width: 400, height: 600 });
     } else {
