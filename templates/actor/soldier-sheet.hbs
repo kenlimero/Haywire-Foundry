@@ -82,15 +82,33 @@
       <div class="haywire-combat-thresholds">
         <div class="haywire-threshold">
           <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Easy"}}</span>
-          <span class="haywire-threshold-value">{{combatStats.easy}}</span>
+          <span class="haywire-threshold-value">
+            {{#if isEditable}}
+              <input type="number" name="system.combatStats.easy" value="{{combatStats.easy}}" min="1" />
+            {{else}}
+              {{combatStats.easy}}
+            {{/if}}
+          </span>
         </div>
         <div class="haywire-threshold">
           <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Medium"}}</span>
-          <span class="haywire-threshold-value">{{combatStats.medium}}</span>
+          <span class="haywire-threshold-value">
+            {{#if isEditable}}
+              <input type="number" name="system.combatStats.medium" value="{{combatStats.medium}}" min="1" />
+            {{else}}
+              {{combatStats.medium}}
+            {{/if}}
+          </span>
         </div>
         <div class="haywire-threshold">
           <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Hard"}}</span>
-          <span class="haywire-threshold-value">{{combatStats.hard}}</span>
+          <span class="haywire-threshold-value">
+            {{#if isEditable}}
+              <input type="number" name="system.combatStats.hard" value="{{combatStats.hard}}" min="1" />
+            {{else}}
+              {{combatStats.hard}}
+            {{/if}}
+          </span>
         </div>
       </div>
       <button type="button" class="haywire-roll-btn" data-action="rollD20">

@@ -28,11 +28,19 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       rollD20: SoldierSheet.#onRollD20,
       rollShoot: SoldierSheet.#onRollShoot,
       toggleCardView: SoldierSheet.#onToggleCardView,
+      toggleLock: SoldierSheet.#onToggleLock,
     },
   };
 
+  _locked = true;
+
   _getHeaderControls() {
     const controls = super._getHeaderControls();
+    controls.unshift({
+      icon: this._locked ? "fas fa-lock" : "fas fa-lock-open",
+      label: this._locked ? "HAYWIRE.Unlock" : "HAYWIRE.Lock",
+      action: "toggleLock",
+    });
     const cardView = game.settings.get("haywire", "soldierCardView");
     controls.unshift({
       icon: cardView ? "fas fa-sheet-plastic" : "fas fa-id-card",
@@ -40,6 +48,11 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       action: "toggleCardView",
     });
     return controls;
+  }
+
+  static async #onToggleLock() {
+    this._locked = !this._locked;
+    this.render({ force: true, window: { controls: true } });
   }
 
   static async #onToggleCardView() {
@@ -166,6 +179,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   _onClose(options) {
     super._onClose(options);
+    this._locked = true;
     if (this._itemHooks) {
       Hooks.off("updateItem", this._itemHooks[0]);
       Hooks.off("deleteItem", this._itemHooks[1]);
@@ -177,7 +191,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /* ---------------------------------------- */
 
   async _onDropItem(event, data) {
-    if (!this.isEditable) return null;
+    if (!this.isEditable || this._locked) return null;
 
     // Résoudre l'item depuis le UUID des données de drop
     // IMPORTANT : garder data.uuid car item.uuid est cassé pour les compendiums (_id: null)
@@ -207,6 +221,11 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       "system.excludedWeaponIds": [],
       "system.excludedSkillIds": [],
     };
+    if (item.system.combatStats) {
+      updateData["system.combatStats.easy"] = item.system.combatStats.easy;
+      updateData["system.combatStats.medium"] = item.system.combatStats.medium;
+      updateData["system.combatStats.hard"] = item.system.combatStats.hard;
+    }
     if (item.system.imagePath) {
       updateData.img = item.system.imagePath;
       updateData["prototypeToken.texture.src"] = item.system.imagePath;
@@ -247,7 +266,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if (cardView) {
       this.setPosition({ width: 400, height: 600 });
     } else {
-      this.setPosition({ width: 650, height: 550 });
+      this.setPosition({ width: 550, height: 550 });
     }
 
     const dropZone = this.element.querySelector(".haywire-sheet-class-image");
@@ -279,7 +298,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const context = await super._prepareContext(options);
     context.actor = this.actor;
     context.system = this.actor.system;
-    context.isEditable = this.isEditable;
+    context.isEditable = this.isEditable && !this._locked;
 
     // Résolution classe par UUID (async pour charger les données complètes du compendium)
     const classId = context.system.classId;
@@ -296,10 +315,12 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       : (classItem?.system?.imagePath || null);
     context.classCardImage = classItem?.system?.imagePath || null;
 
-    // CombatStats dérivées live depuis la classe
-    context.combatStats = classItem?.type === "class"
-      ? classItem.system.combatStats
-      : context.system.combatStats;
+    // CombatStats : utiliser celles de l'actor (modifiables), fallback sur la classe
+    const actorStats = context.system.combatStats;
+    const hasActorStats = actorStats.easy > 0 || actorStats.medium > 0 || actorStats.hard > 0;
+    context.combatStats = hasActorStats
+      ? actorStats
+      : (classItem?.system?.combatStats ?? actorStats);
 
     // Cache des UUIDs classe pour le hook synchrone #isRelevantItem
     this._classWeaponUuids = classItem?.system?.defaultWeapons ?? [];

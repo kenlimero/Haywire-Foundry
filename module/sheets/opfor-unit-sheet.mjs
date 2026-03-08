@@ -54,7 +54,7 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static async #onToggleLock() {
     this._locked = !this._locked;
     if (this._locked) this._editingBehavior = false;
-    this.render();
+    this.render({ force: true, window: { controls: true } });
   }
 
   static async #onToggleCardView() {
