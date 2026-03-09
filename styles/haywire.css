@@ -1106,6 +1106,372 @@
   }
 
   /* ============================================ */
+  /*  Threat Level Overlay                        */
+  /* ============================================ */
+
+  #haywire-threat-overlay {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto;
+  }
+
+  /* Beacon — upside-down gyrophare, base flush with top edge */
+  .haywire-threat-beacon {
+    position: relative;
+    width: 60px;
+    height: 72px;
+    cursor: pointer;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+    transition: filter 0.3s;
+  }
+
+  .haywire-threat-beacon:hover {
+    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.8));
+  }
+
+  /* SVG base + dome drawn with CSS shapes */
+  .haywire-threat-beacon-base {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    width: 50px;
+    height: 10px;
+    background: #333;
+    border-left: 2px solid #555;
+    border-right: 2px solid #555;
+    border-bottom: 1px solid #555;
+    border-radius: 0 0 2px 2px;
+  }
+
+  .haywire-threat-beacon-collar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 6px;
+    background: #3a3a3a;
+    border-left: 1px solid #555;
+    border-right: 1px solid #555;
+    border-bottom: 1px solid #444;
+  }
+
+  .haywire-threat-beacon-dome {
+    position: absolute;
+    top: 16px;
+    left: 8px;
+    width: 44px;
+    height: 50px;
+    border-radius: 0 0 50% 50%;
+    background: #1a0000;
+    border: 1.5px solid #555;
+    border-top: none;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+
+  /* Ridges on the dome */
+  .haywire-threat-beacon-dome::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 10px,
+      rgba(85, 85, 85, 0.3) 10px,
+      rgba(85, 85, 85, 0.3) 11px
+    );
+  }
+
+  /* Inner glow */
+  .haywire-threat-beacon-glow {
+    position: absolute;
+    top: 18px;
+    left: 12px;
+    width: 36px;
+    height: 44px;
+    border-radius: 0 0 50% 50%;
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+
+  .haywire-threat.inactive .haywire-threat-beacon-dome {
+    background: #1a1a1a;
+  }
+
+  /* Active states — dome color */
+  .haywire-threat.severity-low .haywire-threat-beacon-dome {
+    background: linear-gradient(to bottom, #0a2a0a, #143d14);
+  }
+  .haywire-threat.severity-medium .haywire-threat-beacon-dome {
+    background: linear-gradient(to bottom, #2a1a00, #3d2800);
+  }
+  .haywire-threat.severity-high .haywire-threat-beacon-dome {
+    background: linear-gradient(to bottom, #2a0505, #3d0808);
+  }
+
+  /* Active glow */
+  .haywire-threat.active .haywire-threat-beacon-glow {
+    opacity: 0.4;
+  }
+
+  .haywire-threat.severity-low .haywire-threat-beacon-glow {
+    background: radial-gradient(ellipse at 50% 30%, var(--haywire-color-success), transparent 70%);
+  }
+  .haywire-threat.severity-medium .haywire-threat-beacon-glow {
+    background: radial-gradient(ellipse at 50% 30%, #e67e22, transparent 70%);
+  }
+  .haywire-threat.severity-high .haywire-threat-beacon-glow {
+    background: radial-gradient(ellipse at 50% 30%, var(--haywire-color-danger), transparent 70%);
+  }
+
+  /* Alert mode — halo + dome glow pulsing in sync, color matches severity */
+  .haywire-threat.alert .haywire-threat-beacon-glow {
+    animation: haywire-alert-glow 1s ease-in-out infinite;
+  }
+
+  .haywire-threat.alert.severity-low .haywire-threat-beacon {
+    animation: haywire-alert-halo-low 1s ease-in-out infinite;
+  }
+  .haywire-threat.alert.severity-medium .haywire-threat-beacon {
+    animation: haywire-alert-halo-medium 1s ease-in-out infinite;
+  }
+  .haywire-threat.alert.severity-high .haywire-threat-beacon {
+    animation: haywire-alert-halo-high 1s ease-in-out infinite;
+  }
+  .haywire-threat.alert.severity-none .haywire-threat-beacon {
+    animation: haywire-alert-halo-none 1s ease-in-out infinite;
+  }
+
+  @keyframes haywire-alert-glow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+
+  @keyframes haywire-alert-halo-low {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.4)) drop-shadow(0 0 16px rgba(46, 204, 113, 0.2)); }
+    50% { filter: drop-shadow(0 0 16px rgba(46, 204, 113, 0.8)) drop-shadow(0 0 32px rgba(46, 204, 113, 0.4)); }
+  }
+  @keyframes haywire-alert-halo-medium {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(230, 126, 34, 0.4)) drop-shadow(0 0 16px rgba(230, 126, 34, 0.2)); }
+    50% { filter: drop-shadow(0 0 16px rgba(230, 126, 34, 0.8)) drop-shadow(0 0 32px rgba(230, 126, 34, 0.4)); }
+  }
+  @keyframes haywire-alert-halo-high {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(192, 57, 43, 0.4)) drop-shadow(0 0 16px rgba(192, 57, 43, 0.2)); }
+    50% { filter: drop-shadow(0 0 16px rgba(192, 57, 43, 0.8)) drop-shadow(0 0 32px rgba(192, 57, 43, 0.4)); }
+  }
+  @keyframes haywire-alert-halo-none {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(100, 100, 100, 0.3)) drop-shadow(0 0 16px rgba(100, 100, 100, 0.15)); }
+    50% { filter: drop-shadow(0 0 16px rgba(100, 100, 100, 0.6)) drop-shadow(0 0 32px rgba(100, 100, 100, 0.3)); }
+  }
+
+  /* Level number centered in dome */
+  .haywire-threat-level {
+    position: absolute;
+    top: 16px;
+    left: 8px;
+    width: 44px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    font-family: var(--haywire-font-heading);
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #555;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+    transition: color 0.3s;
+    user-select: none;
+  }
+
+  .haywire-threat.severity-low .haywire-threat-level { color: var(--haywire-color-success); }
+  .haywire-threat.severity-medium .haywire-threat-level { color: #e67e22; }
+  .haywire-threat.severity-high .haywire-threat-level { color: var(--haywire-color-danger); }
+
+  /* GM controls — below the beacon */
+  .haywire-threat-controls {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.15rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  #haywire-threat-overlay:hover .haywire-threat-controls {
+    opacity: 1;
+  }
+
+  .haywire-threat-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid #555;
+    background: #1a1a1a;
+    color: var(--haywire-color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.6rem;
+    padding: 0;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .haywire-threat-btn:hover:not(:disabled) {
+    background: var(--haywire-color-primary);
+    border-color: var(--haywire-color-accent);
+  }
+
+  /* Alert button active state */
+  .haywire-threat-alert-btn.active {
+    background: var(--haywire-color-danger);
+    border-color: var(--haywire-color-danger);
+    color: #fff;
+  }
+
+  .haywire-threat-alert-btn.active:hover {
+    background: #a93226;
+    border-color: #e74c3c;
+  }
+
+  .haywire-threat-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* ---- Threat hover card ---- */
+
+  #haywire-threat-card {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    z-index: 99;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  #haywire-threat-card.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .haywire-threat-card-inner {
+    background: var(--haywire-color-bg);
+    border: 2px solid #555;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    min-width: 180px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    color: var(--haywire-color-text);
+  }
+
+  .haywire-threat-card-inner.severity-low { border-color: var(--haywire-color-success); }
+  .haywire-threat-card-inner.severity-medium { border-color: #e67e22; }
+  .haywire-threat-card-inner.severity-high { border-color: var(--haywire-color-danger); }
+
+  .haywire-threat-card-header {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--haywire-color-secondary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  .haywire-threat-card-level {
+    font-family: var(--haywire-font-heading);
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+    color: #666;
+  }
+
+  .severity-none .haywire-threat-card-level { color: #666; }
+  .severity-low .haywire-threat-card-level { color: var(--haywire-color-success); }
+  .severity-medium .haywire-threat-card-level { color: #e67e22; }
+  .severity-high .haywire-threat-card-level { color: var(--haywire-color-danger); }
+
+  .haywire-threat-card-severity {
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+  }
+
+  .severity-none .haywire-threat-card-severity { color: #666; }
+  .severity-low .haywire-threat-card-severity { color: var(--haywire-color-success); }
+  .severity-medium .haywire-threat-card-severity { color: #e67e22; }
+  .severity-high .haywire-threat-card-severity { color: var(--haywire-color-danger); }
+
+  /* Threat bars */
+  .haywire-threat-bars {
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .haywire-threat-bar {
+    width: 14px;
+    height: 6px;
+    border-radius: 2px;
+    background: #333;
+    transition: background 0.2s;
+  }
+
+  .haywire-threat-bar.filled.severity-low { background: var(--haywire-color-success); }
+  .haywire-threat-bar.filled.severity-medium { background: #e67e22; }
+  .haywire-threat-bar.filled.severity-high { background: var(--haywire-color-danger); }
+
+  .haywire-threat-card-hint {
+    font-size: 0.65rem;
+    color: var(--haywire-color-secondary);
+    font-style: italic;
+  }
+
+  /* Alert badge in hover card */
+  .haywire-threat-card-alert {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--haywire-color-danger);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    margin-bottom: 0.4rem;
+    animation: haywire-alert-badge-pulse 1s ease-in-out infinite;
+  }
+
+  @keyframes haywire-alert-badge-pulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+  }
+
+  .haywire-threat-card-inner.alert {
+    border-color: var(--haywire-color-danger);
+  }
+
+  /* ============================================ */
   /*  Card Draw Chat Message                      */
   /* ============================================ */
 

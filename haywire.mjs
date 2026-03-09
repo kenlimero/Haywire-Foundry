@@ -18,6 +18,9 @@ import { HaywireRoll } from "./module/rolls/haywire-roll.mjs";
 // Token overlay
 import { TokenOverlay } from "./module/token-overlay.mjs";
 
+// Threat level overlay
+import { ThreatOverlay } from "./module/threat-overlay.mjs";
+
 // Sheets
 import { SoldierSheet } from "./module/sheets/soldier-sheet.mjs";
 import { ClassSheet } from "./module/sheets/class-sheet.mjs";
@@ -118,7 +121,30 @@ Hooks.once("init", () => {
     "systems/haywire/templates/chat/roll-result.hbs",
   ]);
 
+  // Threat level setting (world-scoped, GM only)
+  game.settings.register("haywire", "threatLevel", {
+    name: "HAYWIRE.Threat.Label",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0,
+    range: { min: 0, max: 9, step: 1 },
+  });
+
+  game.settings.register("haywire", "threatAlert", {
+    name: "HAYWIRE.Threat.Alert",
+    scope: "world",
+    config: false,
+    type: Boolean,
+    default: false,
+  });
+
   console.log("haywire | Système Haywire initialisé");
+});
+
+// Initialiser l'overlay Threat Level une fois le jeu prêt
+Hooks.once("ready", () => {
+  ThreatOverlay.init();
 });
 
 // Masquer le carré de fond derrière les icônes d'effets sur les tokens (garder uniquement le sprite rond)

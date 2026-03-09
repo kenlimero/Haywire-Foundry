@@ -92,6 +92,20 @@
       "ShowCard": "Card View",
       "ShowSheet": "Sheet View"
     },
+    "Threat": {
+      "Label": "Threat Level",
+      "Increase": "Increase threat level",
+      "Decrease": "Decrease threat level",
+      "NoAlert": "No Alert",
+      "Severity": {
+        "Low": "Low Threat",
+        "Medium": "High Threat",
+        "High": "Critical Threat"
+      },
+      "Alert": "Toggle alert",
+      "AlertActive": "ALERT",
+      "TableHint": "Use OPFOR tables for this threat level"
+    },
     "WeaponType": {
       "Primary": "Primary",
       "Secondary": "Secondary",

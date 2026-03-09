@@ -92,6 +92,20 @@
       "ShowCard": "Vue carte",
       "ShowSheet": "Vue fiche"
     },
+    "Threat": {
+      "Label": "Niveau de menace",
+      "Increase": "Augmenter le niveau de menace",
+      "Decrease": "Diminuer le niveau de menace",
+      "NoAlert": "Pas d'alerte",
+      "Severity": {
+        "Low": "Menace faible",
+        "Medium": "Menace élevée",
+        "High": "Menace critique"
+      },
+      "Alert": "Activer/désactiver l'alerte",
+      "AlertActive": "ALERTE",
+      "TableHint": "Utilisez les tables OPFOR pour ce niveau"
+    },
     "WeaponType": {
       "Primary": "Primaire",
       "Secondary": "Secondaire",
