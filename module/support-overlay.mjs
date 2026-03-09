@@ -16,11 +16,11 @@ export class SupportOverlay {
     this.#getOrCreate();
     this.render();
 
-    Hooks.on("updateSetting", (setting) => {
-      if (setting.key === "haywire.supportCardIds") {
-        this.render();
-      }
-    });
+    const onSettingChange = (setting) => {
+      if (setting.key === "haywire.supportCardIds") this.render();
+    };
+    Hooks.on("createSetting", onSettingChange);
+    Hooks.on("updateSetting", onSettingChange);
 
     // Re-render when any leader actor is updated (may become downed)
     Hooks.on("updateActor", (actor) => {

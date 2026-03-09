@@ -125,6 +125,18 @@
       "SelectFaction": "Select a faction to import its 3 support cards",
       "Locked": "Requires alert + OPFOR leader on map"
     },
+    "Infil": {
+      "Label": "Infiltration",
+      "Activate": "Activate",
+      "Activated": "Infiltration Card Activated",
+      "Empty": "No infiltration cards."
+    },
+    "Operations": {
+      "Label": "Operations",
+      "Activate": "Activate",
+      "Activated": "Operation Card Activated",
+      "Empty": "No operation cards."
+    },
     "Unit": {
       "Role": "Role",
       "Classes": "Classes",

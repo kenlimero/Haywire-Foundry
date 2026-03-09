@@ -1977,6 +1977,148 @@
     object-fit: contain;
   }
 
+  /* ============================================ */
+  /*  Infil Cards Overlay                        */
+  /* ============================================ */
+
+  #haywire-infil-overlay {
+    position: fixed;
+    top: calc(50% + 50px);
+    left: 16px;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  #haywire-infil-overlay .haywire-support-thumb {
+    pointer-events: auto;
+  }
+
+  #haywire-infil-panel {
+    position: fixed;
+    top: calc(50% + 50px);
+    left: 140px;
+    z-index: 99;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  #haywire-infil-panel.visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  #haywire-infil-panel .haywire-support-panel-inner {
+    max-width: 480px;
+  }
+
+  #haywire-infil-panel .haywire-support-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: unset;
+  }
+
+  #haywire-infil-preview {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  #haywire-infil-preview.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #haywire-infil-preview img {
+    display: block;
+    max-width: 500px;
+    max-height: 350px;
+    border-radius: 6px;
+    border: 2px solid var(--haywire-color-accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+  }
+
+  /* ============================================ */
+  /*  Operations Cards Overlay                   */
+  /* ============================================ */
+
+  #haywire-operations-overlay {
+    position: fixed;
+    top: calc(50% + 142px);
+    left: 16px;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  #haywire-operations-overlay .haywire-support-thumb {
+    pointer-events: auto;
+  }
+
+  #haywire-operations-panel {
+    position: fixed;
+    top: calc(50% + 142px);
+    left: 140px;
+    z-index: 99;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  #haywire-operations-panel.visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  #haywire-operations-panel .haywire-support-panel-inner {
+    max-width: 480px;
+  }
+
+  #haywire-operations-panel .haywire-support-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: unset;
+  }
+
+  #haywire-operations-preview {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  #haywire-operations-preview.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #haywire-operations-preview img {
+    display: block;
+    max-width: 500px;
+    max-height: 350px;
+    border-radius: 6px;
+    border: 2px solid var(--haywire-color-accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+  }
+
   /* ── Support card sheet ──────────────────────────────────────────────────── */
   .support .haywire-sheet-body {
     padding: 0;

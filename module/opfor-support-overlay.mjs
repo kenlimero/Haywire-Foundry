@@ -19,12 +19,14 @@ export class OpforSupportOverlay {
     this.#getOrCreate();
     this.render();
 
-    Hooks.on("updateSetting", (setting) => {
+    const onSettingChange = (setting) => {
       if (setting.key === "haywire.opforSupportCardIds" || setting.key === "haywire.threatAlert") {
         this.#cachedActivatable = null;
         this.render();
       }
-    });
+    };
+    Hooks.on("createSetting", onSettingChange);
+    Hooks.on("updateSetting", onSettingChange);
 
     // Re-render when tokens are added/removed (leader may appear/disappear)
     Hooks.on("createToken", () => { this.#cachedActivatable = null; this.render(); });

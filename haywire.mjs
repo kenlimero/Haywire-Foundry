@@ -27,6 +27,10 @@ import { ThreatOverlay } from "./module/threat-overlay.mjs";
 import { SupportOverlay } from "./module/support-overlay.mjs";
 import { OpforSupportOverlay } from "./module/opfor-support-overlay.mjs";
 
+// Infil & Operations card overlays
+import { InfilOverlay } from "./module/infil-overlay.mjs";
+import { OperationsOverlay } from "./module/operations-overlay.mjs";
+
 // Sheets
 import { SoldierSheet } from "./module/sheets/soldier-sheet.mjs";
 import { ClassSheet } from "./module/sheets/class-sheet.mjs";
@@ -179,6 +183,24 @@ Hooks.once("init", () => {
     default: [],
   });
 
+  // Infil cards overlay setting (world-scoped, array of card UUIDs)
+  game.settings.register("haywire", "infilCardIds", {
+    name: "HAYWIRE.Infil.Label",
+    scope: "world",
+    config: false,
+    type: Array,
+    default: [],
+  });
+
+  // Operations cards overlay setting (world-scoped, array of card UUIDs)
+  game.settings.register("haywire", "operationsCardIds", {
+    name: "HAYWIRE.Operations.Label",
+    scope: "world",
+    config: false,
+    type: Array,
+    default: [],
+  });
+
   console.log("haywire | Système Haywire initialisé");
 });
 
@@ -187,6 +209,8 @@ Hooks.once("ready", () => {
   ThreatOverlay.init();
   SupportOverlay.init();
   OpforSupportOverlay.init();
+  InfilOverlay.init();
+  OperationsOverlay.init();
 });
 
 // Masquer le carré de fond derrière les icônes d'effets sur les tokens (garder uniquement le sprite rond)
