@@ -122,7 +122,8 @@
       "Label": "OPFOR Support",
       "Activated": "OPFOR Support Activated",
       "ImportFaction": "Import Faction",
-      "SelectFaction": "Select a faction to import its 3 support cards"
+      "SelectFaction": "Select a faction to import its 3 support cards",
+      "Locked": "Requires alert + OPFOR leader on map"
     },
     "Unit": {
       "Role": "Role",

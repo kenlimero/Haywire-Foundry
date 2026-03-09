@@ -1935,6 +1935,22 @@
     max-width: 480px;
   }
 
+  .haywire-support-locked-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    background: #555;
+    color: #aaa;
+    font-size: 0.6rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
   #haywire-opfor-support-preview {
     position: fixed;
     top: 1rem;

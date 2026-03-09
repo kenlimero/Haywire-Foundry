@@ -1,25 +1,87 @@
 /**
- * OPFOR Support Cards Overlay — miniature backcover au milieu à gauche, sous le player support.
+ * OPFOR Support Cards Overlay — miniature backcover à gauche de l'alerte.
  * - Hover sur la miniature : affiche le panneau de cartes support OPFOR
  * - Hover sur une carte : affiche la carte en grand (style token overlay)
  * - Bouton "Activate" sur chaque carte → message chat + retrait de la carte
- * - Pas de drag-and-drop ni d'import automatique
+ * - Activable uniquement si l'alerte est levée ET un leader OPFOR avec le skill "Support" est sur le canvas
  */
 export class OpforSupportOverlay {
   static #el = null;
   static #panelEl = null;
   static #previewEl = null;
   static #hideTimeout = null;
+  static #cachedActivatable = null;
+
+  /** Noms de leaders OPFOR connus. */
+  static LEADER_NAMES = /^(squad commander|cell leader|leader)$/i;
 
   static init() {
     this.#getOrCreate();
     this.render();
 
     Hooks.on("updateSetting", (setting) => {
-      if (setting.key === "haywire.opforSupportCardIds") {
+      if (setting.key === "haywire.opforSupportCardIds" || setting.key === "haywire.threatAlert") {
+        this.#cachedActivatable = null;
         this.render();
       }
     });
+
+    // Re-render when tokens are added/removed (leader may appear/disappear)
+    Hooks.on("createToken", () => { this.#cachedActivatable = null; this.render(); });
+    Hooks.on("deleteToken", () => { this.#cachedActivatable = null; this.render(); });
+
+    // Re-render when an opfor-unit actor is updated (may gain/lose downed)
+    Hooks.on("updateActor", (actor) => {
+      if (actor.type === "opfor-unit") {
+        this.#cachedActivatable = null;
+        this.render();
+      }
+    });
+  }
+
+  /**
+   * Vérifie si le support OPFOR est activable :
+   * 1. L'alerte doit être active
+   * 2. Un leader OPFOR avec le skill "Support" doit être sur le canvas et non downed
+   */
+  static async isActivatable() {
+    if (this.#cachedActivatable !== null) return this.#cachedActivatable;
+
+    // Check alert
+    const alertActive = game.settings.get("haywire", "threatAlert");
+    if (!alertActive) {
+      this.#cachedActivatable = false;
+      return false;
+    }
+
+    // Find opfor-unit tokens on canvas with leader name or "Support" skill
+    const scene = game.scenes?.active;
+    if (!scene) { this.#cachedActivatable = false; return false; }
+
+    for (const token of scene.tokens) {
+      const actor = token.actor;
+      if (!actor || actor.type !== "opfor-unit") continue;
+      if (actor.system.conditions?.has("downed")) continue;
+
+      // Check by name
+      if (this.LEADER_NAMES.test(actor.name)) {
+        this.#cachedActivatable = true;
+        return true;
+      }
+
+      // Check by skill name "Support"
+      const skillUuids = actor.system.opforSkillIds ?? [];
+      for (const uuid of skillUuids) {
+        const skill = await fromUuid(uuid);
+        if (skill?.name?.toLowerCase() === "support") {
+          this.#cachedActivatable = true;
+          return true;
+        }
+      }
+    }
+
+    this.#cachedActivatable = false;
+    return false;
   }
 
   /** UUIDs des cartes support OPFOR actives. */
@@ -55,12 +117,14 @@ export class OpforSupportOverlay {
 
     const cardIds = this.cardIds;
     const count = cardIds.length;
+    const activatable = await this.isActivatable();
     const i18n = (k) => game.i18n.localize(k);
 
     el.innerHTML = `
-      <div class="haywire-support-thumb" title="${i18n("HAYWIRE.OpforSupport.Label")}">
+      <div class="haywire-support-thumb${!activatable && count > 0 ? " leader-downed" : ""}" title="${i18n("HAYWIRE.OpforSupport.Label")}">
         <img src="systems/haywire/assets/cards/backcovers/support-opfor.webp" alt="OPFOR Support" />
-        ${count > 0 ? `<span class="haywire-support-badge">${count}</span>` : ""}
+        ${count > 0 ? `<span class="haywire-support-badge">${activatable ? count : 0}</span>` : ""}
+        ${!activatable && count > 0 ? `<span class="haywire-support-downed-icon" title="${i18n("HAYWIRE.OpforSupport.Locked")}"><i class="fas fa-lock"></i> ${count}</span>` : ""}
       </div>`;
 
     const thumb = el.querySelector(".haywire-support-thumb");
@@ -80,7 +144,7 @@ export class OpforSupportOverlay {
     panel.addEventListener("mouseenter", () => this.#showPanel());
     panel.addEventListener("mouseleave", () => this.#hidePanel());
 
-    await this.#renderPanel(panel, cardIds, count, i18n);
+    await this.#renderPanel(panel, cardIds, count, activatable, i18n);
   }
 
   /* ---- Private ---- */
@@ -127,7 +191,7 @@ export class OpforSupportOverlay {
     this.#previewEl?.classList.remove("visible");
   }
 
-  static async #renderPanel(panel, cardIds, count, i18n) {
+  static async #renderPanel(panel, cardIds, count, activatable, i18n) {
     const importBtn = game.user.isGM && count === 0
       ? `<button class="haywire-opfor-import-faction" title="${i18n("HAYWIRE.OpforSupport.SelectFaction")}">
            <i class="fas fa-file-import"></i> ${i18n("HAYWIRE.OpforSupport.ImportFaction")}
@@ -147,6 +211,10 @@ export class OpforSupportOverlay {
       return;
     }
 
+    const lockedBanner = !activatable
+      ? `<div class="haywire-support-locked-banner"><i class="fas fa-lock"></i> ${i18n("HAYWIRE.OpforSupport.Locked")}</div>`
+      : "";
+
     const resolved = await Promise.all(cardIds.map((uuid) => fromUuid(uuid)));
     const cardsHtml = cardIds
       .map((uuid, i) => {
@@ -154,10 +222,11 @@ export class OpforSupportOverlay {
         const name = card?.name ?? "???";
         const img = card?.img ?? "icons/svg/card-hand.svg";
         return `
-        <div class="haywire-support-card" data-preview-img="${img}" data-preview-name="${name}">
+        <div class="haywire-support-card${!activatable ? " disabled" : ""}" data-preview-img="${img}" data-preview-name="${name}">
           <img class="haywire-support-card-img" src="${img}" alt="${name}" />
           <button class="haywire-support-activate" data-uuid="${uuid}" data-name="${name}" data-img="${img}"
-                  title="${i18n("HAYWIRE.Support.Activate")}">
+                  title="${!activatable ? i18n("HAYWIRE.OpforSupport.Locked") : i18n("HAYWIRE.Support.Activate")}"
+                  ${!activatable ? "disabled" : ""}>
             <i class="fas fa-bullseye"></i> ${i18n("HAYWIRE.Support.Activate")}
           </button>
         </div>`;
@@ -170,6 +239,7 @@ export class OpforSupportOverlay {
           <i class="fas fa-skull-crossbones"></i> ${i18n("HAYWIRE.OpforSupport.Label")}
           <span class="haywire-support-count">${count}</span>
         </div>
+        ${lockedBanner}
         <div class="haywire-support-cards">${cardsHtml}</div>
       </div>`;
 
