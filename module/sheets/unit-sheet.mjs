@@ -128,7 +128,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         img: cls.system.imagePath || cls.img || "icons/svg/mystery-man.svg",
         folder: folder.id,
         system: {
-          hitPoints: { value: 1, max: 1 },
+          hitPoints: { value: 2, max: 2 },
           actionPoints: { value: 2, max: 2 },
           classId: classUuid,
           combatStats,
