@@ -10,7 +10,7 @@ export class SupportSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
   static DEFAULT_OPTIONS = {
     classes: ["haywire", "item", "support"],
-    position: { width: 450, height: 500 },
+    position: { width: 500, height: 400 },
     form: { submitOnChange: true, closeOnSubmit: false },
     window: { resizable: true },
   };

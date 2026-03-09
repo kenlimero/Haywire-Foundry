@@ -1,21 +1,3 @@
 <section class="haywire-sheet-body">
-
-  {{!-- Header: nom éditable --}}
-  <div class="haywire-sheet-header">
-    <div class="haywire-sheet-name">
-      <input type="text" name="name" value="{{item.name}}" class="haywire-name-input" {{#unless isEditable}}disabled{{/unless}} />
-    </div>
-  </div>
-
-  {{!-- Card image --}}
-  <div class="haywire-sheet-section" style="text-align:center;">
-    <img src="{{item.img}}" alt="{{item.name}}" style="max-width:100%; border-radius:6px;" />
-  </div>
-
-  {{!-- Description --}}
-  <div class="haywire-sheet-section">
-    <label>{{localize "HAYWIRE.SkillDescription"}}</label>
-    <input type="text" name="system.description" value="{{system.description}}" class="haywire-special-input" {{#unless isEditable}}disabled{{/unless}} />
-  </div>
-
+  <img src="{{item.img}}" alt="{{item.name}}" style="width:100%; border-radius:6px;" />
 </section>
