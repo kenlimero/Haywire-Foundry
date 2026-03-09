@@ -262,16 +262,31 @@ Hooks.on("passCards", (origin, destination, context) => {
   _postCardChatMessage(origin, cards, context.action ?? "Draw");
 });
 
-// Click on card image in chat → open ImagePopout
-Hooks.on("renderChatMessageHTML", (message, html) => {
-  html.querySelectorAll("img[data-action='showCard']")?.forEach(img => {
-    img.style.cursor = "pointer";
-    img.addEventListener("click", () => {
-      const popout = new foundry.applications.apps.ImagePopout({ src: img.dataset.src, uuid: null, caption: "", window: { title: img.dataset.title } });
-        popout.render(true).then(() => popout.setPosition({ width: 556, height: 450 }));
+// Hover on card image in chat → show preview overlay (top-right)
+{
+  let chatPreviewEl = null;
+  function getChatPreview() {
+    if (!chatPreviewEl) {
+      chatPreviewEl = document.createElement("div");
+      chatPreviewEl.id = "haywire-chat-preview";
+      document.body.appendChild(chatPreviewEl);
+    }
+    return chatPreviewEl;
+  }
+
+  Hooks.on("renderChatMessageHTML", (_message, html) => {
+    html.querySelectorAll(".haywire-card-chat-img")?.forEach(img => {
+      img.addEventListener("mouseenter", () => {
+        const preview = getChatPreview();
+        preview.innerHTML = `<img src="${img.src}" alt="${img.alt}" />`;
+        preview.classList.add("visible");
+      });
+      img.addEventListener("mouseleave", () => {
+        getChatPreview().classList.remove("visible");
+      });
     });
   });
-});
+}
 
 // Quand un token est posé sur la carte, importer ses cartes support dans l'overlay
 Hooks.on("createToken", (tokenDoc) => {
