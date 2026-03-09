@@ -49,8 +49,9 @@
 [-] faire l'affichage en overlay de l'actorsheet de l'actor dont c'est le tour pour déclencher ses actions.
 
 # Gestion des Unités
-[-] Faire une sheet pour les unités et y mettre les UUID des classes
-[-] importé l'unités, créait un répertoire dans Actor avec le nom de l'unité et les différents actor avec des classes.
+[P] Faire une sheet pour les unités et y mettre les UUID des classes
+[P] importé l'unités, créait un répertoire dans Actor avec le nom de l'unité et les différents actor avec des classes.
+    [-] Les actors importés ont tous 1HP sur 1
 
 # System
 [x] mettre une image sur le système 
@@ -67,7 +68,7 @@
         [-] weapons
 [P] gestion des decks :
     [x] créer les decks et l'affichage.
-    [-] trouver un moyen de faire automatiquement.
+    [-] trouver un moyen de faire automatiquement. 
 
 # Mécanisme de jeu
 [-] Implémenter les mécanismes de jeu

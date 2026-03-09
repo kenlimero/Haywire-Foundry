@@ -7,6 +7,7 @@ import { WeaponModel } from "./module/models/weapon-model.mjs";
 import { SkillModel } from "./module/models/skill-model.mjs";
 import { OpforUnitModel } from "./module/models/opfor-unit-model.mjs";
 import { OpforSkillModel } from "./module/models/opfor-skill-model.mjs";
+import { UnitModel } from "./module/models/unit-model.mjs";
 
 // Documents
 import { HaywireActor } from "./module/documents/haywire-actor.mjs";
@@ -28,6 +29,7 @@ import { WeaponSheet } from "./module/sheets/weapon-sheet.mjs";
 import { SkillSheet } from "./module/sheets/skill-sheet.mjs";
 import { OpforUnitSheet } from "./module/sheets/opfor-unit-sheet.mjs";
 import { OpforSkillSheet } from "./module/sheets/opfor-skill-sheet.mjs";
+import { UnitSheet } from "./module/sheets/unit-sheet.mjs";
 
 Hooks.once("init", () => {
   // Expose API for third-party modules
@@ -48,6 +50,7 @@ Hooks.once("init", () => {
     weapon: WeaponModel,
     skill: SkillModel,
     "opfor-skill": OpforSkillModel,
+    unit: UnitModel,
   };
 
   // Sheets — V13 utilise le namespace complet
@@ -80,6 +83,11 @@ Hooks.once("init", () => {
     types: ["opfor-unit"],
     makeDefault: true,
     label: "HAYWIRE.SheetOpforUnit",
+  });
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, "haywire", UnitSheet, {
+    types: ["unit"],
+    makeDefault: true,
+    label: "HAYWIRE.SheetUnit",
   });
 
   // Token bar attributes
@@ -118,6 +126,7 @@ Hooks.once("init", () => {
     "systems/haywire/templates/item/class-sheet.hbs",
     "systems/haywire/templates/item/weapon-sheet.hbs",
     "systems/haywire/templates/item/skill-sheet.hbs",
+    "systems/haywire/templates/item/unit-sheet.hbs",
     "systems/haywire/templates/chat/roll-result.hbs",
   ]);
 

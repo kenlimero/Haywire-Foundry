@@ -2,7 +2,7 @@
   "id": "haywire",
   "title": "Haywire",
   "description": "Système FoundryVTT pour le wargame tactique solo/coop HAYWIRE V2",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
@@ -10,7 +10,7 @@
   },
   "url": "https://github.com/kenlimero/Haywire-Foundry",
   "manifest": "https://raw.githubusercontent.com/kenlimero/Haywire-Foundry/main/system.json",
-  "download": "https://github.com/kenlimero/Haywire-Foundry/archive/refs/tags/v0.8.6.zip",
+  "download": "https://github.com/kenlimero/Haywire-Foundry/archive/refs/tags/v0.8.7.zip",
   "authors": [
     {
       "name": "Ricco",
@@ -44,7 +44,8 @@
       "class": {},
       "weapon": {},
       "skill": {},
-      "opfor-skill": {}
+      "opfor-skill": {},
+      "unit": {}
     }
   },
   "packs": [
@@ -118,6 +119,17 @@
       "name": "opfor-skills",
       "label": "HAYWIRE.CompendiumOpforSkills",
       "path": "packs/opfor-skills",
+      "type": "Item",
+      "system": "haywire",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "units",
+      "label": "HAYWIRE.CompendiumUnits",
+      "path": "packs/units",
       "type": "Item",
       "system": "haywire",
       "ownership": {

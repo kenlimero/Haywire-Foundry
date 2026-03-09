@@ -1506,4 +1506,105 @@
     color: var(--haywire-color-accent);
     padding: 0.4rem;
   }
+
+  /* ─── Unit Sheet ──────────────────────────────────────────────────────── */
+
+  .haywire-unit-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.25rem;
+  }
+
+  .haywire-unit-tier {
+    font-family: var(--haywire-font-heading);
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+
+  .haywire-tier-1 {
+    background: var(--haywire-color-primary);
+    color: #fff;
+  }
+
+  .haywire-tier-2 {
+    background: var(--haywire-color-secondary);
+    color: #fff;
+  }
+
+  .haywire-unit-type {
+    font-size: 0.8rem;
+    color: var(--haywire-color-text);
+    opacity: 0.7;
+    text-transform: capitalize;
+  }
+
+  .haywire-classes-list,
+  .haywire-support-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .haywire-class-entry,
+  .haywire-support-entry {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+
+  .haywire-support-thumb {
+    width: 40px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .haywire-class-name,
+  .haywire-support-name {
+    flex: 1;
+    color: var(--haywire-color-text);
+  }
+
+  .haywire-no-support {
+    color: var(--haywire-color-text);
+    opacity: 0.5;
+    font-style: italic;
+    padding: 0.25rem 0;
+  }
+
+  .haywire-unit-deploy {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--haywire-color-border);
+  }
+
+  .haywire-deploy-button {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-family: var(--haywire-font-heading);
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    background: var(--haywire-color-primary);
+    border: 2px solid var(--haywire-color-accent);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+
+  .haywire-deploy-button:hover {
+    background: var(--haywire-color-accent);
+    color: #000;
+  }
 }

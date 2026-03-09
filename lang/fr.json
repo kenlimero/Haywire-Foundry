@@ -7,7 +7,9 @@
     "CompendiumOpforUnits": "Unités OPFOR",
     "CompendiumOpforSupport": "Cartes Support OPFOR",
     "CompendiumOpforSkills": "Compétences OPFOR",
+    "CompendiumUnits": "Unités Joueur",
     "CompendiumDecks": "Decks de Cartes",
+    "SheetUnit": "Fiche Unité",
     "SheetOpforUnit": "Fiche Unité OPFOR",
     "SheetOpforSkill": "Fiche Compétence OPFOR",
     "SheetSoldier": "Fiche Soldat",
@@ -106,6 +108,14 @@
       "AlertActive": "ALERTE",
       "TableHint": "Utilisez les tables OPFOR pour ce niveau"
     },
+    "Unit": {
+      "Role": "Rôle",
+      "Classes": "Classes",
+      "SupportCards": "Cartes de support",
+      "NoSupport": "Aucun support disponible.",
+      "Deploy": "Déployer l'unité",
+      "DragClassHint": "Glissez une classe ici pour l'ajouter"
+    },
     "WeaponType": {
       "Primary": "Primaire",
       "Secondary": "Secondaire",
@@ -122,7 +132,8 @@
       "class": "Classe",
       "weapon": "Arme",
       "skill": "Compétence",
-      "opfor-skill": "Compétence OPFOR"
+      "opfor-skill": "Compétence OPFOR",
+      "unit": "Unité"
     }
   }
 }

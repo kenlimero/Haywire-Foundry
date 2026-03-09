@@ -7,7 +7,9 @@
     "CompendiumOpforUnits": "OPFOR Units",
     "CompendiumOpforSupport": "OPFOR Support Cards",
     "CompendiumOpforSkills": "OPFOR Skills",
+    "CompendiumUnits": "Player Units",
     "CompendiumDecks": "Card Decks",
+    "SheetUnit": "Unit Sheet",
     "SheetOpforUnit": "OPFOR Unit Sheet",
     "SheetOpforSkill": "OPFOR Skill Sheet",
     "SheetSoldier": "Soldier Sheet",
@@ -106,6 +108,14 @@
       "AlertActive": "ALERT",
       "TableHint": "Use OPFOR tables for this threat level"
     },
+    "Unit": {
+      "Role": "Role",
+      "Classes": "Classes",
+      "SupportCards": "Support Cards",
+      "NoSupport": "No support available.",
+      "Deploy": "Deploy Unit",
+      "DragClassHint": "Drag a class here to add it"
+    },
     "WeaponType": {
       "Primary": "Primary",
       "Secondary": "Secondary",
@@ -122,7 +132,8 @@
       "class": "Class",
       "weapon": "Weapon",
       "skill": "Skill",
-      "opfor-skill": "OPFOR Skill"
+      "opfor-skill": "OPFOR Skill",
+      "unit": "Unit"
     }
   }
 }

@@ -1,0 +1,75 @@
+<section class="haywire-sheet-body">
+
+  {{!-- Header --}}
+  <div class="haywire-sheet-header">
+    <div class="haywire-sheet-name">
+      <input type="text" name="name" value="{{item.name}}" class="haywire-name-input" {{#unless isEditable}}disabled{{/unless}} />
+    </div>
+    <div class="haywire-unit-meta">
+      <span class="haywire-unit-tier haywire-tier-{{system.tier}}">Tier {{system.tier}}</span>
+      <span class="haywire-unit-type">{{system.unitType}}</span>
+    </div>
+  </div>
+
+  {{!-- Role --}}
+  <div class="haywire-sheet-stats">
+    <div class="haywire-stat">
+      <label>{{localize "HAYWIRE.Unit.Role"}}</label>
+      <div class="haywire-stat-value">
+        <input type="text" name="system.role" value="{{system.role}}" {{#unless isEditable}}disabled{{/unless}} />
+      </div>
+    </div>
+  </div>
+
+  {{!-- Classes --}}
+  <div class="haywire-sheet-section">
+    <label>{{localize "HAYWIRE.Unit.Classes"}}</label>
+    <div class="haywire-classes-list">
+      {{#each classes}}
+        <div class="haywire-class-entry {{#if this.missing}}haywire-missing{{/if}}">
+          <span class="haywire-class-name">{{this.name}}</span>
+          {{#if ../isEditable}}
+          <button type="button" class="haywire-remove-button" data-action="removeClass" data-class-uuid="{{this.uuid}}">
+            <i class="fas fa-trash"></i>
+          </button>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+    {{#if isEditable}}
+    <small class="haywire-no-items">{{localize "HAYWIRE.Unit.DragClassHint"}}</small>
+    {{/if}}
+  </div>
+
+  {{!-- Support Cards --}}
+  <div class="haywire-sheet-section">
+    <label>{{localize "HAYWIRE.Unit.SupportCards"}}</label>
+    {{#if supportCards.length}}
+    <div class="haywire-support-list">
+      {{#each supportCards}}
+        <div class="haywire-support-entry">
+          {{#if this.img}}
+          <img src="{{this.img}}" class="haywire-support-thumb" data-action="showSupport" data-src="{{this.img}}" data-title="{{this.name}}" />
+          {{/if}}
+          <span class="haywire-support-name">{{this.name}}</span>
+          {{#if ../isEditable}}
+          <button type="button" class="haywire-remove-button" data-action="removeSupport" data-support-uuid="{{this.uuid}}">
+            <i class="fas fa-trash"></i>
+          </button>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+    {{else}}
+    <div class="haywire-no-support">{{localize "HAYWIRE.Unit.NoSupport"}}</div>
+    {{/if}}
+  </div>
+
+  {{!-- Deploy Button (uses <a> so it works even when form is disabled/compendium) --}}
+  <div class="haywire-sheet-section haywire-unit-deploy">
+    <a class="haywire-deploy-button" data-action="deployUnit">
+      <i class="fas fa-users"></i> {{localize "HAYWIRE.Unit.Deploy"}}
+    </a>
+  </div>
+
+</section>
