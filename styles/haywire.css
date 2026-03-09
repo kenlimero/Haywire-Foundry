@@ -1758,9 +1758,9 @@
   }
 
   .haywire-support-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
     gap: 0.4rem;
+    overflow-x: auto;
   }
 
   .haywire-support-card {
@@ -1769,6 +1769,8 @@
     border-radius: 6px;
     overflow: hidden;
     transition: border-color 0.15s;
+    width: 140px;
+    flex-shrink: 0;
   }
 
   .haywire-support-card:hover {
@@ -1877,6 +1879,73 @@
   }
 
   #haywire-support-preview img {
+    display: block;
+    max-width: 500px;
+    max-height: 350px;
+    border-radius: 6px;
+    border: 2px solid var(--haywire-color-accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+  }
+
+  /* ============================================ */
+  /*  OPFOR Support Cards Overlay                 */
+  /* ============================================ */
+
+  #haywire-opfor-support-overlay {
+    position: fixed;
+    top: 8px;
+    left: calc(50% - 100px);
+    transform: translateX(-100%);
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  #haywire-opfor-support-overlay .haywire-support-thumb {
+    pointer-events: auto;
+    width: 90px;
+    height: 63px;
+  }
+
+  #haywire-opfor-support-panel {
+    position: fixed;
+    top: 75px;
+    left: calc(50% - 100px);
+    transform: translateX(-100%);
+    z-index: 99;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  #haywire-opfor-support-panel.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #haywire-opfor-support-panel .haywire-support-panel-inner {
+    max-width: 480px;
+  }
+
+  #haywire-opfor-support-preview {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  #haywire-opfor-support-preview.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #haywire-opfor-support-preview img {
     display: block;
     max-width: 500px;
     max-height: 350px;

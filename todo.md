@@ -18,7 +18,9 @@
     [x] lock la fiche contre les modif
     [x] ajout de faction dans la carte
     [x] les conditions ne fonctionnent pas
-    [-] Overlay du support OPFOR
+    [P] Overlay du support OPFOR
+        [x] liaison à la carte support
+        [-] importation des 3 cartes automatiquement
 
 # Actorsheet
 [x] une fois une classe drag and drop dans l'actorsheet, pouvoir supprimer et modifier l'équipement sans modifier la classe dans item.

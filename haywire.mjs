@@ -25,6 +25,7 @@ import { ThreatOverlay } from "./module/threat-overlay.mjs";
 
 // Support cards overlay
 import { SupportOverlay } from "./module/support-overlay.mjs";
+import { OpforSupportOverlay } from "./module/opfor-support-overlay.mjs";
 
 // Sheets
 import { SoldierSheet } from "./module/sheets/soldier-sheet.mjs";
@@ -169,6 +170,15 @@ Hooks.once("init", () => {
     default: [],
   });
 
+  // OPFOR support cards overlay setting (world-scoped, array of card UUIDs)
+  game.settings.register("haywire", "opforSupportCardIds", {
+    name: "HAYWIRE.OpforSupport.Label",
+    scope: "world",
+    config: false,
+    type: Array,
+    default: [],
+  });
+
   console.log("haywire | Système Haywire initialisé");
 });
 
@@ -176,6 +186,7 @@ Hooks.once("init", () => {
 Hooks.once("ready", () => {
   ThreatOverlay.init();
   SupportOverlay.init();
+  OpforSupportOverlay.init();
 });
 
 // Masquer le carré de fond derrière les icônes d'effets sur les tokens (garder uniquement le sprite rond)

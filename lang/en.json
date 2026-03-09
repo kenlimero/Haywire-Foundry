@@ -118,6 +118,10 @@
       "Activated": "Support Activated",
       "LeaderDowned": "Leader is down — support unavailable"
     },
+    "OpforSupport": {
+      "Label": "OPFOR Support",
+      "Activated": "OPFOR Support Activated"
+    },
     "Unit": {
       "Role": "Role",
       "Classes": "Classes",
