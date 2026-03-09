@@ -12,7 +12,8 @@
     "build:opfor-skills": "node scripts/pack-opfor-skills.mjs",
     "build:opfor-support": "node scripts/pack-opfor-support.mjs",
     "build:decks": "node scripts/pack-decks.mjs",
-    "build:player-units": "node scripts/pack-units.mjs"
+    "build:player-units": "node scripts/pack-units.mjs",
+    "build:player-support": "node scripts/pack-player-support.mjs"
   },
   "devDependencies": {
     "classic-level": "^3.0.0"

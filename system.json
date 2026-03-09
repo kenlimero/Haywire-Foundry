@@ -2,7 +2,7 @@
   "id": "haywire",
   "title": "Haywire",
   "description": "Système FoundryVTT pour le wargame tactique solo/coop HAYWIRE V2",
-  "version": "0.9.3",
+  "version": "0.10.0",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
@@ -45,7 +45,8 @@
       "weapon": {},
       "skill": {},
       "opfor-skill": {},
-      "unit": {}
+      "unit": {},
+      "support": {}
     }
   },
   "packs": [
@@ -108,7 +109,7 @@
       "name": "opfor-support",
       "label": "HAYWIRE.CompendiumOpforSupport",
       "path": "packs/opfor-support",
-      "type": "JournalEntry",
+      "type": "Item",
       "system": "haywire",
       "ownership": {
         "PLAYER": "OBSERVER",
@@ -138,6 +139,17 @@
       }
     },
     {
+      "name": "player-support",
+      "label": "HAYWIRE.CompendiumPlayerSupport",
+      "path": "packs/player-support",
+      "type": "Item",
+      "system": "haywire",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
       "name": "decks",
       "label": "HAYWIRE.CompendiumDecks",
       "path": "packs/decks",
@@ -156,7 +168,7 @@
       "folders": [
         {
           "name": "Player",
-          "packs": ["player-classes", "player-skills", "player-units"]
+          "packs": ["player-classes", "player-skills", "player-units", "player-support"]
         },
         {
           "name": "OPFOR",

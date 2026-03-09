@@ -8,10 +8,12 @@
     "CompendiumOpforSupport": "Cartes Support OPFOR",
     "CompendiumOpforSkills": "Compétences OPFOR",
     "CompendiumPlayerUnits": "Unités Joueur",
+    "CompendiumPlayerSupport": "Deck Support Joueur",
     "CompendiumDecks": "Decks de Cartes",
     "SheetUnit": "Fiche Unité",
     "SheetOpforUnit": "Fiche Unité OPFOR",
     "SheetOpforSkill": "Fiche Compétence OPFOR",
+    "SheetSupport": "Fiche Carte Support",
     "SheetSoldier": "Fiche Soldat",
     "SheetClass": "Fiche Classe",
     "SheetWeapon": "Fiche Arme",
@@ -133,7 +135,8 @@
       "weapon": "Arme",
       "skill": "Compétence",
       "opfor-skill": "Compétence OPFOR",
-      "unit": "Unité"
+      "unit": "Unité",
+      "support": "Support"
     }
   }
 }

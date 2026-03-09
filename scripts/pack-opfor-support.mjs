@@ -3,13 +3,11 @@ import { rm } from "fs/promises";
 
 const OUTPUT = "packs/opfor-support";
 
-const STATS = { systemId: "haywire", systemVersion: "0.6.1", coreVersion: "13" };
+const STATS = { systemId: "haywire", systemVersion: "0.9.3", coreVersion: "13" };
 
-// ─── ID generators ───────────────────────────────────────────────────────────
-let journalCounter = 0;
-let pageCounter = 0;
-const nextJournalId = () => `hwSup${String(++journalCounter).padStart(11, "0")}`;
-const nextPageId = () => `hwPge${String(++pageCounter).padStart(11, "0")}`;
+// ─── ID generator ────────────────────────────────────────────────────────────
+let counter = 0;
+const nextId = () => `hwOsp${String(++counter).padStart(11, "0")}`;
 
 // ─── Folder definitions ──────────────────────────────────────────────────────
 const FOLDERS = [
@@ -50,7 +48,7 @@ for (let i = 0; i < FOLDERS.length; i++) {
     _id: f.id,
     _key: folderKey,
     name: f.name,
-    type: "JournalEntry",
+    type: "Item",
     sorting: "a",
     sort: (i + 1) * 100000,
     color: null,
@@ -62,42 +60,25 @@ for (let i = 0; i < FOLDERS.length; i++) {
   console.log(`Folder: ${f.name}`);
 }
 
-// Create sublevel for pages (Foundry V13 embedded collection pattern)
-const pagesSublevel = db.sublevel("journal.pages", { keyEncoding: "utf8", valueEncoding: "utf8" });
-
 console.log(`\nPacking ${CARDS.length} support cards...`);
 
 for (const card of CARDS) {
-  const _id = nextJournalId();
-  const pageId = nextPageId();
-  const key = `!journal!${_id}`;
+  const id = nextId();
+  const key = `!items!${id}`;
   const folderId = FOLDERS[card.faction].id;
 
-  // Write the image page into the sublevel
-  const page = {
-    _id: pageId,
-    name: card.name,
-    type: "image",
-    src: card.img,
-    title: { show: false, level: 1 },
-    image: { caption: "" },
-    sort: 0,
-    ownership: { default: -1 },
-    flags: {},
-    _stats: STATS,
-  };
-  const pageKey = `${_id}.${pageId}`;
-  await pagesSublevel.put(pageKey, JSON.stringify(page));
-
-  // Write the journal entry with page IDs
   const doc = {
-    _id,
+    _id: id,
     _key: key,
     name: card.name,
+    type: "support",
     img: card.img,
-    pages: [pageId],
+    system: {
+      description: "",
+    },
+    effects: [],
     folder: folderId,
-    sort: 0,
+    sort: counter * 100000,
     ownership: { default: 0 },
     flags: {},
     _stats: STATS,
