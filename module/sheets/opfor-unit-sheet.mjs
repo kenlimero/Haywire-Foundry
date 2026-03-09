@@ -32,7 +32,9 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     },
   };
 
-  _locked = true;
+  get _locked() {
+    return this.actor.getFlag("haywire", "locked") ?? false;
+  }
 
   _getHeaderControls() {
     const controls = super._getHeaderControls();
@@ -53,8 +55,9 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   static async #onToggleLock() {
-    this._locked = !this._locked;
-    if (this._locked) this._editingBehavior = false;
+    const newLocked = !this._locked;
+    await this.actor.setFlag("haywire", "locked", newLocked);
+    if (newLocked) this._editingBehavior = false;
     this.render({ force: true, window: { controls: true } });
   }
 

@@ -32,7 +32,9 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     },
   };
 
-  _locked = true;
+  get _locked() {
+    return this.actor.getFlag("haywire", "locked") ?? false;
+  }
 
   _getHeaderControls() {
     const controls = super._getHeaderControls();
@@ -51,7 +53,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   static async #onToggleLock() {
-    this._locked = !this._locked;
+    await this.actor.setFlag("haywire", "locked", !this._locked);
     this.render({ force: true, window: { controls: true } });
   }
 
@@ -175,7 +177,6 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   _onClose(options) {
     super._onClose(options);
-    this._locked = true;
     if (this._itemHooks) {
       Hooks.off("updateItem", this._itemHooks[0]);
       Hooks.off("deleteItem", this._itemHooks[1]);

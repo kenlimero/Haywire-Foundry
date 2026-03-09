@@ -26,12 +26,13 @@
 [x] Modifier le token dans l'actorsheet. Par défaut, c'est celui de la classe mais on pourrait vouloir le personnaliser.
 [x] Compatibilité avec tokenizer.
 [x] lock la fiche contre les modif
-[-] Unlock par défaut
+[x] Unlock par défaut
 
 # Token
 [x] conditions rondes mais carré autour quand posé.
 [x] afficher les AP
 [x] impossible de supprimer la condition injured, seulement l'ajout de HP le permet. Faire en sorte que la condition injured puisse être retirée et ajouter dans ce cas 1HP.
+[-] bug overlay si token effacé, il s'affiche toujours
 
 # Compendiums
 [x] Compendiums : le bouton import ne fonctionne pas
