@@ -26,6 +26,7 @@
 [x] Modifier le token dans l'actorsheet. Par défaut, c'est celui de la classe mais on pourrait vouloir le personnaliser.
 [x] Compatibilité avec tokenizer.
 [x] lock la fiche contre les modif
+[-] Unlock par défaut
 
 # Token
 [x] conditions rondes mais carré autour quand posé.
@@ -36,7 +37,7 @@
 [x] Compendiums : le bouton import ne fonctionne pas
 ## Classes
 [x] le compendium de classe doit être trier par tier
-[-] créer les groupes d'intervention. Composé de plusieurs classes se sont des équipes prêtent à l'action.
+[x] créer les groupes d'intervention. Composé de plusieurs classes se sont des équipes prêtent à l'action.
 ## Weapons
 [?] Weapons/equipements : supprimer les doublons.
 ## Gestion des véhicules
@@ -49,9 +50,10 @@
 [-] faire l'affichage en overlay de l'actorsheet de l'actor dont c'est le tour pour déclencher ses actions.
 
 # Gestion des Unités
-[P] Faire une sheet pour les unités et y mettre les UUID des classes
-[P] importé l'unités, créait un répertoire dans Actor avec le nom de l'unité et les différents actor avec des classes.
-    [-] Les actors importés ont tous 1HP sur 1
+[x] Faire une sheet pour les unités et y mettre les UUID des classes
+[x] importé l'unités, créait un répertoire dans Actor avec le nom de l'unité et les différents actor avec des classes.
+    [x] Les actors importés ont tous 1HP sur 1
+[-] faire un pack de carte support et retirer du pack deck
 
 # System
 [x] mettre une image sur le système 
@@ -69,6 +71,8 @@
 [P] gestion des decks :
     [x] créer les decks et l'affichage.
     [-] trouver un moyen de faire automatiquement. 
+[-] Overlay support
+[-] Overlay FOG
 
 # Mécanisme de jeu
 [-] Implémenter les mécanismes de jeu

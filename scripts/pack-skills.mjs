@@ -3,7 +3,7 @@ import { readdir, readFile, rm } from "fs/promises";
 import { join } from "path";
 
 const INPUT = "packs/_source/skills";
-const OUTPUT = "packs/skills";
+const OUTPUT = "packs/player-skills";
 
 // Clean output
 await rm(OUTPUT, { recursive: true, force: true });

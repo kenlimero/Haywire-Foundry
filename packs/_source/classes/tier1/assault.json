@@ -11,8 +11,8 @@
       "hard": 13
     },
     "skillIds": [
-      "Compendium.haywire.skills.hwSkl00000000019",
-      "Compendium.haywire.skills.hwSkl00000000001"
+      "Compendium.haywire.player-skills.hwSkl00000000019",
+      "Compendium.haywire.player-skills.hwSkl00000000001"
     ],
     "defaultWeapons": [
       "Compendium.haywire.weapons.hwWpn00000000006",

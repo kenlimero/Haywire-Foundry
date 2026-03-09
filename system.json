@@ -2,7 +2,7 @@
   "id": "haywire",
   "title": "Haywire",
   "description": "Système FoundryVTT pour le wargame tactique solo/coop HAYWIRE V2",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
@@ -10,7 +10,7 @@
   },
   "url": "https://github.com/kenlimero/Haywire-Foundry",
   "manifest": "https://raw.githubusercontent.com/kenlimero/Haywire-Foundry/main/system.json",
-  "download": "https://github.com/kenlimero/Haywire-Foundry/archive/refs/tags/v0.9.0.zip",
+  "download": "https://github.com/kenlimero/Haywire-Foundry/archive/refs/tags/v0.9.1.zip",
   "authors": [
     {
       "name": "Ricco",
@@ -50,9 +50,9 @@
   },
   "packs": [
     {
-      "name": "classes",
-      "label": "HAYWIRE.CompendiumClasses",
-      "path": "packs/classes",
+      "name": "player-classes",
+      "label": "HAYWIRE.CompendiumPlayerClasses",
+      "path": "packs/player-classes",
       "type": "Item",
       "system": "haywire",
       "ownership": {
@@ -72,9 +72,9 @@
       }
     },
     {
-      "name": "skills",
-      "label": "HAYWIRE.CompendiumSkills",
-      "path": "packs/skills",
+      "name": "player-skills",
+      "label": "HAYWIRE.CompendiumPlayerSkills",
+      "path": "packs/player-skills",
       "type": "Item",
       "system": "haywire",
       "ownership": {
@@ -127,9 +127,9 @@
       }
     },
     {
-      "name": "units",
-      "label": "HAYWIRE.CompendiumUnits",
-      "path": "packs/units",
+      "name": "player-units",
+      "label": "HAYWIRE.CompendiumPlayerUnits",
+      "path": "packs/player-units",
       "type": "Item",
       "system": "haywire",
       "ownership": {
@@ -147,6 +147,22 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Haywire",
+      "packs": ["weapons", "decks"],
+      "folders": [
+        {
+          "name": "Player",
+          "packs": ["player-classes", "player-skills", "player-units"]
+        },
+        {
+          "name": "OPFOR",
+          "packs": ["opfor-tables", "opfor-units", "opfor-support", "opfor-skills"]
+        }
+      ]
     }
   ],
   "primaryTokenAttribute": "hitPoints",

@@ -3,7 +3,7 @@ import { readdir, readFile, rm } from "fs/promises";
 import { join } from "path";
 
 const INPUT = "packs/_source/classes";
-const OUTPUT = "packs/classes";
+const OUTPUT = "packs/player-classes";
 
 const TIERS = [
   { dir: "tier1", id: "hwFld00000000001", name: "Tier 1 — Specialists", sort: 1 },

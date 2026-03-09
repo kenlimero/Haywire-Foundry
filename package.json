@@ -4,15 +4,15 @@
   "version": "0.5.0",
   "description": "Build tools for the Haywire FoundryVTT system",
   "scripts": {
-    "build:classes": "node scripts/pack-classes.mjs",
+    "build:player-classes": "node scripts/pack-classes.mjs",
     "build:weapons": "node scripts/pack-weapons.mjs",
-    "build:skills": "node scripts/pack-skills.mjs",
+    "build:player-skills": "node scripts/pack-skills.mjs",
     "build:opfor-tables": "node scripts/pack-opfor-tables.mjs",
     "build:opfor-units": "node scripts/pack-opfor-units.mjs",
     "build:opfor-skills": "node scripts/pack-opfor-skills.mjs",
     "build:opfor-support": "node scripts/pack-opfor-support.mjs",
     "build:decks": "node scripts/pack-decks.mjs",
-    "build:units": "node scripts/pack-units.mjs"
+    "build:player-units": "node scripts/pack-units.mjs"
   },
   "devDependencies": {
     "classic-level": "^3.0.0"

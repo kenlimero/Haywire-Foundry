@@ -1,7 +1,7 @@
 import { ClassicLevel } from "classic-level";
 import { rm } from "fs/promises";
 
-const OUTPUT = "packs/units";
+const OUTPUT = "packs/player-units";
 const STATS = { systemId: "haywire", systemVersion: "0.8.6", coreVersion: "13" };
 
 // ─── ID generators ───────────────────────────────────────────────────────────
@@ -11,7 +11,7 @@ const nextItemId = () => `hwUnt${String(++itemCounter).padStart(11, "0")}`;
 const nextFolderId = () => `hwFldUnt${String(++folderCounter).padStart(8, "0")}`;
 
 // ─── Class UUID helpers ──────────────────────────────────────────────────────
-const CLS = (id) => `Compendium.haywire.classes.${id}`;
+const CLS = (id) => `Compendium.haywire.player-classes.${id}`;
 
 const CLASS_IDS = {
   "Team Leader":       CLS("hwCls00000000001"),
