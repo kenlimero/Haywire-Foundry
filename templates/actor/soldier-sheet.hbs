@@ -189,4 +189,27 @@
     {{/if}}
   </div>
 
+  {{!-- Support cards --}}
+  <div class="haywire-sheet-section">
+    <label>{{localize "HAYWIRE.Support.Label"}}</label>
+    <div class="haywire-supports-list">
+      {{#each supports}}
+        <div class="haywire-support-entry {{#if this.missing}}haywire-missing{{/if}}">
+          {{#if this.img}}
+            <img src="{{this.img}}" alt="{{this.name}}" class="haywire-support-thumb" data-action="openItem" data-item-uuid="{{this.uuid}}" />
+          {{/if}}
+          <a class="haywire-item-link" data-action="openItem" data-item-uuid="{{this.uuid}}">{{this.name}}</a>
+          {{#if ../isEditable}}
+            <button type="button" class="haywire-btn-delete" data-action="removeSupport" data-support-uuid="{{this.uuid}}">
+              <i class="fas fa-trash"></i>
+            </button>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+    {{#if isEditable}}
+    <small class="haywire-no-items">{{localize "HAYWIRE.DragSupportHint"}}</small>
+    {{/if}}
+  </div>
+
 </section>

@@ -493,6 +493,28 @@
     align-items: center;
   }
 
+  /* Supports List */
+  .haywire-supports-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .haywire-support-entry {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .haywire-support-thumb {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid var(--haywire-color-primary);
+    cursor: pointer;
+  }
+
   .haywire-skill-name {
     width: 35%;
     font-size: 0.8rem;

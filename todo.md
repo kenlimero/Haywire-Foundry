@@ -47,7 +47,6 @@
 ## Support
 [-] Faire un compendium drag-and-drop des cartes supports
 
-
 # Combat
 [-] Déterminer les actions de combat
     [-] joueurs
@@ -81,6 +80,9 @@
 [P] gestion des decks aléatoire :
     [x] créer les decks et l'affichage.
     [-] trouver un moyen de faire automatiquement. 
+[-] **Avoir un bouton de reset de game**
+    - déterminer les actions
+## Overlay support
 [P] Overlay support
     [x] importation d'unité
     [x] drag-and-drop de carte support
@@ -89,6 +91,7 @@
         [x] leader downed plus de support
         [?] comment faire en cas d'importation où d'utilisation pour ne pas faire l'import de l'unité à chaque fois ?
             - liaison avec le leader ?
+## Overlay FOG
 [-] Overlay FOG
 
 # Mécanisme de jeu

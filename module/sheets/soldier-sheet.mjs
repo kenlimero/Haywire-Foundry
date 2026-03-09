@@ -22,6 +22,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     actions: {
       removeWeapon: SoldierSheet.#onRemoveWeapon,
       removeSkill: SoldierSheet.#onRemoveSkill,
+      removeSupport: SoldierSheet.#onRemoveSupport,
       removeCondition: SoldierSheet.#onRemoveCondition,
       openItem: SoldierSheet.#onOpenItem,
       editPortrait: SoldierSheet.#onEditPortrait,
@@ -137,6 +138,12 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }
   }
 
+  static async #onRemoveSupport(event, target) {
+    const uuid = target.dataset.supportUuid;
+    const supportIds = this.actor.system.supportIds.filter(id => id !== uuid);
+    await this.actor.update({ "system.supportIds": supportIds });
+  }
+
   static async #onRemoveCondition(event, target) {
     const condition = target.closest("[data-condition]").dataset.condition;
     await this.actor.toggleStatusEffect(condition, { active: false });
@@ -169,6 +176,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     if (item.uuid === system.classId) return true;
     if (system.weaponIds.includes(item.uuid)) return true;
     if (system.skillIds.includes(item.uuid)) return true;
+    if (system.supportIds.includes(item.uuid)) return true;
     // Utiliser le cache résolu au dernier render (évite fromUuidSync sur compendium)
     if (this._classWeaponUuids?.includes(item.uuid)) return true;
     if (this._classSkillUuids?.includes(item.uuid)) return true;
@@ -204,6 +212,9 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     }
     if (item.type === "skill") {
       return this.#onDropSkillItem(item, uuid);
+    }
+    if (item.type === "support") {
+      return this.#onDropSupportItem(item, uuid);
     }
 
     console.warn(`haywire | SoldierSheet: ${game.i18n.localize("HAYWIRE.InvalidDrop")} (type: ${item.type})`);
@@ -249,6 +260,13 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     const skillIds = [...this.actor.system.skillIds, uuid];
     await this.actor.update({ "system.skillIds": skillIds });
+  }
+
+  async #onDropSupportItem(_item, uuid) {
+    if (this.actor.system.supportIds.includes(uuid)) return;
+
+    const supportIds = [...this.actor.system.supportIds, uuid];
+    await this.actor.update({ "system.supportIds": supportIds });
   }
 
   /* ---------------------------------------- */
@@ -331,9 +349,12 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const allSkillUuids = [...classSkillIds, ...(context.system.skillIds ?? [])];
     const allWeaponUuids = [...classWeaponIds, ...context.system.weaponIds];
 
-    const [resolvedSkills, resolvedWeapons] = await Promise.all([
+    const allSupportUuids = context.system.supportIds ?? [];
+
+    const [resolvedSkills, resolvedWeapons, resolvedSupports] = await Promise.all([
       Promise.all(allSkillUuids.map(uuid => fromUuid(uuid))),
       Promise.all(allWeaponUuids.map(uuid => fromUuid(uuid))),
+      Promise.all(allSupportUuids.map(uuid => fromUuid(uuid))),
     ]);
 
     context.skills = allSkillUuids.map((uuid, i) => {
@@ -344,6 +365,16 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         description: s?.system?.description ?? "",
         missing: !s,
         fromClass: classSkillIds.includes(uuid),
+      };
+    });
+
+    context.supports = allSupportUuids.map((uuid, i) => {
+      const s = resolvedSupports[i];
+      return {
+        uuid,
+        name: s?.name ?? `[${uuid}]`,
+        img: s?.img ?? null,
+        missing: !s,
       };
     });
 
