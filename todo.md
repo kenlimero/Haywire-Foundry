@@ -17,7 +17,7 @@
     [x] rendre les behavior éditable
     [x] lock la fiche contre les modif
     [x] ajout de faction dans la carte
-    [-] les conditions ne fonctionnent pas
+    [x] les conditions ne fonctionnent pas
 
 # Actorsheet
 [x] une fois une classe drag and drop dans l'actorsheet, pouvoir supprimer et modifier l'équipement sans modifier la classe dans item.
@@ -58,7 +58,8 @@
     [P] afficher la fiche de soldier type founcdry ou juste l'image - un paramètre pour soldier et un autre pour opfor.
         [x] les sheet affichent unitairement html ou carte
         [-] refaire les settings globaux
-    [-] afficher la fiche de opfor type founcdry ou juste l'image - un paramètre pour soldier et un autre pour opfor.
+        [-] faire un setting uniquement pour le type de fiche sur l'overlay
+    [-] overlay on/off
     [-] configuration du répertoire d'importation pour tous les types :
         [-] soldier
         [–] opfor
