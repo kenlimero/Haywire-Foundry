@@ -84,6 +84,16 @@ export class SupportOverlay {
     thumb.addEventListener("mouseenter", () => this.#showPanel());
     thumb.addEventListener("mouseleave", () => this.#hidePanel());
 
+    // Drag-and-drop support items onto the backcover
+    thumb.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      thumb.classList.add("drag-over");
+    });
+    thumb.addEventListener("dragleave", () => {
+      thumb.classList.remove("drag-over");
+    });
+    thumb.addEventListener("drop", (e) => this.#onDrop(e, thumb));
+
     // Keep panel visible when hovering the panel itself
     panel.addEventListener("mouseenter", () => this.#showPanel());
     panel.addEventListener("mouseleave", () => this.#hidePanel());
@@ -202,6 +212,30 @@ export class SupportOverlay {
         await this.#activateCard(uuid, name, img);
       });
     });
+  }
+
+  static async #onDrop(event, thumb) {
+    event.preventDefault();
+    thumb.classList.remove("drag-over");
+
+    let data;
+    try {
+      data = JSON.parse(event.dataTransfer.getData("text/plain"));
+    } catch {
+      return;
+    }
+    if (!data.uuid) return;
+
+    const doc = await fromUuid(data.uuid);
+    if (!doc || doc.type !== "support") {
+      ui.notifications.warn("Only support items can be dropped here.");
+      return;
+    }
+
+    const currentIds = this.cardIds;
+    if (currentIds.includes(data.uuid)) return;
+
+    await this.setCardIds([...currentIds, data.uuid]);
   }
 
   static async #activateCard(uuid, name, img) {

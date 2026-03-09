@@ -1644,6 +1644,11 @@
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
   }
 
+  .haywire-support-thumb.drag-over {
+    border-color: var(--haywire-color-accent);
+    box-shadow: 0 0 12px rgba(212, 160, 23, 0.6);
+  }
+
   .haywire-support-thumb img {
     width: 100%;
     height: 100%;

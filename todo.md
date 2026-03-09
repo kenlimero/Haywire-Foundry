@@ -27,6 +27,7 @@
 [x] Compatibilité avec tokenizer.
 [x] lock la fiche contre les modif
 [x] Unlock par défaut
+[-] **Retransformer les classes en simple actor configurable**
 
 # Token
 [x] conditions rondes mais carré autour quand posé.
@@ -43,6 +44,9 @@
 [?] Weapons/equipements : supprimer les doublons.
 ## Gestion des véhicules
 [-] Implémenter le compendium de véhicules
+## Support
+[-] Faire un compendium drag-and-drop des cartes supports
+
 
 # Combat
 [-] Déterminer les actions de combat
@@ -55,6 +59,10 @@
 [x] importé l'unités, créait un répertoire dans Actor avec le nom de l'unité et les différents actor avec des classes.
     [x] Les actors importés ont tous 1HP sur 1
 [-] faire un pack de carte support et retirer du pack deck
+[x] les cartes support dans l'unit ne sont pas en paysage (css global du type de carte résolu lorsque overlay à été fait)
+[-] faire un overlay des classes
+[-] faire un overlay des cartes support sans clic
+[-] Lorsqu'une unité est déployé, l'actor team leader ou squad leader ont l'UUID des cartes support de l'unité. Ces cartes supports seront importéés dans l'overlay.
 
 # System
 [x] mettre une image sur le système 
@@ -64,15 +72,23 @@
         [-] refaire les settings globaux
         [-] faire un setting uniquement pour le type de fiche sur l'overlay
     [-] overlay on/off
-    [-] configuration du répertoire d'importation pour tous les types :
+    [P] configuration du répertoire d'importation pour tous les types :
         [-] soldier
+        [x] Units
         [–] opfor
         [-] skill
         [-] weapons
-[P] gestion des decks :
+[P] gestion des decks aléatoire :
     [x] créer les decks et l'affichage.
     [-] trouver un moyen de faire automatiquement. 
-[-] Overlay support
+[P] Overlay support
+    [x] importation d'unité
+    [x] drag-and-drop de carte support
+    [x] Gestion de l'activation
+    [P] Gestion de l'unité et du leader
+        [x] leader downed plus de support
+        [?] comment faire en cas d'importation où d'utilisation pour ne pas faire l'import de l'unité à chaque fois ?
+            - liaison avec le leader ?
 [-] Overlay FOG
 
 # Mécanisme de jeu
