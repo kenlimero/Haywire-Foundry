@@ -354,21 +354,21 @@ export class OpforSupportOverlay {
     ui.notifications.info(`${entries.length} ${folder.name} support cards imported.`);
   }
 
-  static async #activateCard(uuid, name, img) {
+  static async #activateCard(_uuid, name, img) {
     const i18n = (k) => game.i18n.localize(k);
-    const speaker = ChatMessage.getSpeaker();
 
-    await ChatMessage.create({
-      content: `<div class="haywire-card-chat">
-        <div class="haywire-card-chat-header">
-          <i class="fas fa-skull-crossbones"></i> ${i18n("HAYWIRE.OpforSupport.Activated")}
-        </div>
-        <img class="haywire-card-chat-img" src="${img}" alt="${name}" />
-        <div class="haywire-card-chat-name">${name}</div>
-      </div>`,
-      speaker,
-    });
+    try {
+      await ChatMessage.create({
+        content: `<div class="haywire-card-chat">
+          <div class="haywire-card-chat-header">
+            <i class="fas fa-skull-crossbones"></i> ${i18n("HAYWIRE.OpforSupport.Activated")}
+          </div>
+          <img class="haywire-card-chat-img" src="${img}" alt="${name}" />
+        </div>`,
+      });
+    } catch (err) {
+      console.error("OpforSupportOverlay | ChatMessage.create failed", err);
+    }
 
-    await this.removeCard(uuid);
   }
 }
