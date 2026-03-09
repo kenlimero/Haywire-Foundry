@@ -111,6 +111,12 @@
       "AlertActive": "ALERTE",
       "TableHint": "Utilisez les tables OPFOR pour ce niveau"
     },
+    "OpforSupport": {
+      "Label": "Support OPFOR",
+      "Activated": "Support OPFOR activé",
+      "ImportFaction": "Importer une faction",
+      "SelectFaction": "Choisissez une faction pour importer ses 3 cartes de support"
+    },
     "Unit": {
       "Role": "Rôle",
       "Classes": "Classes",

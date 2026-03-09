@@ -120,7 +120,9 @@
     },
     "OpforSupport": {
       "Label": "OPFOR Support",
-      "Activated": "OPFOR Support Activated"
+      "Activated": "OPFOR Support Activated",
+      "ImportFaction": "Import Faction",
+      "SelectFaction": "Select a faction to import its 3 support cards"
     },
     "Unit": {
       "Role": "Role",

@@ -128,6 +128,12 @@ export class OpforSupportOverlay {
   }
 
   static async #renderPanel(panel, cardIds, count, i18n) {
+    const importBtn = game.user.isGM && count === 0
+      ? `<button class="haywire-opfor-import-faction" title="${i18n("HAYWIRE.OpforSupport.SelectFaction")}">
+           <i class="fas fa-file-import"></i> ${i18n("HAYWIRE.OpforSupport.ImportFaction")}
+         </button>`
+      : "";
+
     if (count === 0) {
       panel.innerHTML = `
         <div class="haywire-support-panel-inner">
@@ -135,7 +141,9 @@ export class OpforSupportOverlay {
             <i class="fas fa-skull-crossbones"></i> ${i18n("HAYWIRE.OpforSupport.Label")}
           </div>
           <div class="haywire-support-empty">${i18n("HAYWIRE.Unit.NoSupport")}</div>
+          ${importBtn}
         </div>`;
+      this.#bindImportButton(panel);
       return;
     }
 
@@ -203,6 +211,57 @@ export class OpforSupportOverlay {
     if (current.includes(data.uuid)) return;
 
     await this.setCardIds([...current, data.uuid]);
+  }
+
+  static #bindImportButton(panel) {
+    panel.querySelector(".haywire-opfor-import-faction")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.#showFactionDialog();
+    });
+  }
+
+  static async #showFactionDialog() {
+    const pack = game.packs.get("haywire.opfor-support");
+    if (!pack) {
+      ui.notifications.error("Compendium haywire.opfor-support not found.");
+      return;
+    }
+
+    // Get all folders from the pack to build faction choices
+    const index = await pack.getIndex({ fields: ["folder"] });
+    const folders = pack.folders;
+    if (!folders.size) {
+      ui.notifications.warn("No folders found in opfor-support compendium.");
+      return;
+    }
+
+    const buttons = {};
+    for (const folder of folders) {
+      buttons[folder.id] = {
+        label: folder.name,
+        icon: '<i class="fas fa-skull-crossbones"></i>',
+        callback: () => this.#importFaction(index, folder),
+      };
+    }
+
+    new Dialog({
+      title: game.i18n.localize("HAYWIRE.OpforSupport.ImportFaction"),
+      content: `<p>${game.i18n.localize("HAYWIRE.OpforSupport.SelectFaction")}</p>`,
+      buttons,
+      default: null,
+    }).render(true);
+  }
+
+  static async #importFaction(index, folder) {
+    const entries = index.filter((e) => e.folder === folder._id);
+    if (!entries.length) {
+      ui.notifications.warn(`No cards found in folder "${folder.name}".`);
+      return;
+    }
+
+    const uuids = entries.map((e) => `Compendium.haywire.opfor-support.Item.${e._id}`);
+    await this.addCards(uuids);
+    ui.notifications.info(`${entries.length} ${folder.name} support cards imported.`);
   }
 
   static async #activateCard(uuid, name, img) {

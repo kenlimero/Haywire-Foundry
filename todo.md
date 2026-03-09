@@ -4,7 +4,7 @@
     [x] ajouter les skills aux classes par des liens UUID.
 
 # OPFOR
-[P] créer les OPPFOR.
+[x] créer les OPPFOR.
     [x] créer les compendiums
         [x] Units
         [x] threat level et reinforcement
@@ -18,9 +18,9 @@
     [x] lock la fiche contre les modif
     [x] ajout de faction dans la carte
     [x] les conditions ne fonctionnent pas
-    [P] Overlay du support OPFOR
+    [x] Overlay du support OPFOR
         [x] liaison à la carte support
-        [-] importation des 3 cartes automatiquement
+        [x] importation des 3 cartes automatiquement
 
 # Actorsheet
 [x] une fois une classe drag and drop dans l'actorsheet, pouvoir supprimer et modifier l'équipement sans modifier la classe dans item.
