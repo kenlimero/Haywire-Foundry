@@ -235,21 +235,21 @@ export class OpforSupportOverlay {
       return;
     }
 
-    const buttons = {};
+    const buttons = [];
     for (const folder of folders) {
-      buttons[folder.id] = {
+      buttons.push({
+        action: folder.id,
         label: folder.name,
-        icon: '<i class="fas fa-skull-crossbones"></i>',
+        icon: "fas fa-skull-crossbones",
         callback: () => this.#importFaction(index, folder),
-      };
+      });
     }
 
-    new Dialog({
-      title: game.i18n.localize("HAYWIRE.OpforSupport.ImportFaction"),
+    await foundry.applications.api.DialogV2.wait({
+      window: { title: game.i18n.localize("HAYWIRE.OpforSupport.ImportFaction") },
       content: `<p>${game.i18n.localize("HAYWIRE.OpforSupport.SelectFaction")}</p>`,
       buttons,
-      default: null,
-    }).render(true);
+    });
   }
 
   static async #importFaction(index, folder) {
