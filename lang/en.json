@@ -116,7 +116,9 @@
       "Leader": "Support Leader",
       "Activate": "Activate",
       "Activated": "Support Activated",
-      "LeaderDowned": "Leader is down — support unavailable"
+      "LeaderDowned": "Leader is down — support unavailable",
+      "Remove": "Remove card",
+      "Purge": "Remove all cards"
     },
     "OpforSupport": {
       "Label": "OPFOR Support",
@@ -127,14 +129,10 @@
     },
     "Infil": {
       "Label": "Infiltration",
-      "Activate": "Activate",
-      "Activated": "Infiltration Card Activated",
       "Empty": "No infiltration cards."
     },
     "Operations": {
       "Label": "Operations",
-      "Activate": "Activate",
-      "Activated": "Operation Card Activated",
       "Empty": "No operation cards."
     },
     "Unit": {

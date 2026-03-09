@@ -183,6 +183,7 @@ export class SupportOverlay {
         const leaderName = leaderActor?.name ?? "";
         return `
         <div class="haywire-support-card${downed ? " disabled" : ""}" data-preview-img="${img}" data-preview-name="${name}">
+          <span class="haywire-support-card-remove" data-uuid="${entry.uuid}" title="${i18n("HAYWIRE.Support.Remove")}"><i class="fas fa-times"></i></span>
           <img class="haywire-support-card-img" src="${img}" alt="${name}" />
           ${leaderName ? `<span class="haywire-support-card-leader${downed ? " downed" : ""}" title="${leaderName}"><i class="fas ${downed ? "fa-skull" : "fa-user-shield"}"></i> ${leaderName}</span>` : ""}
           <button class="haywire-support-activate" data-uuid="${entry.uuid}" data-name="${name}" data-img="${img}"
@@ -199,6 +200,7 @@ export class SupportOverlay {
         <div class="haywire-support-panel-header">
           <i class="fas fa-shield-alt"></i> ${i18n("HAYWIRE.Support.Label")}
           <span class="haywire-support-count">${count}</span>
+          <span class="haywire-support-purge" title="${i18n("HAYWIRE.Support.Purge")}"><i class="fas fa-trash"></i></span>
         </div>
         <div class="haywire-support-cards">${cardsHtml}</div>
       </div>`;
@@ -224,6 +226,20 @@ export class SupportOverlay {
         const { uuid, name, img } = btn.dataset;
         await this.#activateCard(uuid, name, img);
       });
+    });
+
+    // Remove button
+    panel.querySelectorAll(".haywire-support-card-remove").forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await this.removeCard(btn.dataset.uuid);
+      });
+    });
+
+    // Purge all cards
+    panel.querySelector(".haywire-support-purge")?.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      await this.setCardEntries([]);
     });
   }
 

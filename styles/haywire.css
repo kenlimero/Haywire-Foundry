@@ -1637,14 +1637,15 @@
   #haywire-support-overlay {
     position: fixed;
     top: 50%;
-    left: 16px;
+    left: -80px;
     transform: translateY(-50%);
     z-index: 100;
-    pointer-events: none;
+    pointer-events: auto;
+    transition: left 0.25s ease;
   }
 
-  #haywire-support-overlay .haywire-support-thumb {
-    pointer-events: auto;
+  #haywire-support-overlay:hover {
+    left: 0px;
   }
 
   .haywire-support-thumb {
@@ -1748,6 +1749,19 @@
     margin-left: auto;
   }
 
+  .haywire-support-purge {
+    cursor: pointer;
+    color: var(--haywire-color-text);
+    opacity: 0.5;
+    font-size: 0.65rem;
+    transition: opacity 0.15s, color 0.15s;
+  }
+
+  .haywire-support-purge:hover {
+    opacity: 1;
+    color: var(--haywire-color-danger);
+  }
+
   .haywire-support-empty {
     color: var(--haywire-color-text);
     opacity: 0.5;
@@ -1770,6 +1784,7 @@
   }
 
   .haywire-support-card {
+    position: relative;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 6px;
@@ -1783,11 +1798,43 @@
     border-color: var(--haywire-color-accent);
   }
 
+  .haywire-support-card-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: #ccc;
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 0.55rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s, background 0.15s;
+    z-index: 2;
+    pointer-events: auto;
+  }
+
+  .haywire-support-card:hover .haywire-support-card-remove {
+    opacity: 1;
+  }
+
+  .haywire-support-card-remove:hover {
+    background: var(--haywire-color-danger);
+    color: #fff;
+  }
+
   .haywire-support-card-img {
     width: 100%;
     object-fit: contain;
     display: block;
   }
+
 
   .haywire-support-card-name {
     font-family: var(--haywire-font-heading);
@@ -1900,11 +1947,16 @@
 
   #haywire-opfor-support-overlay {
     position: fixed;
-    top: 8px;
+    top: -42px;
     left: calc(50% - 100px);
     transform: translateX(-100%);
     z-index: 100;
-    pointer-events: none;
+    pointer-events: auto;
+    transition: top 0.25s ease;
+  }
+
+  #haywire-opfor-support-overlay:hover {
+    top: 0px;
   }
 
   #haywire-opfor-support-overlay .haywire-support-thumb {
@@ -1977,49 +2029,51 @@
     object-fit: contain;
   }
 
+  /* Remove button on infil/operations thumbnails */
+  .haywire-overlay-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    color: #ccc;
+    border-radius: 50%;
+    font-size: 0.6rem;
+    cursor: pointer;
+    z-index: 2;
+    pointer-events: auto;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s, background 0.15s;
+  }
+
+  .haywire-support-thumb:hover .haywire-overlay-remove {
+    opacity: 1;
+  }
+
+  .haywire-overlay-remove:hover {
+    background: var(--haywire-color-danger);
+    color: #fff;
+  }
+
   /* ============================================ */
-  /*  Infil Cards Overlay                        */
+  /*  Infil Card Overlay                          */
   /* ============================================ */
 
   #haywire-infil-overlay {
     position: fixed;
     top: calc(50% + 50px);
-    left: 16px;
+    left: -80px;
     z-index: 100;
-    pointer-events: none;
-  }
-
-  #haywire-infil-overlay .haywire-support-thumb {
     pointer-events: auto;
+    transition: left 0.25s ease;
   }
 
-  #haywire-infil-panel {
-    position: fixed;
-    top: calc(50% + 50px);
-    left: 140px;
-    z-index: 99;
-    pointer-events: none;
-    opacity: 0;
-    transform: translateX(-12px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    max-height: calc(100vh - 120px);
-    overflow-y: auto;
-  }
-
-  #haywire-infil-panel.visible {
-    opacity: 1;
-    transform: translateX(0);
-    pointer-events: auto;
-  }
-
-  #haywire-infil-panel .haywire-support-panel-inner {
-    max-width: 480px;
-  }
-
-  #haywire-infil-panel .haywire-support-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    overflow-x: unset;
+  #haywire-infil-overlay:hover {
+    left: 0px;
   }
 
   #haywire-infil-preview {
@@ -2049,48 +2103,20 @@
   }
 
   /* ============================================ */
-  /*  Operations Cards Overlay                   */
+  /*  Operations Card Overlay                     */
   /* ============================================ */
 
   #haywire-operations-overlay {
     position: fixed;
     top: calc(50% + 142px);
-    left: 16px;
+    left: -80px;
     z-index: 100;
-    pointer-events: none;
-  }
-
-  #haywire-operations-overlay .haywire-support-thumb {
     pointer-events: auto;
+    transition: left 0.25s ease;
   }
 
-  #haywire-operations-panel {
-    position: fixed;
-    top: calc(50% + 142px);
-    left: 140px;
-    z-index: 99;
-    pointer-events: none;
-    opacity: 0;
-    transform: translateX(-12px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    max-height: calc(100vh - 120px);
-    overflow-y: auto;
-  }
-
-  #haywire-operations-panel.visible {
-    opacity: 1;
-    transform: translateX(0);
-    pointer-events: auto;
-  }
-
-  #haywire-operations-panel .haywire-support-panel-inner {
-    max-width: 480px;
-  }
-
-  #haywire-operations-panel .haywire-support-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    overflow-x: unset;
+  #haywire-operations-overlay:hover {
+    left: 0px;
   }
 
   #haywire-operations-preview {
