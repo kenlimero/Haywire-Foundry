@@ -137,13 +137,26 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     }
 
     const created = await Actor.createDocuments(actorsData);
+
+    // Push support cards to the world setting for the overlay
+    const supportCardIds = unit.system.supportCardIds ?? [];
+    if (supportCardIds.length) {
+      await game.settings.set("haywire", "supportCardIds", [...supportCardIds]);
+    }
+
+    // Find the leader actor (Team Leader or Squad Leader) and store its ID
+    const leader = created.find((a) => /leader/i.test(a.name));
+    if (leader) {
+      await game.settings.set("haywire", "supportLeaderId", leader.id);
+    }
+
     ui.notifications.info(`${created.length} soldiers created in folder "${unitName}".`);
   }
 
   static #onShowSupport(event, target) {
     const src = target.dataset.src;
     const title = target.dataset.title;
-    const popout = new ImagePopout({
+    const popout = new foundry.applications.apps.ImagePopout({
       src,
       uuid: null,
       caption: "",

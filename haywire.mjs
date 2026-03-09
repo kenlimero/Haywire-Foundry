@@ -22,6 +22,9 @@ import { TokenOverlay } from "./module/token-overlay.mjs";
 // Threat level overlay
 import { ThreatOverlay } from "./module/threat-overlay.mjs";
 
+// Support cards overlay
+import { SupportOverlay } from "./module/support-overlay.mjs";
+
 // Sheets
 import { SoldierSheet } from "./module/sheets/soldier-sheet.mjs";
 import { ClassSheet } from "./module/sheets/class-sheet.mjs";
@@ -148,12 +151,31 @@ Hooks.once("init", () => {
     default: false,
   });
 
+  // Support cards overlay setting (world-scoped, array of card UUIDs)
+  game.settings.register("haywire", "supportCardIds", {
+    name: "HAYWIRE.Support.Label",
+    scope: "world",
+    config: false,
+    type: Array,
+    default: [],
+  });
+
+  // Support leader actor ID (world-scoped)
+  game.settings.register("haywire", "supportLeaderId", {
+    name: "HAYWIRE.Support.Leader",
+    scope: "world",
+    config: false,
+    type: String,
+    default: "",
+  });
+
   console.log("haywire | Système Haywire initialisé");
 });
 
 // Initialiser l'overlay Threat Level une fois le jeu prêt
 Hooks.once("ready", () => {
   ThreatOverlay.init();
+  SupportOverlay.init();
 });
 
 // Masquer le carré de fond derrière les icônes d'effets sur les tokens (garder uniquement le sprite rond)
@@ -205,7 +227,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
   html.querySelectorAll("img[data-action='showCard']")?.forEach(img => {
     img.style.cursor = "pointer";
     img.addEventListener("click", () => {
-      const popout = new ImagePopout({ src: img.dataset.src, uuid: null, caption: "", window: { title: img.dataset.title } });
+      const popout = new foundry.applications.apps.ImagePopout({ src: img.dataset.src, uuid: null, caption: "", window: { title: img.dataset.title } });
         popout.render(true).then(() => popout.setPosition({ width: 556, height: 450 }));
     });
   });

@@ -108,6 +108,13 @@
       "AlertActive": "ALERT",
       "TableHint": "Use OPFOR tables for this threat level"
     },
+    "Support": {
+      "Label": "Support Cards",
+      "Leader": "Support Leader",
+      "Activate": "Activate",
+      "Activated": "Support Activated",
+      "LeaderDowned": "Leader is down — support unavailable"
+    },
     "Unit": {
       "Role": "Role",
       "Classes": "Classes",
