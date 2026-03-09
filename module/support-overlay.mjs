@@ -3,7 +3,8 @@
  * - Hover sur la miniature : affiche le panneau de cartes support
  * - Hover sur une carte : affiche la carte en grand (style token overlay)
  * - Bouton "Activate" sur chaque carte → message chat + retrait de la carte
- * - Si le leader est downed, les boutons sont désactivés
+ * - Chaque carte est liée à un leader : si le leader est downed, ses cartes sont désactivées
+ * - Quand un token avec des supportIds est posé sur la carte, ses cartes sont ajoutées
  */
 export class SupportOverlay {
   static #el = null;
@@ -16,48 +17,67 @@ export class SupportOverlay {
     this.render();
 
     Hooks.on("updateSetting", (setting) => {
-      if (setting.key === "haywire.supportCardIds" || setting.key === "haywire.supportLeaderId") {
+      if (setting.key === "haywire.supportCardIds") {
         this.render();
       }
     });
 
-    // Re-render when the leader actor is updated (may become downed)
+    // Re-render when any leader actor is updated (may become downed)
     Hooks.on("updateActor", (actor) => {
-      const leaderId = this.leaderId;
-      if (leaderId && actor.id === leaderId) {
+      const leaderIds = this.#getLeaderIds();
+      if (leaderIds.has(actor.id)) {
         this.render();
       }
     });
   }
 
-  /** UUIDs des cartes support actives. */
-  static get cardIds() {
-    return game.settings.get("haywire", "supportCardIds");
+  /** Entries des cartes support actives: [{uuid, leaderId}, ...] */
+  static get cardEntries() {
+    return game.settings.get("haywire", "supportCardIds") ?? [];
   }
 
-  /** ID de l'acteur leader. */
-  static get leaderId() {
-    return game.settings.get("haywire", "supportLeaderId");
+  /** IDs uniques des leaders liés aux cartes actives. */
+  static #getLeaderIds() {
+    const entries = this.cardEntries;
+    return new Set(entries.map((e) => e.leaderId).filter(Boolean));
   }
 
-  /** Le leader est-il downed ? */
-  static get isLeaderDowned() {
-    const leaderId = this.leaderId;
-    if (!leaderId) return false;
-    const leader = game.actors.get(leaderId);
-    if (!leader) return false;
-    return leader.system.conditions?.has("downed") ?? false;
+  /** Vérifie si un leader donné est downed. */
+  static isActorDowned(actorId) {
+    if (!actorId) return false;
+    const actor = game.actors.get(actorId);
+    if (!actor) return false;
+    return actor.system.conditions?.has("downed") ?? false;
+  }
+
+  /** Au moins un leader est downed ? (pour l'affichage du thumbnail) */
+  static get hasAnyLeaderDowned() {
+    for (const id of this.#getLeaderIds()) {
+      if (this.isActorDowned(id)) return true;
+    }
+    return false;
   }
 
   /** Met à jour la liste (GM only). */
-  static async setCardIds(ids) {
-    await game.settings.set("haywire", "supportCardIds", ids);
+  static async setCardEntries(entries) {
+    await game.settings.set("haywire", "supportCardIds", entries);
+  }
+
+  /** Ajoute des cartes liées à un leader. */
+  static async addCards(uuids, leaderId) {
+    const current = this.cardEntries;
+    const existingUuids = new Set(current.map((e) => e.uuid));
+    const newEntries = uuids
+      .filter((uuid) => !existingUuids.has(uuid))
+      .map((uuid) => ({ uuid, leaderId: leaderId ?? "" }));
+    if (newEntries.length === 0) return;
+    await this.setCardEntries([...current, ...newEntries]);
   }
 
   /** Retire une carte de la liste après activation. */
   static async removeCard(uuid) {
-    const ids = this.cardIds.filter((id) => id !== uuid);
-    await this.setCardIds(ids);
+    const entries = this.cardEntries.filter((e) => e.uuid !== uuid);
+    await this.setCardEntries(entries);
   }
 
   /** Reconstruit le HTML. */
@@ -66,17 +86,17 @@ export class SupportOverlay {
     const panel = this.#panelEl;
     if (!el || !panel) return;
 
-    const cardIds = this.cardIds;
-    const count = cardIds.length;
-    const leaderDowned = this.isLeaderDowned;
+    const entries = this.cardEntries;
+    const count = entries.length;
+    const anyDowned = this.hasAnyLeaderDowned;
     const i18n = (k) => game.i18n.localize(k);
 
     // Thumbnail toujours visible
     el.innerHTML = `
-      <div class="haywire-support-thumb${leaderDowned ? " leader-downed" : ""}" title="${i18n("HAYWIRE.Support.Label")}">
+      <div class="haywire-support-thumb${anyDowned ? " leader-downed" : ""}" title="${i18n("HAYWIRE.Support.Label")}">
         <img src="systems/haywire/assets/cards/backcovers/support.webp" alt="Support" />
         ${count > 0 ? `<span class="haywire-support-badge">${count}</span>` : ""}
-        ${leaderDowned ? `<span class="haywire-support-downed-icon" title="${i18n("HAYWIRE.Support.LeaderDowned")}"><i class="fas fa-skull"></i></span>` : ""}
+        ${anyDowned ? `<span class="haywire-support-downed-icon" title="${i18n("HAYWIRE.Support.LeaderDowned")}"><i class="fas fa-skull"></i></span>` : ""}
       </div>`;
 
     // Bind hover show/hide
@@ -99,7 +119,7 @@ export class SupportOverlay {
     panel.addEventListener("mouseleave", () => this.#hidePanel());
 
     // Pre-render panel content
-    await this.#renderPanel(panel, cardIds, count, leaderDowned, i18n);
+    await this.#renderPanel(panel, entries, count, i18n);
   }
 
   /* ---- Private ---- */
@@ -146,7 +166,7 @@ export class SupportOverlay {
     this.#previewEl?.classList.remove("visible");
   }
 
-  static async #renderPanel(panel, cardIds, count, leaderDowned, i18n) {
+  static async #renderPanel(panel, entries, count, i18n) {
     if (count === 0) {
       panel.innerHTML = `
         <div class="haywire-support-panel-inner">
@@ -158,27 +178,27 @@ export class SupportOverlay {
       return;
     }
 
-    const resolved = await Promise.all(cardIds.map((uuid) => fromUuid(uuid)));
-    const cardsHtml = cardIds
-      .map((uuid, i) => {
+    const resolved = await Promise.all(entries.map((e) => fromUuid(e.uuid)));
+    const cardsHtml = entries
+      .map((entry, i) => {
         const card = resolved[i];
         const name = card?.name ?? "???";
         const img = card?.faces?.[0]?.img ?? card?.img ?? "icons/svg/card-hand.svg";
+        const downed = this.isActorDowned(entry.leaderId);
+        const leaderActor = entry.leaderId ? game.actors.get(entry.leaderId) : null;
+        const leaderName = leaderActor?.name ?? "";
         return `
-        <div class="haywire-support-card${leaderDowned ? " disabled" : ""}" data-preview-img="${img}" data-preview-name="${name}">
+        <div class="haywire-support-card${downed ? " disabled" : ""}" data-preview-img="${img}" data-preview-name="${name}">
           <img class="haywire-support-card-img" src="${img}" alt="${name}" />
-          <button class="haywire-support-activate" data-uuid="${uuid}" data-name="${name}" data-img="${img}"
-                  title="${leaderDowned ? i18n("HAYWIRE.Support.LeaderDowned") : i18n("HAYWIRE.Support.Activate")}"
-                  ${leaderDowned ? "disabled" : ""}>
+          ${leaderName ? `<span class="haywire-support-card-leader${downed ? " downed" : ""}" title="${leaderName}"><i class="fas ${downed ? "fa-skull" : "fa-user-shield"}"></i> ${leaderName}</span>` : ""}
+          <button class="haywire-support-activate" data-uuid="${entry.uuid}" data-name="${name}" data-img="${img}"
+                  title="${downed ? i18n("HAYWIRE.Support.LeaderDowned") : i18n("HAYWIRE.Support.Activate")}"
+                  ${downed ? "disabled" : ""}>
             <i class="fas fa-bullseye"></i> ${i18n("HAYWIRE.Support.Activate")}
           </button>
         </div>`;
       })
       .join("");
-
-    const downedBanner = leaderDowned
-      ? `<div class="haywire-support-downed-banner"><i class="fas fa-skull"></i> ${i18n("HAYWIRE.Support.LeaderDowned")}</div>`
-      : "";
 
     panel.innerHTML = `
       <div class="haywire-support-panel-inner">
@@ -186,7 +206,6 @@ export class SupportOverlay {
           <i class="fas fa-shield-alt"></i> ${i18n("HAYWIRE.Support.Label")}
           <span class="haywire-support-count">${count}</span>
         </div>
-        ${downedBanner}
         <div class="haywire-support-cards">${cardsHtml}</div>
       </div>`;
 
@@ -232,10 +251,7 @@ export class SupportOverlay {
       return;
     }
 
-    const currentIds = this.cardIds;
-    if (currentIds.includes(data.uuid)) return;
-
-    await this.setCardIds([...currentIds, data.uuid]);
+    await this.addCards([data.uuid], "");
   }
 
   static async #activateCard(uuid, name, img) {

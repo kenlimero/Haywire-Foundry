@@ -138,16 +138,13 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     const created = await Actor.createDocuments(actorsData);
 
-    // Push support cards to the world setting for the overlay
-    const supportCardIds = unit.system.supportCardIds ?? [];
-    if (supportCardIds.length) {
-      await game.settings.set("haywire", "supportCardIds", [...supportCardIds]);
-    }
-
-    // Find the leader actor (Team Leader or Squad Leader) and store its ID
+    // Find the leader actor (Team Leader or Squad Leader)
     const leader = created.find((a) => /leader/i.test(a.name));
-    if (leader) {
-      await game.settings.set("haywire", "supportLeaderId", leader.id);
+
+    // Store support card UUIDs on the leader actor
+    const supportCardIds = unit.system.supportCardIds ?? [];
+    if (supportCardIds.length && leader) {
+      await leader.update({ "system.supportIds": [...supportCardIds] });
     }
 
     ui.notifications.info(`${created.length} soldiers created in folder "${unitName}".`);

@@ -18,6 +18,7 @@
     [x] lock la fiche contre les modif
     [x] ajout de faction dans la carte
     [x] les conditions ne fonctionnent pas
+    [-] Overlay du support OPFOR
 
 # Actorsheet
 [x] une fois une classe drag and drop dans l'actorsheet, pouvoir supprimer et modifier l'équipement sans modifier la classe dans item.
@@ -27,6 +28,7 @@
 [x] Compatibilité avec tokenizer.
 [x] lock la fiche contre les modif
 [x] Unlock par défaut
+[x] ajouter le support au actorsheet
 [-] **Retransformer les classes en simple actor configurable**
 
 # Token

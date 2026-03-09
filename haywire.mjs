@@ -160,22 +160,13 @@ Hooks.once("init", () => {
     default: false,
   });
 
-  // Support cards overlay setting (world-scoped, array of card UUIDs)
+  // Support cards overlay setting (world-scoped, array of {uuid, leaderId} entries)
   game.settings.register("haywire", "supportCardIds", {
     name: "HAYWIRE.Support.Label",
     scope: "world",
     config: false,
     type: Array,
     default: [],
-  });
-
-  // Support leader actor ID (world-scoped)
-  game.settings.register("haywire", "supportLeaderId", {
-    name: "HAYWIRE.Support.Leader",
-    scope: "world",
-    config: false,
-    type: String,
-    default: "",
   });
 
   console.log("haywire | Système Haywire initialisé");
@@ -240,6 +231,15 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
         popout.render(true).then(() => popout.setPosition({ width: 556, height: 450 }));
     });
   });
+});
+
+// Quand un token est posé sur la carte, importer ses cartes support dans l'overlay
+Hooks.on("createToken", (tokenDoc) => {
+  const actor = tokenDoc.actor;
+  if (!actor || actor.type !== "soldier") return;
+  const supportIds = actor.system.supportIds ?? [];
+  if (!supportIds.length) return;
+  SupportOverlay.addCards(supportIds, actor.id);
 });
 
 // Prototype token defaults pour les nouveaux Actors Soldier
