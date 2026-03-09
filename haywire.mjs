@@ -203,6 +203,11 @@ Hooks.on("hoverToken", (token, hovered) => {
   else TokenOverlay.hide();
 });
 
+// Masquer l'overlay si le token affiché est supprimé
+Hooks.on("deleteToken", (tokenDoc) => {
+  if (TokenOverlay.currentTokenId === tokenDoc.id) TokenOverlay.hide();
+});
+
 // ─── Card draw display in chat ──────────────────────────────────────────────
 function _postCardChatMessage(origin, cards, action) {
   for (const cardData of cards) {

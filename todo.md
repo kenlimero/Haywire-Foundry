@@ -37,7 +37,7 @@
 [x] conditions rondes mais carré autour quand posé.
 [x] afficher les AP
 [x] impossible de supprimer la condition injured, seulement l'ajout de HP le permet. Faire en sorte que la condition injured puisse être retirée et ajouter dans ce cas 1HP.
-[-] bug overlay si token effacé, il s'affiche toujours
+[x] bug overlay si token effacé, il s'affiche toujours
 
 # Compendiums
 [x] Compendiums : le bouton import ne fonctionne pas
@@ -96,6 +96,7 @@
         [x] comment faire en cas d'importation où d'utilisation pour ne pas faire l'import de l'unité à chaque fois ?
             - liaison avec le leader ?
         [x] indiquer le nombre utilisable et non utilisable
+        [-] lié le opfor support au leader opfor
 ## Overlay FOG
 [-] Overlay FOG
 

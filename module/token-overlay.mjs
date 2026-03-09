@@ -42,6 +42,10 @@ export class TokenOverlay {
     el.classList.add("visible");
   }
 
+  static get currentTokenId() {
+    return this.#currentTokenId;
+  }
+
   static hide() {
     this.#currentTokenId = null;
     if (this.#el) {
