@@ -2,11 +2,14 @@
  * Operations Card Overlay — miniature backcover sous l'infil overlay, côté gauche.
  * - Drag & drop d'un item ou du compendium remplace la backcover par l'image de la carte
  * - Une seule carte à la fois (remplace si déjà présente)
- * - Clic droit pour retirer la carte et revenir à la backcover
+ * - Bouton Roll pour tirer une carte aléatoire du deck Operations
  */
 export class OperationsOverlay {
   static #el = null;
   static #previewEl = null;
+
+  /** Nom du deck dans le compendium haywire.decks */
+  static DECK_NAME = "Operations";
 
   static init() {
     this.#getOrCreate();
@@ -53,6 +56,7 @@ export class OperationsOverlay {
       <div class="haywire-support-thumb" title="${i18n("HAYWIRE.Operations.Label")}">
         <img src="${imgSrc}" alt="${imgAlt}" />
         ${hasCard ? `<span class="haywire-overlay-remove" title="${i18n("HAYWIRE.Support.Remove")}"><i class="fas fa-times"></i></span>` : ""}
+        ${!hasCard ? `<span class="haywire-overlay-roll" title="${i18n("HAYWIRE.Roll")}"><i class="fas fa-dice"></i></span>` : ""}
       </div>`;
 
     const thumb = el.querySelector(".haywire-support-thumb");
@@ -78,6 +82,12 @@ export class OperationsOverlay {
       e.stopPropagation();
       this.#hidePreview();
       this.setCardIds([]);
+    });
+
+    // Roll button
+    el.querySelector(".haywire-overlay-roll")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.#rollCard();
     });
   }
 
@@ -121,5 +131,23 @@ export class OperationsOverlay {
 
     // Replace any existing card with the new one
     await this.setCardIds([data.uuid]);
+  }
+
+  static async #rollCard() {
+    const pack = game.packs.get("haywire.decks");
+    if (!pack) return;
+
+    const index = await pack.getIndex();
+    const deckEntry = index.find((e) => e.name === this.DECK_NAME);
+    if (!deckEntry) return;
+
+    const deck = await pack.getDocument(deckEntry._id);
+    if (!deck?.cards?.size) return;
+
+    const cards = Array.from(deck.cards);
+    const picked = cards[Math.floor(Math.random() * cards.length)];
+    const uuid = `Compendium.haywire.decks.Cards.${deckEntry._id}.Card.${picked._id}`;
+
+    await this.setCardIds([uuid]);
   }
 }

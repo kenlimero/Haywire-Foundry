@@ -2061,6 +2061,33 @@
     color: #fff;
   }
 
+  /* Roll button centered on backcover */
+  .haywire-overlay-roll {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--haywire-color-accent);
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 2;
+    pointer-events: auto;
+    transition: background 0.15s, color 0.15s, transform 0.15s;
+  }
+
+  .haywire-overlay-roll:hover {
+    background: var(--haywire-color-accent);
+    color: #000;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+
   /* ============================================ */
   /*  Infil Card Overlay                          */
   /* ============================================ */
