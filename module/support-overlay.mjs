@@ -139,12 +139,14 @@ export class SupportOverlay {
   static #showPanel() {
     clearTimeout(this.#hideTimeout);
     this.#panelEl?.classList.add("visible");
+    this.#el?.classList.add("pinned");
   }
 
   static #hidePanel() {
     clearTimeout(this.#hideTimeout);
     this.#hideTimeout = setTimeout(() => {
       this.#panelEl?.classList.remove("visible");
+      this.#el?.classList.remove("pinned");
       this.#hidePreview();
     }, 100);
   }

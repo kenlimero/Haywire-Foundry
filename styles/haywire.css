@@ -1644,7 +1644,8 @@
     transition: left 0.25s ease;
   }
 
-  #haywire-support-overlay:hover {
+  #haywire-support-overlay:hover,
+  #haywire-support-overlay.pinned {
     left: 0px;
   }
 
@@ -1955,7 +1956,8 @@
     transition: top 0.25s ease;
   }
 
-  #haywire-opfor-support-overlay:hover {
+  #haywire-opfor-support-overlay:hover,
+  #haywire-opfor-support-overlay.pinned {
     top: 0px;
   }
 
@@ -2072,7 +2074,8 @@
     transition: left 0.25s ease;
   }
 
-  #haywire-infil-overlay:hover {
+  #haywire-infil-overlay:hover,
+  #haywire-infil-overlay.pinned {
     left: 0px;
   }
 
@@ -2115,7 +2118,8 @@
     transition: left 0.25s ease;
   }
 
-  #haywire-operations-overlay:hover {
+  #haywire-operations-overlay:hover,
+  #haywire-operations-overlay.pinned {
     left: 0px;
   }
 
