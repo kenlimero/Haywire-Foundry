@@ -85,14 +85,15 @@
 [-] **Avoir un bouton de reset de game**
     - déterminer les actions
 ## Overlay support
-[P] Overlay support
+[x] Overlay support
     [x] importation d'unité
     [x] drag-and-drop de carte support
     [x] Gestion de l'activation
     [P] Gestion de l'unité et du leader
         [x] leader downed plus de support
-        [?] comment faire en cas d'importation où d'utilisation pour ne pas faire l'import de l'unité à chaque fois ?
+        [x] comment faire en cas d'importation où d'utilisation pour ne pas faire l'import de l'unité à chaque fois ?
             - liaison avec le leader ?
+        [x] indiquer le nombre utilisable et non utilisable
 ## Overlay FOG
 [-] Overlay FOG
 

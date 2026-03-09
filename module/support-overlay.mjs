@@ -50,14 +50,6 @@ export class SupportOverlay {
     return actor.system.conditions?.has("downed") ?? false;
   }
 
-  /** Au moins un leader est downed ? (pour l'affichage du thumbnail) */
-  static get hasAnyLeaderDowned() {
-    for (const id of this.#getLeaderIds()) {
-      if (this.isActorDowned(id)) return true;
-    }
-    return false;
-  }
-
   /** Met à jour la liste (GM only). */
   static async setCardEntries(entries) {
     await game.settings.set("haywire", "supportCardIds", entries);
@@ -88,15 +80,17 @@ export class SupportOverlay {
 
     const entries = this.cardEntries;
     const count = entries.length;
-    const anyDowned = this.hasAnyLeaderDowned;
+    const downedCount = entries.filter((e) => this.isActorDowned(e.leaderId)).length;
+    const activeCount = count - downedCount;
     const i18n = (k) => game.i18n.localize(k);
 
-    // Thumbnail toujours visible
+    // Thumbnail toujours visible — bordure rouge uniquement si plus aucune carte activable
+    const noActiveCards = activeCount === 0 && count > 0;
     el.innerHTML = `
-      <div class="haywire-support-thumb${anyDowned ? " leader-downed" : ""}" title="${i18n("HAYWIRE.Support.Label")}">
+      <div class="haywire-support-thumb${noActiveCards ? " leader-downed" : ""}" title="${i18n("HAYWIRE.Support.Label")}">
         <img src="systems/haywire/assets/cards/backcovers/support.webp" alt="Support" />
-        ${count > 0 ? `<span class="haywire-support-badge">${count}</span>` : ""}
-        ${anyDowned ? `<span class="haywire-support-downed-icon" title="${i18n("HAYWIRE.Support.LeaderDowned")}"><i class="fas fa-skull"></i></span>` : ""}
+        ${activeCount > 0 ? `<span class="haywire-support-badge">${activeCount}</span>` : ""}
+        ${downedCount > 0 ? `<span class="haywire-support-downed-icon" title="${i18n("HAYWIRE.Support.LeaderDowned")}"><i class="fas fa-skull"></i> ${downedCount}</span>` : ""}
       </div>`;
 
     // Bind hover show/hide
