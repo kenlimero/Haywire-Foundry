@@ -44,12 +44,10 @@
 ## Classes
 [x] le compendium de classe doit être trier par tier
 [x] créer les groupes d'intervention. Composé de plusieurs classes se sont des équipes prêtent à l'action.
-## Weapons
-[?] Weapons/equipements : supprimer les doublons.
 ## Gestion des véhicules
 [-] Implémenter le compendium de véhicules
 ## Support
-[-] Faire un compendium drag-and-drop des cartes supports
+[x] Faire un compendium drag-and-drop des cartes supports
 
 # Combat
 [-] Déterminer les actions de combat
@@ -61,11 +59,11 @@
 [x] Faire une sheet pour les unités et y mettre les UUID des classes
 [x] importé l'unités, créait un répertoire dans Actor avec le nom de l'unité et les différents actor avec des classes.
     [x] Les actors importés ont tous 1HP sur 1
-[-] faire un pack de carte support et retirer du pack deck
+[x] faire un pack de carte support et retirer du pack deck
 [x] les cartes support dans l'unit ne sont pas en paysage (css global du type de carte résolu lorsque overlay à été fait)
 [-] faire un overlay des classes
 [-] faire un overlay des cartes support sans clic
-[-] Lorsqu'une unité est déployé, l'actor team leader ou squad leader ont l'UUID des cartes support de l'unité. Ces cartes supports seront importéés dans l'overlay.
+[x] Lorsqu'une unité est déployé, l'actor team leader ou squad leader ont l'UUID des cartes support de l'unité. Ces cartes supports seront importéés dans l'overlay.
 
 # System
 [x] mettre une image sur le système 
@@ -81,24 +79,32 @@
         [–] opfor
         [-] skill
         [-] weapons
-[P] gestion des decks aléatoire :
+[x] gestion des decks aléatoire :
     [x] créer les decks et l'affichage.
-    [-] trouver un moyen de faire automatiquement. 
+    [x] trouver un moyen de faire automatiquement. 
 [-] **Avoir un bouton de reset de game**
     - déterminer les actions
-## Overlay support
+## OVerlay
+[x] faire disparaitre les overlay
+[-] faire des types opfor, player support, infil et opération pour ne pas drag les items des autres.
+### Overlay support
 [x] Overlay support
     [x] importation d'unité
     [x] drag-and-drop de carte support
     [x] Gestion de l'activation
-    [P] Gestion de l'unité et du leader
+    [x] Gestion de l'unité et du leader
         [x] leader downed plus de support
         [x] comment faire en cas d'importation où d'utilisation pour ne pas faire l'import de l'unité à chaque fois ?
             - liaison avec le leader ?
         [x] indiquer le nombre utilisable et non utilisable
-        [-] lié le opfor support au leader opfor
-## Overlay FOG
-[-] Overlay FOG
+        [x] lié le opfor support au leader opfor
+### Overlay FOG
+[x] Overlay FOG
+### Overlay Infil
+[x] Overlay Infil
+### Overlay Operation
+[x] Overlay Infil
+
 
 # Mécanisme de jeu
 [-] Implémenter les mécanismes de jeu

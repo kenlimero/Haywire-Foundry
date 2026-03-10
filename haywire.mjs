@@ -31,6 +31,9 @@ import { OpforSupportOverlay } from "./module/opfor-support-overlay.mjs";
 import { InfilOverlay } from "./module/infil-overlay.mjs";
 import { OperationsOverlay } from "./module/operations-overlay.mjs";
 
+// Fog of War overlay
+import { FogOfWarOverlay } from "./module/fog-of-war-overlay.mjs";
+
 // Sheets
 import { SoldierSheet } from "./module/sheets/soldier-sheet.mjs";
 import { ClassSheet } from "./module/sheets/class-sheet.mjs";
@@ -201,6 +204,23 @@ Hooks.once("init", () => {
     default: [],
   });
 
+  // Fog of War overlay settings
+  game.settings.register("haywire", "fogOfWarCardId", {
+    name: "HAYWIRE.FogOfWar.Label",
+    scope: "world",
+    config: false,
+    type: String,
+    default: "",
+  });
+
+  game.settings.register("haywire", "fogOfWarDie", {
+    name: "HAYWIRE.FogOfWar.DieHint",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 6,
+  });
+
   console.log("haywire | Système Haywire initialisé");
 });
 
@@ -211,6 +231,7 @@ Hooks.once("ready", () => {
   OpforSupportOverlay.init();
   InfilOverlay.init();
   OperationsOverlay.init();
+  FogOfWarOverlay.init();
 });
 
 // Masquer le carré de fond derrière les icônes d'effets sur les tokens (garder uniquement le sprite rond)

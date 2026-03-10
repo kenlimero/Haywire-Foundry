@@ -2203,6 +2203,84 @@
     object-fit: contain;
   }
 
+  /* ============================================ */
+  /*  Fog of War Overlay                          */
+  /* ============================================ */
+
+  #haywire-fog-overlay {
+    position: fixed;
+    top: -42px;
+    left: calc(50% + 100px);
+    z-index: 100;
+    pointer-events: auto;
+    transition: top 0.25s ease;
+  }
+
+  #haywire-fog-overlay:hover,
+  #haywire-fog-overlay.pinned {
+    top: 0px;
+  }
+
+  #haywire-fog-overlay .haywire-support-thumb {
+    pointer-events: auto;
+    width: 90px;
+    height: 63px;
+  }
+
+  .haywire-fog-die {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--haywire-color-accent);
+    border-radius: 50%;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    z-index: 2;
+    pointer-events: auto;
+    transition: background 0.15s, color 0.15s, transform 0.15s;
+  }
+
+  .haywire-fog-die:hover {
+    background: var(--haywire-color-accent);
+    color: #000;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+
+  #haywire-fog-preview {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  #haywire-fog-preview.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #haywire-fog-preview img {
+    display: block;
+    max-width: 500px;
+    max-height: 350px;
+    border-radius: 6px;
+    border: 2px solid var(--haywire-color-accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+  }
+
   /* ── Support card sheet ──────────────────────────────────────────────────── */
   .support .haywire-sheet-body {
     padding: 0;
