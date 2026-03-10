@@ -197,6 +197,7 @@ export class ThreatOverlay {
     const factionKey = this.FACTION_KEYS[folder.name];
     if (factionKey) {
       await game.settings.set("haywire", "opforFaction", factionKey);
+      if (this.level === 0) await this.setLevel(1);
     }
 
     await OpforSupportOverlay.setCardIds([]);
