@@ -7,31 +7,29 @@
  * - Bouton alerte (GM) : active/désactive l'alerte (lueur rouge pulsante)
  */
 import { OpforSupportOverlay } from "./opfor-support-overlay.mjs";
+import { D20_SVG, rollCompendiumTable, getOrCreateElement } from "./overlay-helpers.mjs";
 
 export class ThreatOverlay {
   static #el = null;
   static #cardEl = null;
 
-  /** Maps faction setting value to asset path prefix. */
   static FACTION_PATHS = {
     cartels: "systems/haywire/assets/opfor_cartels/cartel_threat_level_",
     insurgents: "systems/haywire/assets/opfor_insurgents/insurgents_threat_level_",
     russians: "systems/haywire/assets/opfor_russians/russians_threat_level_",
   };
 
-  /** Maps faction setting value to RollTable name prefix. */
   static FACTION_TABLE_NAMES = {
     cartels: "Cartel Threat Level",
     insurgents: "Insurgent Threat Level",
     russians: "Russian Threat Level",
   };
 
-  /** Crée le widget et écoute les changements de setting. */
   static init() {
-    this.#getOrCreate();
+    this.#el = getOrCreateElement(this.#el, "haywire-threat-overlay");
+    this.#cardEl = getOrCreateElement(this.#cardEl, "haywire-threat-card");
     this.render();
 
-    // Re-render quand un setting pertinent change
     Hooks.on("updateSetting", (setting) => {
       if (setting.key === "haywire.threatLevel" || setting.key === "haywire.threatAlert" || setting.key === "haywire.opforFaction") {
         this.render();
@@ -39,34 +37,28 @@ export class ThreatOverlay {
     });
   }
 
-  /** Niveau courant (0-9). */
   static get level() {
     return game.settings.get("haywire", "threatLevel");
   }
 
-  /** Alerte active ? */
   static get alert() {
     return game.settings.get("haywire", "threatAlert");
   }
 
-  /** Faction OPFOR sélectionnée. */
   static get faction() {
     return game.settings.get("haywire", "opforFaction") ?? "cartels";
   }
 
-  /** Met à jour le niveau (GM only). */
   static async setLevel(value) {
     const clamped = Math.clamp(value, 0, 9);
     await game.settings.set("haywire", "threatLevel", clamped);
     if (clamped === 0 && this.alert) await this.toggleAlert();
   }
 
-  /** Bascule l'état d'alerte (GM only). */
   static async toggleAlert() {
     await game.settings.set("haywire", "threatAlert", !this.alert);
   }
 
-  /** Reconstruit le HTML du widget. */
   static render() {
     const el = this.#el;
     if (!el) return;
@@ -78,10 +70,8 @@ export class ThreatOverlay {
     const i18n = (k) => game.i18n.localize(k);
     el.className = `haywire-threat ${isActive ? "active" : "inactive"}${isAlert ? " alert" : ""}`;
 
-    const d20Svg = `<svg viewBox="0 0 512 512"><path d="M48.7 125.8l53.2 31.9c7.8 4.7 17.8 2 22.2-5.9L201.6 12.1c3-5.3-.6-11.9-6.6-11.9H144c-3.4 0-6.5 1.5-8.6 4.2L48.7 125.8zm416.6 0L378.6 4.4c-2.1-2.7-5.2-4.2-8.6-4.2h-51c-6 0-9.6 6.6-6.6 11.9l77.5 139.7c4.4 7.9 14.4 10.6 22.2 5.9l53.2-31.9zM36.3 161.7L3.8 280.4c-2 7.3 2.2 14.9 9.3 17.6l191.2 72C204.1 197.5 111.3 162 36.3 161.7zm439.4 0c-75 .3-167.8 35.8-168 208.3l191.2-72c7.1-2.7 11.3-10.3 9.3-17.6l-32.5-118.7zM256 208c-76.5 0-138.5 62-138.5 138.5S179.5 485 256 485s138.5-62 138.5-138.5S332.5 208 256 208z"/></svg>`;
-
     const factionBtn = !isActive && isGM
-      ? `<button class="haywire-threat-faction-btn" title="${i18n("HAYWIRE.OpforSupport.SelectFaction")}"><i class="fas fa-skull-crossbones"></i></button>`
+      ? `<button class="haywire-threat-btn haywire-threat-faction-btn" title="${i18n("HAYWIRE.OpforSupport.SelectFaction")}"><i class="fas fa-skull-crossbones"></i></button>`
       : "";
 
     el.innerHTML = `
@@ -91,7 +81,7 @@ export class ThreatOverlay {
         <div class="haywire-threat-beacon-dome"></div>
         <div class="haywire-threat-beacon-glow"></div>
         <div class="haywire-threat-level">${isActive ? level : "—"}</div>
-        ${isActive && isGM ? `<button class="haywire-threat-d20" title="${i18n("HAYWIRE.Threat.RollTable")}">${d20Svg}</button>` : ""}
+        ${isActive && isGM ? `<button class="haywire-threat-d20" title="${i18n("HAYWIRE.Threat.RollTable")}">${D20_SVG}</button>` : ""}
       </div>
       ${isGM ? `<div class="haywire-threat-controls">
         <button class="haywire-threat-btn" data-action="decrease" title="${i18n("HAYWIRE.Threat.Decrease")}" ${level <= 0 ? "disabled" : ""}>
@@ -106,7 +96,6 @@ export class ThreatOverlay {
         ${factionBtn}
       </div>` : ""}`;
 
-    // Bind events
     el.querySelectorAll("[data-action]").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -117,19 +106,16 @@ export class ThreatOverlay {
       });
     });
 
-    // d20 roll button
     el.querySelector(".haywire-threat-d20")?.addEventListener("click", (e) => {
       e.stopPropagation();
       this.#rollThreatTable();
     });
 
-    // Faction selection button (level 0)
     el.querySelector(".haywire-threat-faction-btn")?.addEventListener("click", (e) => {
       e.stopPropagation();
       this.#showFactionDialog();
     });
 
-    // Hover → show threat card
     const beacon = el.querySelector(".haywire-threat-beacon");
     beacon.addEventListener("mouseenter", () => this.#showCard());
     beacon.addEventListener("mouseleave", () => this.#hideCard());
@@ -137,19 +123,6 @@ export class ThreatOverlay {
 
   /* ---- Private ---- */
 
-  static #getOrCreate() {
-    if (!this.#el) {
-      this.#el = document.createElement("div");
-      this.#el.id = "haywire-threat-overlay";
-      document.body.appendChild(this.#el);
-    }
-    if (!this.#cardEl) {
-      this.#cardEl = document.createElement("div");
-      this.#cardEl.id = "haywire-threat-card";
-      document.body.appendChild(this.#cardEl);
-    }
-    return this.#el;
-  }
 
   static #showCard() {
     const level = this.level;
@@ -160,8 +133,7 @@ export class ThreatOverlay {
       return;
     }
 
-    const faction = this.faction;
-    const pathPrefix = this.FACTION_PATHS[faction];
+    const pathPrefix = this.FACTION_PATHS[this.faction];
 
     if (!pathPrefix) {
       const i18n = (k) => game.i18n.localize(k);
@@ -178,30 +150,15 @@ export class ThreatOverlay {
 
   static async #rollThreatTable() {
     const level = this.level;
-    const faction = this.faction;
-    const prefix = this.FACTION_TABLE_NAMES[faction];
+    const prefix = this.FACTION_TABLE_NAMES[this.faction];
     if (!prefix || level <= 0) return;
-
-    const tableName = `${prefix} ${level}`;
-    const pack = game.packs.get("haywire.opfor-tables");
-    if (!pack) return;
-
-    const index = await pack.getIndex();
-    const entry = index.find((e) => e.name === tableName);
-    if (!entry) {
-      ui.notifications.warn(`Table "${tableName}" not found.`);
-      return;
-    }
-
-    const table = await pack.getDocument(entry._id);
-    await table.draw();
+    await rollCompendiumTable(`${prefix} ${level}`);
   }
 
   static #hideCard() {
     this.#cardEl?.classList.remove("visible");
   }
 
-  /** Maps compendium folder names to opforFaction setting keys. */
   static FACTION_KEYS = {
     Cartel: "cartels",
     Insurgents: "insurgents",
@@ -246,13 +203,11 @@ export class ThreatOverlay {
       return;
     }
 
-    // Set world faction setting
     const factionKey = this.FACTION_KEYS[folder.name];
     if (factionKey) {
       await game.settings.set("haywire", "opforFaction", factionKey);
     }
 
-    // Replace existing support cards with new faction's cards
     await OpforSupportOverlay.setCardIds([]);
     const uuids = entries.map((e) => `Compendium.haywire.opfor-support.Item.${e._id}`);
     await OpforSupportOverlay.addCards(uuids);

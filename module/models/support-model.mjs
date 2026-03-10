@@ -1,8 +1,3 @@
-export class SupportModel extends foundry.abstract.TypeDataModel {
-  static defineSchema() {
-    const fields = foundry.data.fields;
-    return {
-      description: new fields.StringField({ required: true, initial: "" }),
-    };
-  }
-}
+import { DescriptionModel } from "./model-helpers.mjs";
+
+export class SupportModel extends DescriptionModel {}

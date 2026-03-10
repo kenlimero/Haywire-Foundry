@@ -1,6 +1,5 @@
 {
   "HAYWIRE": {
-    "System": "Haywire",
     "CompendiumPlayerClasses": "Classes Joueur",
     "CompendiumWeapons": "Armes",
     "CompendiumOpforTables": "Tables OPFOR",
@@ -17,17 +16,8 @@
     "SheetSoldier": "Fiche Soldat",
     "SheetClass": "Fiche Classe",
     "SheetWeapon": "Fiche Arme",
-    "Actor": {
-      "Soldier": "Soldat"
-    },
-    "Item": {
-      "Class": "Classe",
-      "Weapon": "Arme",
-      "Skill": "Compétence"
-    },
     "HitPoints": "Points de vie",
     "ActionPoints": "Points d'action",
-    "ClassId": "Classe assignée",
     "Name": "Nom",
     "Tier": "Rang",
     "ImagePath": "Image de carte",
@@ -62,7 +52,6 @@
     "DragWeaponHint": "Glissez une arme ici pour l'ajouter",
     "DragSkillHint": "Glissez une compétence ici pour l'ajouter",
     "DragSupportHint": "Glissez une carte support ici pour l'ajouter",
-    "NoSkills": "Aucune compétence",
     "SheetSkill": "Fiche Compétence",
     "CompendiumPlayerSkills": "Compétences Joueur",
     "SkillDescription": "Description",
@@ -82,8 +71,9 @@
       "5": "Suppression 5",
       "6": "Suppression 6 (Cloué)"
     },
+    "Roll": "Tirer une carte",
+    "Pin": "Épingler",
     "RollD20": "Jet de D20",
-    "RollResult": "Résultat",
     "RollShoot": "Tir",
     "NoWeaponEquipped": "Aucune arme équipée",
     "ShootWith": "Tir avec {weapon}",
@@ -99,23 +89,52 @@
     },
     "Threat": {
       "Label": "Niveau de menace",
+      "Faction": "Faction OPFOR",
+      "FactionHint": "Sélectionnez la faction ennemie pour les cartes de niveau de menace",
+      "NoFaction": "Sélectionnez une faction OPFOR dans les paramètres",
       "Increase": "Augmenter le niveau de menace",
       "Decrease": "Diminuer le niveau de menace",
-      "NoAlert": "Pas d'alerte",
-      "Severity": {
-        "Low": "Menace faible",
-        "Medium": "Menace élevée",
-        "High": "Menace critique"
-      },
       "Alert": "Activer/désactiver l'alerte",
-      "AlertActive": "ALERTE",
-      "TableHint": "Utilisez les tables OPFOR pour ce niveau"
+      "RollTable": "Jet sur la table de menace (d20)"
+    },
+    "Support": {
+      "Label": "Cartes de support",
+      "Leader": "Leader de support",
+      "Activate": "Activer",
+      "Activated": "Support activé",
+      "LeaderDowned": "Leader à terre — support indisponible",
+      "Remove": "Retirer la carte",
+      "Purge": "Retirer toutes les cartes"
     },
     "OpforSupport": {
       "Label": "Support OPFOR",
-      "Activated": "Support OPFOR activé",
       "ImportFaction": "Importer une faction",
       "SelectFaction": "Choisissez une faction pour importer ses 3 cartes de support"
+    },
+    "Infil": {
+      "Label": "Infiltration"
+    },
+    "Operations": {
+      "Label": "Opérations"
+    },
+    "Reinforcement": {
+      "Roll": "Jet de renforts (d20)"
+    },
+    "FogOfWar": {
+      "Label": "Brouillard de guerre",
+      "DieHint": "Cliquez pour décrémenter le compte à rebours",
+      "DieRolled": "Résultat :",
+      "DeckExhausted": "Deck Brouillard de guerre épuisé — redistribution.",
+      "CardDrawn": "Brouillard de guerre"
+    },
+    "MissionReset": {
+      "Label": "Réinitialiser la mission",
+      "ResetState": "Réinitialiser l'état (cartes, menace, PV)",
+      "ResetAll": "Réinitialiser l'état + supprimer tous les tokens",
+      "ConfirmTitle": "Réinitialiser la mission",
+      "ConfirmContent": "Cela réinitialisera les cartes, le niveau de menace, les PV et conditions des tokens. Êtes-vous sûr ?",
+      "ConfirmContentAll": "Cela réinitialisera TOUT l'état du jeu ET supprimera chaque token de la scène. Cette action est irréversible. Êtes-vous sûr ?",
+      "Done": "Mission réinitialisée."
     },
     "Unit": {
       "Role": "Rôle",

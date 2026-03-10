@@ -1,3 +1,5 @@
+import { resolveUuids, parseItemDrop } from "./sheet-helpers.mjs";
+
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
 
@@ -22,26 +24,14 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   };
 
   async #onDrop(event) {
-    event.preventDefault();
     if (!this.isEditable) return;
 
-    let data;
-    try {
-      data = JSON.parse(event.dataTransfer.getData("text/plain"));
-    } catch (e) {
-      return;
-    }
-    if (!data.uuid) return;
+    const drop = await parseItemDrop(event);
+    if (!drop) return;
 
-    const doc = await fromUuid(data.uuid);
-    if (!doc) return;
-
-    const uuid = data.uuid;
-
-    if (data.type === "Item" && doc.type === "class") {
-      if (this.item.system.classIds.includes(uuid)) return;
-      const classIds = [...this.item.system.classIds, uuid];
-      await this.item.update({ "system.classIds": classIds });
+    if (drop.item.type === "class") {
+      if (this.item.system.classIds.includes(drop.uuid)) return;
+      await this.item.update({ "system.classIds": [...this.item.system.classIds, drop.uuid] });
     } else {
       console.warn("haywire | UnitSheet: Only Class items can be dropped here");
     }
@@ -53,31 +43,25 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.system = this.item.system;
     context.isEditable = this.isEditable;
 
-    // Resolve classes
-    const classUuids = this.item.system.classIds ?? [];
-    const resolvedClasses = await Promise.all(classUuids.map(uuid => fromUuid(uuid)));
-    context.classes = classUuids.map((uuid, i) => {
-      const c = resolvedClasses[i];
-      return {
-        uuid,
-        name: c?.name ?? `[${uuid}]`,
-        img: c?.system?.imagePath ?? c?.img ?? null,
-        missing: !c,
-      };
-    });
+    // Resolve classes and support cards in parallel
+    const [classEntries, supportEntries] = await Promise.all([
+      resolveUuids(this.item.system.classIds ?? []),
+      resolveUuids(this.item.system.supportCardIds ?? []),
+    ]);
 
-    // Resolve support cards
-    const supportUuids = this.item.system.supportCardIds ?? [];
-    const resolvedSupports = await Promise.all(supportUuids.map(uuid => fromUuid(uuid)));
-    context.supportCards = supportUuids.map((uuid, i) => {
-      const s = resolvedSupports[i];
-      return {
-        uuid,
-        name: s?.name ?? `[${uuid}]`,
-        img: s?.faces?.[0]?.img ?? s?.img ?? null,
-        missing: !s,
-      };
-    });
+    context.classes = classEntries.map(({ uuid, resolved: c, missing }) => ({
+      uuid,
+      name: c?.name ?? `[${uuid}]`,
+      img: c?.system?.imagePath ?? c?.img ?? null,
+      missing,
+    }));
+
+    context.supportCards = supportEntries.map(({ uuid, resolved: s, missing }) => ({
+      uuid,
+      name: s?.name ?? `[${uuid}]`,
+      img: s?.faces?.[0]?.img ?? s?.img ?? null,
+      missing,
+    }));
 
     return context;
   }

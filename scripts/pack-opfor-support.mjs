@@ -1,5 +1,4 @@
-import { ClassicLevel } from "classic-level";
-import { rm } from "fs/promises";
+import { openDb, writeFolders } from "./pack-utils.mjs";
 
 const OUTPUT = "packs/opfor-support";
 
@@ -37,28 +36,10 @@ const CARDS = [
 // ═════════════════════════════════════════════════════════════════════════════
 //  PACK INTO LEVELDB
 // ═════════════════════════════════════════════════════════════════════════════
-await rm(OUTPUT, { recursive: true, force: true });
-const db = new ClassicLevel(OUTPUT, { keyEncoding: "utf8", valueEncoding: "utf8" });
+const db = await openDb(OUTPUT);
 
 // Write folders
-for (let i = 0; i < FOLDERS.length; i++) {
-  const f = FOLDERS[i];
-  const folderKey = `!folders!${f.id}`;
-  const folder = {
-    _id: f.id,
-    _key: folderKey,
-    name: f.name,
-    type: "Item",
-    sorting: "a",
-    sort: (i + 1) * 100000,
-    color: null,
-    folder: null,
-    flags: {},
-    _stats: STATS,
-  };
-  await db.put(folderKey, JSON.stringify(folder));
-  console.log(`Folder: ${f.name}`);
-}
+await writeFolders(db, FOLDERS, "Item", STATS);
 
 console.log(`\nPacking ${CARDS.length} support cards...`);
 

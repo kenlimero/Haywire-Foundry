@@ -1,6 +1,6 @@
-import { ClassicLevel } from "classic-level";
-import { readdir, readFile, rm } from "fs/promises";
+import { readdir, readFile } from "fs/promises";
 import { join } from "path";
+import { openDb, writeFolders } from "./pack-utils.mjs";
 
 const INPUT = "packs/_source/classes";
 const OUTPUT = "packs/player-classes";
@@ -11,28 +11,12 @@ const TIERS = [
   { dir: "tier3", id: "hwFld00000000003", name: "Tier 3 — Local", sort: 3 },
 ];
 
-// Clean output
-await rm(OUTPUT, { recursive: true, force: true });
+const STATS = { systemId: "haywire", systemVersion: "0.5.0", coreVersion: "13" };
 
-const db = new ClassicLevel(OUTPUT, { keyEncoding: "utf8", valueEncoding: "utf8" });
+const db = await openDb(OUTPUT);
 
 // Create folders
-for (const tier of TIERS) {
-  const folderKey = `!folders!${tier.id}`;
-  const folder = {
-    _id: tier.id,
-    _key: folderKey,
-    name: tier.name,
-    type: "Item",
-    sorting: "a",
-    sort: tier.sort * 100000,
-    color: null,
-    flags: {},
-    _stats: { systemId: "haywire", systemVersion: "0.5.0", coreVersion: "13" },
-  };
-  await db.put(folderKey, JSON.stringify(folder));
-  console.log(`Folder: ${tier.name}`);
-}
+await writeFolders(db, TIERS, "Item", STATS);
 
 // Pack items
 let count = 0;

@@ -1,0 +1,31 @@
+{{!-- Suppression + Conditions block (shared by soldier & opfor-unit sheets) --}}
+<div class="haywire-sheet-suppression">
+  <label>{{localize "HAYWIRE.SuppressionLabel"}}</label>
+  <input type="number" name="system.suppression" value="{{system.suppression}}" min="0" max="6" {{#unless isEditable}}disabled{{/unless}} />
+</div>
+
+<div class="haywire-sheet-conditions">
+  <label>{{localize "HAYWIRE.Conditions.Label"}}</label>
+  <div class="haywire-conditions-list">
+    {{#each conditions}}
+      <span class="haywire-condition-badge haywire-condition-{{this.key}}" data-condition="{{this.key}}">
+        {{this.label}}
+        {{#if ../isEditable}}
+          <button type="button" class="haywire-condition-remove" data-action="removeCondition">
+            <i class="fas fa-times"></i>
+          </button>
+        {{/if}}
+      </span>
+    {{/each}}
+  </div>
+  {{#if isEditable}}
+  {{#if availableConditions.length}}
+    <select class="haywire-condition-select">
+      <option value="">{{localize "HAYWIRE.SelectCondition"}}</option>
+      {{#each availableConditions}}
+        <option value="{{this.key}}">{{this.label}}</option>
+      {{/each}}
+    </select>
+  {{/if}}
+  {{/if}}
+</div>

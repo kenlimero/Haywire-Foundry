@@ -1,6 +1,5 @@
-import { ClassicLevel } from "classic-level";
-import { readdir, rm } from "fs/promises";
-import { basename } from "path";
+import { readdir } from "fs/promises";
+import { openDb, fileToName } from "./pack-utils.mjs";
 
 const OUTPUT = "packs/decks";
 
@@ -11,14 +10,6 @@ let deckCounter = 0;
 let cardCounter = 0;
 const nextDeckId = () => `hwDck${String(++deckCounter).padStart(11, "0")}`;
 const nextCardId = () => `hwCrd${String(++cardCounter).padStart(11, "0")}`;
-
-// ─── Helper: filename → display name ────────────────────────────────────────
-function fileToName(filename) {
-  return basename(filename, ".webp")
-    .replace(/_s_/g, "'s ")       // eagle_s_claw → eagle's claw
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, c => c.toUpperCase());
-}
 
 // ─── Deck definitions ───────────────────────────────────────────────────────
 const DECKS = [
@@ -51,8 +42,7 @@ const DECKS = [
 // ═════════════════════════════════════════════════════════════════════════════
 //  PACK INTO LEVELDB
 // ═════════════════════════════════════════════════════════════════════════════
-await rm(OUTPUT, { recursive: true, force: true });
-const db = new ClassicLevel(OUTPUT, { keyEncoding: "utf8", valueEncoding: "utf8" });
+const db = await openDb(OUTPUT);
 
 // Create sublevel for embedded cards
 const cardsSublevel = db.sublevel("cards.cards", { keyEncoding: "utf8", valueEncoding: "utf8" });

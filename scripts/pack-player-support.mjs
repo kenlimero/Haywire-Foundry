@@ -1,6 +1,5 @@
-import { ClassicLevel } from "classic-level";
-import { readdir, rm } from "fs/promises";
-import { basename } from "path";
+import { readdir } from "fs/promises";
+import { openDb, fileToName } from "./pack-utils.mjs";
 
 const OUTPUT = "packs/player-support";
 const IMG_DIR = "assets/cards/supports";
@@ -12,19 +11,10 @@ const STATS = { systemId: "haywire", systemVersion: "0.9.3", coreVersion: "13" }
 let counter = 0;
 const nextId = () => `hwSup${String(++counter).padStart(11, "0")}`;
 
-// ─── Helper: filename → display name ─────────────────────────────────────────
-function fileToName(filename) {
-  return basename(filename, ".webp")
-    .replace(/_s_/g, "'s ")
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, c => c.toUpperCase());
-}
-
 // ═══════════════════════════════════════════════════════════════════════════════
 //  PACK INTO LEVELDB
 // ═══════════════════════════════════════════════════════════════════════════════
-await rm(OUTPUT, { recursive: true, force: true });
-const db = new ClassicLevel(OUTPUT, { keyEncoding: "utf8", valueEncoding: "utf8" });
+const db = await openDb(OUTPUT);
 
 const files = (await readdir(IMG_DIR))
   .filter(f => f.endsWith(".webp"))

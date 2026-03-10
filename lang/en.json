@@ -1,6 +1,5 @@
 {
   "HAYWIRE": {
-    "System": "Haywire",
     "CompendiumPlayerClasses": "Player Classes",
     "CompendiumWeapons": "Weapons",
     "CompendiumOpforTables": "OPFOR Tables",
@@ -17,17 +16,8 @@
     "SheetSoldier": "Soldier Sheet",
     "SheetClass": "Class Sheet",
     "SheetWeapon": "Weapon Sheet",
-    "Actor": {
-      "Soldier": "Soldier"
-    },
-    "Item": {
-      "Class": "Class",
-      "Weapon": "Weapon",
-      "Skill": "Skill"
-    },
     "HitPoints": "Hit Points",
     "ActionPoints": "Action Points",
-    "ClassId": "Assigned Class",
     "Name": "Name",
     "Tier": "Tier",
     "ImagePath": "Card Image",
@@ -62,7 +52,6 @@
     "DragWeaponHint": "Drag a weapon here to add it",
     "DragSkillHint": "Drag a skill here to add it",
     "DragSupportHint": "Drag a support card here to add it",
-    "NoSkills": "No skills",
     "SheetSkill": "Skill Sheet",
     "CompendiumPlayerSkills": "Player Skills",
     "SkillDescription": "Description",
@@ -84,7 +73,6 @@
     },
     "Roll": "Draw a card",
     "RollD20": "D20 Roll",
-    "RollResult": "Result",
     "RollShoot": "Shoot",
     "NoWeaponEquipped": "No weapon equipped",
     "ShootWith": "Shoot with {weapon}",
@@ -106,15 +94,7 @@
       "NoFaction": "Select an OPFOR faction in Settings",
       "Increase": "Increase threat level",
       "Decrease": "Decrease threat level",
-      "NoAlert": "No Alert",
-      "Severity": {
-        "Low": "Low Threat",
-        "Medium": "High Threat",
-        "High": "Critical Threat"
-      },
       "Alert": "Toggle alert",
-      "AlertActive": "ALERT",
-      "TableHint": "Use OPFOR tables for this threat level",
       "RollTable": "Roll on threat table (d20)"
     },
     "Support": {
@@ -128,18 +108,14 @@
     },
     "OpforSupport": {
       "Label": "OPFOR Support",
-      "Activated": "OPFOR Support Activated",
       "ImportFaction": "Import Faction",
-      "SelectFaction": "Select a faction to import its 3 support cards",
-      "Locked": "Requires alert + OPFOR leader on map"
+      "SelectFaction": "Select a faction to import its 3 support cards"
     },
     "Infil": {
-      "Label": "Infiltration",
-      "Empty": "No infiltration cards."
+      "Label": "Infiltration"
     },
     "Operations": {
-      "Label": "Operations",
-      "Empty": "No operation cards."
+      "Label": "Operations"
     },
     "Reinforcement": {
       "Roll": "Roll Reinforcements (d20)"

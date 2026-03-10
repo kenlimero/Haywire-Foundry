@@ -1,4 +1,7 @@
-import { HaywireRoll } from "../rolls/haywire-roll.mjs";
+import {
+  buildConditionsContext, resolveUuids, buildSkillsContext, buildWeaponsContext,
+  bindConditionSelect, onRollD20, onRollShoot, onRemoveCondition, onOpenItem,
+} from "./sheet-helpers.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -20,12 +23,12 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     window: { resizable: true },
     dragDrop: [{ dropSelector: null }],
     actions: {
-      rollD20: OpforUnitSheet.#onRollD20,
-      rollShoot: OpforUnitSheet.#onRollShoot,
+      rollD20: onRollD20,
+      rollShoot: onRollShoot,
       removeWeapon: OpforUnitSheet.#onRemoveWeapon,
       removeSkill: OpforUnitSheet.#onRemoveSkill,
-      removeCondition: OpforUnitSheet.#onRemoveCondition,
-      openItem: OpforUnitSheet.#onOpenItem,
+      removeCondition: onRemoveCondition,
+      openItem: onOpenItem,
       toggleCardView: OpforUnitSheet.#onToggleCardView,
       editBehavior: OpforUnitSheet.#onEditBehavior,
       toggleLock: OpforUnitSheet.#onToggleLock,
@@ -82,54 +85,16 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     options.parts = cardView ? ["card"] : ["sheet"];
   }
 
-  static async #onRollD20(event, target) {
-    await HaywireRoll.d20({
-      actor: this.actor,
-      label: game.i18n.localize("HAYWIRE.RollD20"),
-    });
-  }
-
-  static async #onRollShoot(event, target) {
-    const weaponUuid = target.dataset.weaponUuid;
-    if (!weaponUuid) return;
-
-    const weapon = await fromUuid(weaponUuid);
-    if (!weapon) {
-      ui.notifications.warn(game.i18n.localize("HAYWIRE.NoWeaponEquipped"));
-      return;
-    }
-
-    await HaywireRoll.shoot({
-      actor: this.actor,
-      weapon,
-    });
-  }
-
   static async #onRemoveWeapon(event, target) {
     const uuid = target.dataset.weaponUuid;
     const weaponIds = this.actor.system.weaponIds.filter(id => id !== uuid);
     await this.actor.update({ "system.weaponIds": weaponIds });
   }
 
-  static async #onRemoveCondition(event, target) {
-    const condition = target.closest("[data-condition]").dataset.condition;
-    await this.actor.toggleStatusEffect(condition, { active: false });
-  }
-
   static async #onRemoveSkill(event, target) {
     const uuid = target.dataset.skillUuid;
     const opforSkillIds = this.actor.system.opforSkillIds.filter(id => id !== uuid);
     await this.actor.update({ "system.opforSkillIds": opforSkillIds });
-  }
-
-  static async #onOpenItem(event, target) {
-    const uuid = target.dataset.itemUuid;
-    const item = await fromUuid(uuid);
-    if (!item) {
-      console.warn(`haywire | OpforUnitSheet: item UUID "${uuid}" introuvable`);
-      return;
-    }
-    item.sheet.render(true);
   }
 
   /* ---------------------------------------- */
@@ -208,15 +173,7 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       this.setPosition({ width: 860, height: 600 });
     }
 
-    const conditionSelect = this.element.querySelector(".haywire-condition-select");
-    if (conditionSelect) {
-      conditionSelect.addEventListener("change", async (e) => {
-        if (!this.isEditable) return;
-        const condition = e.target.value;
-        if (!condition) return;
-        await this.actor.toggleStatusEffect(condition, { active: true });
-      });
-    }
+    bindConditionSelect(this.element, this.actor, this.isEditable);
   }
 
   async _prepareContext(options) {
@@ -231,47 +188,19 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     context.faction = this.actor.system.faction;
     context.cardImage = this.actor.system.cardImage;
 
-    // Resolve opfor skills
-    const skillUuids = this.actor.system.opforSkillIds ?? [];
-    const resolvedSkills = await Promise.all(skillUuids.map(uuid => fromUuid(uuid)));
-    context.skills = skillUuids.map((uuid, i) => {
-      const s = resolvedSkills[i];
-      return {
-        uuid,
-        name: s?.name ?? `[${uuid}]`,
-        description: s?.system?.description ?? "",
-        missing: !s,
-      };
-    });
+    // Resolve opfor skills and weapons in parallel
+    const [skillEntries, weaponEntries] = await Promise.all([
+      resolveUuids(this.actor.system.opforSkillIds ?? []),
+      resolveUuids(this.actor.system.weaponIds ?? []),
+    ]);
 
-    // Resolve weapons
-    const weaponUuids = this.actor.system.weaponIds ?? [];
-    const resolvedWeapons = await Promise.all(weaponUuids.map(uuid => fromUuid(uuid)));
-    context.weapons = weaponUuids.map((uuid, i) => {
-      const w = resolvedWeapons[i];
-      if (!w) return { uuid, name: `[${uuid}]`, weaponType: "?", range: 0, rateOfFire: 0, modifiers: 0, missing: true };
-      return {
-        uuid,
-        name: w.name,
-        weaponType: game.i18n.localize(`HAYWIRE.WeaponType.${w.system.weaponType}`),
-        range: w.system.range,
-        rateOfFire: w.system.rateOfFire,
-        modifiers: w.system.modifiers,
-      };
-    });
-
+    context.skills = buildSkillsContext(skillEntries);
+    context.weapons = buildWeaponsContext(weaponEntries);
     context.hasWeapons = context.weapons.length > 0;
     context.hasSkills = context.skills.length > 0;
 
     // Conditions
-    const conditionLabel = c => game.i18n.localize(`HAYWIRE.Conditions.${c.charAt(0).toUpperCase() + c.slice(1)}`);
-    const currentConditions = [...this.actor.system.conditions];
-    context.conditions = currentConditions.map(c => ({ key: c, label: conditionLabel(c) }));
-
-    const HAYWIRE_CONDITIONS = ["suppressed", "pinned", "downed", "hidden", "injured", "overwatch"];
-    context.availableConditions = HAYWIRE_CONDITIONS
-      .filter(c => !currentConditions.includes(c))
-      .map(c => ({ key: c, label: conditionLabel(c) }));
+    Object.assign(context, buildConditionsContext(this.actor.system.conditions));
 
     return context;
   }

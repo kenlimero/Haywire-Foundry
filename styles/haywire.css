@@ -223,29 +223,6 @@
     color: var(--haywire-color-text);
   }
 
-  .haywire-condition-suppressed {
-    background: #7f6b2e;
-  }
-
-  .haywire-condition-pinned {
-    background: #8b4513;
-  }
-
-  .haywire-condition-downed {
-    background: var(--haywire-color-danger);
-  }
-
-  .haywire-condition-hidden {
-    background: #3a5a3a;
-  }
-
-  .haywire-condition-injured {
-    background: #a04030;
-  }
-
-  .haywire-condition-overwatch {
-    background: #2a5a8a;
-  }
 
   /* Condition remove button (inside badge) */
   .haywire-condition-remove {
@@ -557,26 +534,6 @@
     border: 1px solid var(--haywire-color-primary);
     border-radius: 3px;
     padding: 0.25rem 0.4rem;
-  }
-
-  /* Add / Remove Buttons */
-  .haywire-add-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    margin-top: 0.35rem;
-    padding: 0.25rem 0.6rem;
-    font-size: 0.75rem;
-    color: var(--haywire-color-text);
-    background: var(--haywire-color-primary);
-    border: 1px solid var(--haywire-color-border);
-    border-radius: 3px;
-    cursor: pointer;
-  }
-
-  .haywire-add-button:hover {
-    background: var(--haywire-color-accent);
-    color: var(--haywire-color-bg);
   }
 
   .haywire-remove-button {
@@ -1239,17 +1196,12 @@
   /* Active glow */
   .haywire-threat.active .haywire-threat-beacon-glow {
     opacity: 0.4;
-  }
-
-  .haywire-threat.active .haywire-threat-beacon-glow {
     background: radial-gradient(ellipse at 50% 30%, var(--haywire-color-success), transparent 70%);
-  }
-  .haywire-threat.alert .haywire-threat-beacon-glow {
-    background: radial-gradient(ellipse at 50% 30%, var(--haywire-color-danger), transparent 70%);
   }
 
   /* Alert mode — halo + dome glow pulsing in sync, color matches severity */
   .haywire-threat.alert .haywire-threat-beacon-glow {
+    background: radial-gradient(ellipse at 50% 30%, var(--haywire-color-danger), transparent 70%);
     animation: haywire-alert-glow 1s ease-in-out infinite;
   }
 
@@ -1516,6 +1468,7 @@
     background: var(--haywire-color-secondary);
     color: #fff;
   }
+
 
   .haywire-unit-type {
     font-size: 0.8rem;
@@ -1838,15 +1791,6 @@
   }
 
 
-  .haywire-support-card-name {
-    font-family: var(--haywire-font-heading);
-    font-size: 0.7rem;
-    font-weight: bold;
-    color: var(--haywire-color-text);
-    padding: 0.2rem 0.3rem 0.1rem;
-    text-align: center;
-  }
-
   .haywire-support-activate {
     display: flex;
     align-items: center;
@@ -1991,21 +1935,6 @@
     max-width: 480px;
   }
 
-  .haywire-support-locked-banner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
-    background: #555;
-    color: #aaa;
-    font-size: 0.6rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    margin-bottom: 0.5rem;
-  }
 
   #haywire-opfor-support-preview {
     position: fixed;
