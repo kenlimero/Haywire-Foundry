@@ -57,6 +57,7 @@ export class MissionReset {
     await game.settings.set("haywire", "operationsCardIds", []);
     await game.settings.set("haywire", "threatLevel", 0);
     await game.settings.set("haywire", "threatAlert", false);
+    await game.settings.set("haywire", "opforFaction", "");
 
     const tokens = canvas.tokens?.placeables ?? [];
 

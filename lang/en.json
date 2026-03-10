@@ -103,6 +103,7 @@
       "Label": "Threat Level",
       "Faction": "OPFOR Faction",
       "FactionHint": "Select the enemy faction for threat level cards",
+      "NoFaction": "Select an OPFOR faction in Settings",
       "Increase": "Increase threat level",
       "Decrease": "Decrease threat level",
       "NoAlert": "No Alert",
@@ -113,7 +114,8 @@
       },
       "Alert": "Toggle alert",
       "AlertActive": "ALERT",
-      "TableHint": "Use OPFOR tables for this threat level"
+      "TableHint": "Use OPFOR tables for this threat level",
+      "RollTable": "Roll on threat table (d20)"
     },
     "Support": {
       "Label": "Support Cards",

@@ -1290,6 +1290,43 @@
   .haywire-threat.active .haywire-threat-level { color: var(--haywire-color-success); }
   .haywire-threat.alert .haywire-threat-level { color: var(--haywire-color-danger); }
 
+  /* d20 roll button — centered in dome, appears on beacon hover */
+  .haywire-threat-d20 {
+    position: absolute;
+    top: 16px;
+    left: 8px;
+    width: 44px;
+    height: 50px;
+    border: none;
+    border-radius: 0 0 50% 50%;
+    background: rgba(201, 168, 0, 0.15);
+    color: #c9a800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.15s ease, background 0.15s;
+  }
+
+  .haywire-threat-d20 svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    filter: drop-shadow(0 0 4px rgba(201, 168, 0, 0.6));
+  }
+
+  .haywire-threat-beacon:hover .haywire-threat-d20 {
+    opacity: 1;
+  }
+
+  .haywire-threat-d20:hover {
+    background: rgba(201, 168, 0, 0.35);
+    color: #e6c200;
+  }
+
   /* GM controls — below the beacon */
   .haywire-threat-controls {
     display: flex;
@@ -1371,8 +1408,21 @@
     transition: border-color 0.3s;
   }
 
-  .haywire-threat-card-img.alert {
+  #haywire-threat-card .haywire-threat-card-img.alert {
     border-color: #5c1a1a;
+  }
+
+  .haywire-threat-card-msg {
+    background: var(--haywire-color-bg);
+    border: 2px solid #555;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: var(--haywire-color-secondary);
+    font-size: 0.75rem;
+    font-style: italic;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    max-width: 240px;
   }
 
   /* ============================================ */
@@ -1385,6 +1435,7 @@
     border-radius: 6px;
     overflow: hidden;
     text-align: center;
+    color: var(--haywire-color-accent);
   }
 
   .haywire-card-chat-header {
