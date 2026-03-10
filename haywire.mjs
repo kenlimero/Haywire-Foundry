@@ -34,6 +34,9 @@ import { OperationsOverlay } from "./module/operations-overlay.mjs";
 // Fog of War overlay
 import { FogOfWarOverlay } from "./module/fog-of-war-overlay.mjs";
 
+// Mission reset
+import { MissionReset } from "./module/mission-reset.mjs";
+
 // Sheets
 import { SoldierSheet } from "./module/sheets/soldier-sheet.mjs";
 import { ClassSheet } from "./module/sheets/class-sheet.mjs";
@@ -220,6 +223,17 @@ Hooks.once("init", () => {
     type: Number,
     default: 6,
   });
+
+  game.settings.register("haywire", "fogOfWarDrawnCards", {
+    name: "Fog of War Drawn Cards",
+    scope: "world",
+    config: false,
+    type: Array,
+    default: [],
+  });
+
+  // Register scene control button for mission reset (must be in init, before ready)
+  MissionReset.init();
 
   console.log("haywire | Système Haywire initialisé");
 });

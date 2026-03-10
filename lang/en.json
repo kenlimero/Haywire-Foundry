@@ -139,7 +139,18 @@
     },
     "FogOfWar": {
       "Label": "Fog of War",
-      "DieHint": "Click to decrement — rolls at 1"
+      "DieHint": "Click to decrement — rolls at 1",
+      "DeckExhausted": "Fog of War deck exhausted — reshuffling.",
+      "CardDrawn": "Fog of War"
+    },
+    "MissionReset": {
+      "Label": "Reset Mission",
+      "ResetState": "Reset state (cards, threat, HP)",
+      "ResetAll": "Reset state + delete all tokens",
+      "ConfirmTitle": "Reset Mission",
+      "ConfirmContent": "This will reset cards, threat level, tokens HP and conditions. Are you sure?",
+      "ConfirmContentAll": "This will reset ALL game state AND delete every token from the scene. This cannot be undone. Are you sure?",
+      "Done": "Mission has been reset."
     },
     "Unit": {
       "Role": "Role",

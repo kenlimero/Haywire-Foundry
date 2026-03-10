@@ -43,6 +43,14 @@ export class FogOfWarOverlay {
     await game.settings.set("haywire", "fogOfWarDie", value);
   }
 
+  static get drawnCards() {
+    return game.settings.get("haywire", "fogOfWarDrawnCards") ?? [];
+  }
+
+  static async setDrawnCards(ids) {
+    await game.settings.set("haywire", "fogOfWarDrawnCards", ids);
+  }
+
   /** Reconstruit le HTML. */
   static async render() {
     const el = this.#el;
@@ -174,10 +182,39 @@ export class FogOfWarOverlay {
     const deck = await pack.getDocument(deckEntry._id);
     if (!deck?.cards?.size) return;
 
-    const cards = Array.from(deck.cards);
-    const picked = cards[Math.floor(Math.random() * cards.length)];
+    const allCards = Array.from(deck.cards);
+    let drawnIds = this.drawnCards;
+    let available = allCards.filter((c) => !drawnIds.includes(c._id));
+
+    // Deck exhausted — notify GM and reshuffle
+    if (available.length === 0) {
+      ChatMessage.create({
+        content: `<p><strong>${game.i18n.localize("HAYWIRE.FogOfWar.DeckExhausted")}</strong></p>`,
+        whisper: ChatMessage.getWhisperRecipients("GM"),
+      });
+      drawnIds = [];
+      await this.setDrawnCards([]);
+      available = allCards;
+    }
+
+    const picked = available[Math.floor(Math.random() * available.length)];
     const uuid = `Compendium.haywire.decks.Cards.${deckEntry._id}.Card.${picked._id}`;
 
+    // Record drawn card
+    await this.setDrawnCards([...drawnIds, picked._id]);
     await this.setCardId(uuid);
+
+    // Public chat message with card image
+    const faceImg = picked.faces?.[0]?.img ?? picked.img;
+    const cardName = picked.name ?? "???";
+    ChatMessage.create({
+      content: `<div class="haywire-card-chat">
+      <div class="haywire-card-chat-header">
+        <i class="fas fa-cloud-fog"></i> ${game.i18n.localize("HAYWIRE.FogOfWar.CardDrawn")}
+      </div>
+      <img class="haywire-card-chat-img" src="${faceImg}" alt="${cardName}" data-action="showCard" data-src="${faceImg}" data-title="${cardName}"/>
+    </div>`,
+      speaker: { alias: game.i18n.localize("HAYWIRE.FogOfWar.Label") },
+    });
   }
 }
