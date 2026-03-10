@@ -2,8 +2,7 @@
  * OPFOR Support Cards Overlay — miniature backcover à gauche de l'alerte.
  * - Hover sur la miniature : affiche le panneau de cartes support OPFOR
  * - Hover sur une carte : affiche la carte en grand (style token overlay)
- * - Bouton "Activate" sur chaque carte → message chat + retrait de la carte
- * - Activable uniquement si l'alerte est levée ET un leader OPFOR avec le skill "Support" est sur le canvas
+ * - Visible uniquement si l'alerte est levée ET un leader OPFOR avec le skill "Support" est sur le canvas
  */
 export class OpforSupportOverlay {
   static #el = null;
@@ -122,13 +121,21 @@ export class OpforSupportOverlay {
     const activatable = await this.isActivatable();
     const i18n = (k) => game.i18n.localize(k);
 
+    // Hide overlay when cards exist but conditions are not met
+    if (!activatable && count > 0) {
+      el.innerHTML = "";
+      panel.innerHTML = "";
+      el.style.display = "none";
+      return;
+    }
+    el.style.display = "";
+
     const pinSvg = `<span class="haywire-overlay-pin" title="${i18n("HAYWIRE.Pin")}"><svg viewBox="0 0 384 512"><path d="M300.8 203.9L290 213.1H273c-7.7 0-15 3.2-20.3 8.5L194.7 279.6 104.4 189.3l58-58c5.3-5.3 8.5-12.6 8.5-20.3V94.1l9.2-10.9C196.3 64.5 220.2 54 245.2 54h48c23.2 0 45.6 8.2 63.1 23L384 101.3 282.7 202.6zM96 297.4l87.6 87.6L57.6 511c-5.8 5.8-14.3 8-22.2 5.7S21.5 508.5 19.3 500.6c-2.3-7.9-.1-16.4 5.7-22.2L96 297.4z"/></svg></span>`;
     el.innerHTML = `
-      <div class="haywire-support-thumb${!activatable && count > 0 ? " leader-downed" : ""}" title="${i18n("HAYWIRE.OpforSupport.Label")}">
+      <div class="haywire-support-thumb" title="${i18n("HAYWIRE.OpforSupport.Label")}">
         <img src="systems/haywire/assets/cards/backcovers/support-opfor.webp" alt="OPFOR Support" />
         ${pinSvg}
-        ${count > 0 ? `<span class="haywire-support-badge">${activatable ? count : 0}</span>` : ""}
-        ${!activatable && count > 0 ? `<span class="haywire-support-downed-icon" title="${i18n("HAYWIRE.OpforSupport.Locked")}"><i class="fas fa-lock"></i> ${count}</span>` : ""}
+        ${count > 0 ? `<span class="haywire-support-badge">${count}</span>` : ""}
       </div>`;
 
     const thumb = el.querySelector(".haywire-support-thumb");
@@ -154,7 +161,7 @@ export class OpforSupportOverlay {
     panel.addEventListener("mouseenter", () => this.#showPanel());
     panel.addEventListener("mouseleave", () => this.#hidePanel());
 
-    await this.#renderPanel(panel, cardIds, count, activatable, i18n);
+    await this.#renderPanel(panel, cardIds, count, i18n);
   }
 
   /* ---- Private ---- */
@@ -203,7 +210,7 @@ export class OpforSupportOverlay {
     this.#previewEl?.classList.remove("visible");
   }
 
-  static async #renderPanel(panel, cardIds, count, activatable, i18n) {
+  static async #renderPanel(panel, cardIds, count, i18n) {
     const importBtn = game.user.isGM && count === 0
       ? `<button class="haywire-opfor-import-faction" title="${i18n("HAYWIRE.OpforSupport.SelectFaction")}">
            <i class="fas fa-file-import"></i> ${i18n("HAYWIRE.OpforSupport.ImportFaction")}
@@ -223,10 +230,6 @@ export class OpforSupportOverlay {
       return;
     }
 
-    const lockedBanner = !activatable
-      ? `<div class="haywire-support-locked-banner"><i class="fas fa-lock"></i> ${i18n("HAYWIRE.OpforSupport.Locked")}</div>`
-      : "";
-
     const resolved = await Promise.all(cardIds.map((uuid) => fromUuid(uuid)));
     const cardsHtml = cardIds
       .map((uuid, i) => {
@@ -234,14 +237,9 @@ export class OpforSupportOverlay {
         const name = card?.name ?? "???";
         const img = card?.img ?? "icons/svg/card-hand.svg";
         return `
-        <div class="haywire-support-card${!activatable ? " disabled" : ""}" data-preview-img="${img}" data-preview-name="${name}">
+        <div class="haywire-support-card" data-preview-img="${img}" data-preview-name="${name}">
           <span class="haywire-support-card-remove" data-uuid="${uuid}" title="${i18n("HAYWIRE.Support.Remove")}"><i class="fas fa-times"></i></span>
           <img class="haywire-support-card-img" src="${img}" alt="${name}" />
-          <button class="haywire-support-activate" data-uuid="${uuid}" data-name="${name}" data-img="${img}"
-                  title="${!activatable ? i18n("HAYWIRE.OpforSupport.Locked") : i18n("HAYWIRE.Support.Activate")}"
-                  ${!activatable ? "disabled" : ""}>
-            <i class="fas fa-bullseye"></i> ${i18n("HAYWIRE.Support.Activate")}
-          </button>
         </div>`;
       })
       .join("");
@@ -253,7 +251,6 @@ export class OpforSupportOverlay {
           <span class="haywire-support-count">${count}</span>
           <span class="haywire-support-purge" title="${i18n("HAYWIRE.Support.Purge")}"><i class="fas fa-trash"></i></span>
         </div>
-        ${lockedBanner}
         <div class="haywire-support-cards">${cardsHtml}</div>
       </div>`;
 
@@ -267,14 +264,6 @@ export class OpforSupportOverlay {
       });
       card.addEventListener("mouseleave", () => {
         this.#hidePreview();
-      });
-    });
-
-    panel.querySelectorAll(".haywire-support-activate").forEach((btn) => {
-      btn.addEventListener("click", async (e) => {
-        e.stopPropagation();
-        const { uuid, name, img } = btn.dataset;
-        await this.#activateCard(uuid, name, img);
       });
     });
 
@@ -375,21 +364,4 @@ export class OpforSupportOverlay {
     ui.notifications.info(`${entries.length} ${folder.name} support cards imported.`);
   }
 
-  static async #activateCard(_uuid, name, img) {
-    const i18n = (k) => game.i18n.localize(k);
-
-    try {
-      await ChatMessage.create({
-        content: `<div class="haywire-card-chat">
-          <div class="haywire-card-chat-header">
-            <i class="fas fa-skull-crossbones"></i> ${i18n("HAYWIRE.OpforSupport.Activated")}
-          </div>
-          <img class="haywire-card-chat-img" src="${img}" alt="${name}" />
-        </div>`,
-      });
-    } catch (err) {
-      console.error("OpforSupportOverlay | ChatMessage.create failed", err);
-    }
-
-  }
 }
