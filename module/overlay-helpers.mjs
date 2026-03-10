@@ -143,18 +143,18 @@ export function bindOpforActivityHooks(invalidateAndRender) {
   });
 }
 
-/** Roll on a named table from haywire.opfor-tables compendium. */
+/** Roll on a named table from haywire.opfor-tables compendium. Returns draw results. */
 export async function rollCompendiumTable(tableName) {
   const pack = game.packs.get("haywire.opfor-tables");
-  if (!pack) return;
+  if (!pack) return null;
 
   const index = await pack.getIndex();
   const entry = index.find((e) => e.name === tableName);
   if (!entry) {
     ui.notifications.warn(`Table "${tableName}" not found.`);
-    return;
+    return null;
   }
 
   const table = await pack.getDocument(entry._id);
-  await table.draw();
+  return table.draw();
 }

@@ -119,7 +119,8 @@
       "CardDrawn": "Opérations"
     },
     "Reinforcement": {
-      "Roll": "Jet de renforts (d20)"
+      "Roll": "Jet de renforts (d20)",
+      "Support": "Support OpFor"
     },
     "FogOfWar": {
       "Label": "Brouillard de guerre",

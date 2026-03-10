@@ -119,7 +119,8 @@
       "CardDrawn": "Operations"
     },
     "Reinforcement": {
-      "Roll": "Roll Reinforcements (d20)"
+      "Roll": "Roll Reinforcements (d20)",
+      "Support": "OpFor Support"
     },
     "FogOfWar": {
       "Label": "Fog of War",

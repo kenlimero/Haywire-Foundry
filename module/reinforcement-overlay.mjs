@@ -92,10 +92,49 @@ export class ReinforcementOverlay {
 
   /* ---- Private ---- */
 
+  /** Map reinforcement result text (lowercased) to opfor-support card name. */
+  static SUPPORT_CARD_NAMES = {
+    "blend in support": "Blend In",
+    "human shield support": "Human Shield",
+    "heli sniper support": "Heli Sniper",
+    "chemical strike": "Chemical Strike",
+    "hidden sniper": "Hidden Sniper",
+    "mortar shelling": "Mortar Shelling",
+    "fpv drone": "FPV Drone",
+    "artillery barrage": "Artillery Barrage",
+    "medallon mine": "Medallon Mine",
+  };
 
   static async #rollReinforcementTable() {
     const tableName = this.FACTION_TABLE_NAMES[this.faction];
     if (!tableName) return;
-    await rollCompendiumTable(tableName);
+    const draw = await rollCompendiumTable(tableName);
+    if (!draw?.results?.length) return;
+
+    // Check if the result references a support card
+    const resultText = (draw.results[0].description ?? draw.results[0].text ?? "").toLowerCase();
+    const cardName = this.SUPPORT_CARD_NAMES[resultText];
+    if (!cardName) return;
+
+    // Find the matching support card in the compendium
+    const pack = game.packs.get("haywire.opfor-support");
+    if (!pack) return;
+    const index = await pack.getIndex();
+    const cardEntry = index.find((e) => e.name === cardName);
+    if (!cardEntry) return;
+
+    const card = await pack.getDocument(cardEntry._id);
+    if (!card?.img) return;
+
+    // Display the support card in chat
+    await ChatMessage.create({
+      content: `<div class="haywire-card-chat">
+        <div class="haywire-card-chat-header">
+          <i class="fas fa-crosshairs"></i> ${game.i18n.localize("HAYWIRE.Reinforcement.Support")}
+        </div>
+        <img class="haywire-card-chat-img" src="${card.img}" alt="${card.name}" />
+      </div>`,
+      whisper: game.users.filter((u) => u.isGM).map((u) => u.id),
+    });
   }
 }
