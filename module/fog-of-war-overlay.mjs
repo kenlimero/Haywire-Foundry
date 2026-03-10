@@ -1,9 +1,11 @@
 /**
  * Fog of War Overlay — miniature backcover en haut, entre OPFOR support et le threat level.
- * - Affiche un dé 6 faces sur la backcover, partant de 6
- * - Chaque clic décrémente le dé de 1
- * - À 1, un roll sur le deck Fog of War est fait, la carte tirée remplace la backcover, le dé repasse à 6
- * - Preview de la carte au hover quand une carte est active
+ * - die=0 : affiche un bouton Roll d6 (1ère fois uniquement)
+ * - Clic roll : lance un d6, affiche le résultat, message chat
+ * - Si 6 : tire immédiatement une carte fog of war
+ * - Si <6 : décompte -1 par clic
+ * - À 1 (sans afficher) : tire une carte automatiquement
+ * - Après tirage/suppression : compteur repart à 6 (pas de nouveau roll)
  */
 export class FogOfWarOverlay {
   static #el = null;
@@ -30,9 +32,9 @@ export class FogOfWarOverlay {
     return game.settings.get("haywire", "fogOfWarCardId") ?? "";
   }
 
-  /** Valeur actuelle du dé (1–6). */
+  /** Valeur actuelle du dé (0=needs roll, 2-6=countdown). */
   static get die() {
-    return game.settings.get("haywire", "fogOfWarDie") ?? 6;
+    return game.settings.get("haywire", "fogOfWarDie") ?? 0;
   }
 
   static async setCardId(id) {
@@ -72,13 +74,18 @@ export class FogOfWarOverlay {
       }
     }
 
+    // die=0 → roll button, die>0 → show countdown number
+    const needsRoll = die === 0 && !hasCard;
+    const showDie = die > 0 && !hasCard;
+
     const pinSvg = `<span class="haywire-overlay-pin" title="${i18n("HAYWIRE.Pin")}"><svg viewBox="0 0 384 512"><path d="M300.8 203.9L290 213.1H273c-7.7 0-15 3.2-20.3 8.5L194.7 279.6 104.4 189.3l58-58c5.3-5.3 8.5-12.6 8.5-20.3V94.1l9.2-10.9C196.3 64.5 220.2 54 245.2 54h48c23.2 0 45.6 8.2 63.1 23L384 101.3 282.7 202.6zM96 297.4l87.6 87.6L57.6 511c-5.8 5.8-14.3 8-22.2 5.7S21.5 508.5 19.3 500.6c-2.3-7.9-.1-16.4 5.7-22.2L96 297.4z"/></svg></span>`;
     el.innerHTML = `
       <div class="haywire-support-thumb" title="${i18n("HAYWIRE.FogOfWar.Label")}">
         <img src="${imgSrc}" alt="${imgAlt}" />
         ${pinSvg}
         ${hasCard ? `<span class="haywire-overlay-remove" title="${i18n("HAYWIRE.Support.Remove")}"><i class="fas fa-times"></i></span>` : ""}
-        ${!hasCard ? `<span class="haywire-fog-die" title="${i18n("HAYWIRE.FogOfWar.DieHint")}">${die}</span>` : ""}
+        ${needsRoll ? `<span class="haywire-overlay-roll" title="${i18n("HAYWIRE.Roll")}"><i class="fas fa-dice"></i></span>` : ""}
+        ${showDie ? `<span class="haywire-fog-die" title="${i18n("HAYWIRE.FogOfWar.DieHint")}">${die}</span>` : ""}
       </div>`;
 
     const thumb = el.querySelector(".haywire-support-thumb");
@@ -105,14 +112,20 @@ export class FogOfWarOverlay {
       thumb.addEventListener("mouseleave", () => this.#hidePreview());
     }
 
-    // Remove button
+    // Remove button — clear card, countdown restarts at 6
     el.querySelector(".haywire-overlay-remove")?.addEventListener("click", (e) => {
       e.stopPropagation();
       this.#hidePreview();
       this.setCardId("");
     });
 
-    // Die click — decrement, roll at 1
+    // Roll button — roll a d6 to start the countdown
+    el.querySelector(".haywire-overlay-roll")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.#onRollDie();
+    });
+
+    // Die click — decrement countdown, draw card at 1
     el.querySelector(".haywire-fog-die")?.addEventListener("click", (e) => {
       e.stopPropagation();
       this.#onDieClick();
@@ -160,10 +173,38 @@ export class FogOfWarOverlay {
     await this.setCardId(data.uuid);
   }
 
+  /** Roll d6 button clicked — roll, post chat, handle result. */
+  static async #onRollDie() {
+    const roll = await new Roll("1d6").evaluate();
+    const result = roll.total;
+
+    // Chat message with roll result
+    const label = game.i18n.localize("HAYWIRE.FogOfWar.Label");
+    const rolled = game.i18n.localize("HAYWIRE.FogOfWar.DieRolled");
+    ChatMessage.create({
+      content: `<div class="haywire-card-chat">
+        <div class="haywire-card-chat-header">
+          <i class="fas fa-cloud-fog"></i> ${label}
+        </div>
+        <p style="padding:0.5rem;font-size:1.2rem;margin:0;"><strong>${rolled} ${result}</strong></p>
+      </div>`,
+      speaker: { alias: label },
+    });
+
+    if (result === 6) {
+      // Immediately draw a card, then countdown restarts at 6
+      await this.#rollCard();
+      await this.setDie(6);
+    } else {
+      await this.setDie(result);
+    }
+  }
+
+  /** Die countdown clicked — decrement, draw card when reaching 1. */
   static async #onDieClick() {
     const current = this.die;
-    if (current <= 1) {
-      // Roll on the Fog of War deck and reset die
+    if (current <= 2) {
+      // Would go to 1 — draw card without showing 1, restart at 6
       await this.#rollCard();
       await this.setDie(6);
     } else {

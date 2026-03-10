@@ -139,7 +139,8 @@
     },
     "FogOfWar": {
       "Label": "Fog of War",
-      "DieHint": "Click to decrement — rolls at 1",
+      "DieHint": "Click to decrement countdown",
+      "DieRolled": "Rolled:",
       "DeckExhausted": "Fog of War deck exhausted — reshuffling.",
       "CardDrawn": "Fog of War"
     },

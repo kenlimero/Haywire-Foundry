@@ -221,7 +221,7 @@ Hooks.once("init", () => {
     scope: "world",
     config: false,
     type: Number,
-    default: 6,
+    default: 0,
   });
 
   game.settings.register("haywire", "fogOfWarDrawnCards", {

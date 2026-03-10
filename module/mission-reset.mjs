@@ -50,7 +50,7 @@ export class MissionReset {
     // Reset all world settings
     await game.settings.set("haywire", "fogOfWarDrawnCards", []);
     await game.settings.set("haywire", "fogOfWarCardId", "");
-    await game.settings.set("haywire", "fogOfWarDie", 6);
+    await game.settings.set("haywire", "fogOfWarDie", 0);
     await game.settings.set("haywire", "supportCardIds", []);
     await game.settings.set("haywire", "opforSupportCardIds", []);
     await game.settings.set("haywire", "infilCardIds", []);
