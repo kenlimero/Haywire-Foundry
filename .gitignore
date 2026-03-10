@@ -20,6 +20,8 @@ _bmad-output/
 
 # Claude
 .claude/
+.superpowers/
+docs/
 
 # Environment
 .env

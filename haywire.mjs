@@ -34,6 +34,9 @@ import { OperationsOverlay } from "./module/operations-overlay.mjs";
 // Fog of War overlay
 import { FogOfWarOverlay } from "./module/fog-of-war-overlay.mjs";
 
+// Reinforcement overlay
+import { ReinforcementOverlay } from "./module/reinforcement-overlay.mjs";
+
 // Mission reset
 import { MissionReset } from "./module/mission-reset.mjs";
 
@@ -261,6 +264,7 @@ Hooks.once("ready", () => {
   InfilOverlay.init();
   OperationsOverlay.init();
   FogOfWarOverlay.init();
+  ReinforcementOverlay.init();
 });
 
 // Masquer le carré de fond derrière les icônes d'effets sur les tokens (garder uniquement le sprite rond)

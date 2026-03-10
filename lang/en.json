@@ -141,6 +141,9 @@
       "Label": "Operations",
       "Empty": "No operation cards."
     },
+    "Reinforcement": {
+      "Roll": "Roll Reinforcements (d20)"
+    },
     "FogOfWar": {
       "Label": "Fog of War",
       "DieHint": "Click to decrement countdown",

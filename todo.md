@@ -82,8 +82,12 @@
 [x] gestion des decks aléatoire :
     [x] créer les decks et l'affichage.
     [x] trouver un moyen de faire automatiquement. 
-[-] **Avoir un bouton de reset de game**
-    - déterminer les actions
+[x] **Avoir un bouton de reset de game**
+## Alarme et threat level
+[x] changer l'Alarme pour être toujours en vert et deviendra rouge en cas d'alerte pour tous les niveaux.
+[x] affiche la carte du niveau
+[x] faire un bouton roll
+[-] supprimer le preview de l'overlay pour le remplacer par le preview standard
 ## OVerlay
 [x] faire disparaitre les overlay
 [-] faire des types opfor, player support, infil et opération pour ne pas drag les items des autres.
@@ -98,8 +102,12 @@
             - liaison avec le leader ?
         [x] indiquer le nombre utilisable et non utilisable
         [x] lié le opfor support au leader opfor
+    [-] Changer la sélection de la faction à l'overlay Thread level
+    [-] faire disparaitre si les condion n'apparaissent pas
 ### Overlay FOG
-[x] Overlay FOG
+[x] sauvegarde des cartes dans world settings pour ne pas tirer encore la même.
+[x] le premier est un roll
+
 ### Overlay Infil
 [x] Overlay Infil
 ### Overlay Operation

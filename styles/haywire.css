@@ -2033,6 +2033,107 @@
     object-fit: contain;
   }
 
+  /* ============================================ */
+  /*  Reinforcement Overlay                       */
+  /* ============================================ */
+
+  #haywire-reinforcement-overlay {
+    position: fixed;
+    top: -42px;
+    left: calc(50% - 250px);
+    transform: translateX(-100%);
+    z-index: 100;
+    pointer-events: auto;
+    transition: top 0.25s ease;
+  }
+
+  #haywire-reinforcement-overlay:hover,
+  #haywire-reinforcement-overlay.pinned,
+  #haywire-reinforcement-overlay.user-pinned {
+    top: 0px;
+  }
+
+  .haywire-reinforcement-card {
+    position: relative;
+    display: inline-block;
+  }
+
+  .haywire-reinforcement-thumb {
+    display: block;
+    width: 63px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid #555;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  #haywire-reinforcement-overlay .haywire-overlay-roll {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.75);
+    border: 2px solid #ffd700;
+    color: #ffd700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+  }
+
+  #haywire-reinforcement-overlay .haywire-overlay-roll svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  #haywire-reinforcement-overlay .haywire-overlay-roll:hover {
+    background: var(--haywire-color-accent);
+    color: #000;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+
+  #haywire-reinforcement-overlay .haywire-overlay-pin {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+  }
+
+  #haywire-reinforcement-preview {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  #haywire-reinforcement-preview.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #haywire-reinforcement-preview img {
+    display: block;
+    max-width: 350px;
+    max-height: 500px;
+    border-radius: 6px;
+    border: 2px solid var(--haywire-color-accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+  }
+
   /* Remove button on infil/operations thumbnails */
   .haywire-overlay-remove {
     position: absolute;
