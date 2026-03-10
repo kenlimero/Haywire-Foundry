@@ -102,8 +102,8 @@
             - liaison avec le leader ?
         [x] indiquer le nombre utilisable et non utilisable
         [x] lié le opfor support au leader opfor
-    [-] Changer la sélection de la faction à l'overlay Thread level
-    [-] faire disparaitre si les condion n'apparaissent pas
+    [x] Changer la sélection de la faction à l'overlay Thread level
+    [x] faire disparaitre si les conditions n'apparaissent pas
 ### Overlay FOG
 [x] sauvegarde des cartes dans world settings pour ne pas tirer encore la même.
 [x] le premier est un roll

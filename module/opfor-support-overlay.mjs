@@ -2,7 +2,7 @@
  * OPFOR Support Cards Overlay — miniature backcover à gauche de l'alerte.
  * - Hover sur la miniature : affiche le panneau de cartes support OPFOR
  * - Hover sur une carte : affiche la carte en grand (style token overlay)
- * - Visible uniquement si l'alerte est levée ET un leader OPFOR avec le skill "Support" est sur le canvas
+ * - Visible uniquement si l'alerte est active ET un leader/support skill non-downed est sur la scène
  */
 export class OpforSupportOverlay {
   static #el = null;
@@ -27,11 +27,8 @@ export class OpforSupportOverlay {
     Hooks.on("createSetting", onSettingChange);
     Hooks.on("updateSetting", onSettingChange);
 
-    // Re-render when tokens are added/removed (leader may appear/disappear)
     Hooks.on("createToken", () => { this.#cachedActivatable = null; this.render(); });
     Hooks.on("deleteToken", () => { this.#cachedActivatable = null; this.render(); });
-
-    // Re-render when an opfor-unit actor is updated (may gain/lose downed)
     Hooks.on("updateActor", (actor) => {
       if (actor.type === "opfor-unit") {
         this.#cachedActivatable = null;
@@ -41,21 +38,19 @@ export class OpforSupportOverlay {
   }
 
   /**
-   * Vérifie si le support OPFOR est activable :
+   * Vérifie si l'overlay doit être visible :
    * 1. L'alerte doit être active
-   * 2. Un leader OPFOR avec le skill "Support" doit être sur le canvas et non downed
+   * 2. Un leader OPFOR ou unit avec skill "Support" non-downed sur la scène
    */
   static async isActivatable() {
     if (this.#cachedActivatable !== null) return this.#cachedActivatable;
 
-    // Check alert
     const alertActive = game.settings.get("haywire", "threatAlert");
     if (!alertActive) {
       this.#cachedActivatable = false;
       return false;
     }
 
-    // Find opfor-unit tokens on canvas with leader name or "Support" skill
     const scene = game.scenes?.active;
     if (!scene) { this.#cachedActivatable = false; return false; }
 
@@ -64,13 +59,11 @@ export class OpforSupportOverlay {
       if (!actor || actor.type !== "opfor-unit") continue;
       if (actor.system.conditions?.has("downed")) continue;
 
-      // Check by name
       if (this.LEADER_NAMES.test(actor.name)) {
         this.#cachedActivatable = true;
         return true;
       }
 
-      // Check by skill name "Support"
       const skillUuids = actor.system.opforSkillIds ?? [];
       for (const uuid of skillUuids) {
         const skill = await fromUuid(uuid);
@@ -121,14 +114,12 @@ export class OpforSupportOverlay {
     const activatable = await this.isActivatable();
     const i18n = (k) => game.i18n.localize(k);
 
-    // Hide overlay when cards exist but conditions are not met
-    if (!activatable && count > 0) {
+    // Hide overlay when conditions not met (alert + leader/support skill)
+    if (!activatable) {
       el.innerHTML = "";
       panel.innerHTML = "";
-      el.style.display = "none";
       return;
     }
-    el.style.display = "";
 
     const pinSvg = `<span class="haywire-overlay-pin" title="${i18n("HAYWIRE.Pin")}"><svg viewBox="0 0 384 512"><path d="M300.8 203.9L290 213.1H273c-7.7 0-15 3.2-20.3 8.5L194.7 279.6 104.4 189.3l58-58c5.3-5.3 8.5-12.6 8.5-20.3V94.1l9.2-10.9C196.3 64.5 220.2 54 245.2 54h48c23.2 0 45.6 8.2 63.1 23L384 101.3 282.7 202.6zM96 297.4l87.6 87.6L57.6 511c-5.8 5.8-14.3 8-22.2 5.7S21.5 508.5 19.3 500.6c-2.3-7.9-.1-16.4 5.7-22.2L96 297.4z"/></svg></span>`;
     el.innerHTML = `
@@ -211,12 +202,6 @@ export class OpforSupportOverlay {
   }
 
   static async #renderPanel(panel, cardIds, count, i18n) {
-    const importBtn = game.user.isGM && count === 0
-      ? `<button class="haywire-opfor-import-faction" title="${i18n("HAYWIRE.OpforSupport.SelectFaction")}">
-           <i class="fas fa-file-import"></i> ${i18n("HAYWIRE.OpforSupport.ImportFaction")}
-         </button>`
-      : "";
-
     if (count === 0) {
       panel.innerHTML = `
         <div class="haywire-support-panel-inner">
@@ -224,9 +209,7 @@ export class OpforSupportOverlay {
             <i class="fas fa-skull-crossbones"></i> ${i18n("HAYWIRE.OpforSupport.Label")}
           </div>
           <div class="haywire-support-empty">${i18n("HAYWIRE.Unit.NoSupport")}</div>
-          ${importBtn}
         </div>`;
-      this.#bindImportButton(panel);
       return;
     }
 
@@ -298,70 +281,6 @@ export class OpforSupportOverlay {
     if (current.includes(data.uuid)) return;
 
     await this.setCardIds([...current, data.uuid]);
-  }
-
-  static #bindImportButton(panel) {
-    panel.querySelector(".haywire-opfor-import-faction")?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      this.#showFactionDialog();
-    });
-  }
-
-  static async #showFactionDialog() {
-    const pack = game.packs.get("haywire.opfor-support");
-    if (!pack) {
-      ui.notifications.error("Compendium haywire.opfor-support not found.");
-      return;
-    }
-
-    // Get all folders from the pack to build faction choices
-    const index = await pack.getIndex({ fields: ["folder"] });
-    const folders = pack.folders;
-    if (!folders.size) {
-      ui.notifications.warn("No folders found in opfor-support compendium.");
-      return;
-    }
-
-    const buttons = [];
-    for (const folder of folders) {
-      buttons.push({
-        action: folder.id,
-        label: folder.name,
-        icon: "fas fa-skull-crossbones",
-        callback: () => this.#importFaction(index, folder),
-      });
-    }
-
-    await foundry.applications.api.DialogV2.wait({
-      window: { title: game.i18n.localize("HAYWIRE.OpforSupport.ImportFaction") },
-      content: `<p>${game.i18n.localize("HAYWIRE.OpforSupport.SelectFaction")}</p>`,
-      buttons,
-    });
-  }
-
-  /** Maps compendium folder names to opforFaction setting keys. */
-  static FACTION_KEYS = {
-    Cartel: "cartels",
-    Insurgents: "insurgents",
-    Russians: "russians",
-  };
-
-  static async #importFaction(index, folder) {
-    const entries = index.filter((e) => e.folder === folder._id);
-    if (!entries.length) {
-      ui.notifications.warn(`No cards found in folder "${folder.name}".`);
-      return;
-    }
-
-    // Update the world faction setting to match the selected faction
-    const factionKey = this.FACTION_KEYS[folder.name];
-    if (factionKey) {
-      await game.settings.set("haywire", "opforFaction", factionKey);
-    }
-
-    const uuids = entries.map((e) => `Compendium.haywire.opfor-support.Item.${e._id}`);
-    await this.addCards(uuids);
-    ui.notifications.info(`${entries.length} ${folder.name} support cards imported.`);
   }
 
 }

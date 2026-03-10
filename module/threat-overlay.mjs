@@ -1,11 +1,13 @@
 /**
  * Threat Level Overlay — gyrophare fixe en haut au centre de l'écran.
- * - Niveau 0 : gyrophare éteint (pas d'alerte)
+ * - Niveau 0 : gyrophare éteint (pas d'alerte) + bouton sélection faction
  * - Niveaux 1-9 : gyrophare allumé, couleur selon la sévérité
  * - Hover : affiche une carte résumé du niveau de menace
  * - Boutons +/- (GM uniquement) pour ajuster le niveau
  * - Bouton alerte (GM) : active/désactive l'alerte (lueur rouge pulsante)
  */
+import { OpforSupportOverlay } from "./opfor-support-overlay.mjs";
+
 export class ThreatOverlay {
   static #el = null;
   static #cardEl = null;
@@ -78,6 +80,10 @@ export class ThreatOverlay {
 
     const d20Svg = `<svg viewBox="0 0 512 512"><path d="M48.7 125.8l53.2 31.9c7.8 4.7 17.8 2 22.2-5.9L201.6 12.1c3-5.3-.6-11.9-6.6-11.9H144c-3.4 0-6.5 1.5-8.6 4.2L48.7 125.8zm416.6 0L378.6 4.4c-2.1-2.7-5.2-4.2-8.6-4.2h-51c-6 0-9.6 6.6-6.6 11.9l77.5 139.7c4.4 7.9 14.4 10.6 22.2 5.9l53.2-31.9zM36.3 161.7L3.8 280.4c-2 7.3 2.2 14.9 9.3 17.6l191.2 72C204.1 197.5 111.3 162 36.3 161.7zm439.4 0c-75 .3-167.8 35.8-168 208.3l191.2-72c7.1-2.7 11.3-10.3 9.3-17.6l-32.5-118.7zM256 208c-76.5 0-138.5 62-138.5 138.5S179.5 485 256 485s138.5-62 138.5-138.5S332.5 208 256 208z"/></svg>`;
 
+    const factionBtn = !isActive && isGM
+      ? `<button class="haywire-threat-faction-btn" title="${i18n("HAYWIRE.OpforSupport.SelectFaction")}"><i class="fas fa-skull-crossbones"></i></button>`
+      : "";
+
     el.innerHTML = `
       <div class="haywire-threat-beacon">
         <div class="haywire-threat-beacon-base"></div>
@@ -97,6 +103,7 @@ export class ThreatOverlay {
         <button class="haywire-threat-btn haywire-threat-alert-btn ${isAlert ? "active" : ""}" data-action="alert" title="${i18n("HAYWIRE.Threat.Alert")}" ${!isActive ? "disabled" : ""}>
           <i class="fas fa-bell"></i>
         </button>
+        ${factionBtn}
       </div>` : ""}`;
 
     // Bind events
@@ -114,6 +121,12 @@ export class ThreatOverlay {
     el.querySelector(".haywire-threat-d20")?.addEventListener("click", (e) => {
       e.stopPropagation();
       this.#rollThreatTable();
+    });
+
+    // Faction selection button (level 0)
+    el.querySelector(".haywire-threat-faction-btn")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.#showFactionDialog();
     });
 
     // Hover → show threat card
@@ -186,5 +199,62 @@ export class ThreatOverlay {
 
   static #hideCard() {
     this.#cardEl?.classList.remove("visible");
+  }
+
+  /** Maps compendium folder names to opforFaction setting keys. */
+  static FACTION_KEYS = {
+    Cartel: "cartels",
+    Insurgents: "insurgents",
+    Russians: "russians",
+  };
+
+  static async #showFactionDialog() {
+    const pack = game.packs.get("haywire.opfor-support");
+    if (!pack) {
+      ui.notifications.error("Compendium haywire.opfor-support not found.");
+      return;
+    }
+
+    const index = await pack.getIndex({ fields: ["folder"] });
+    const folders = pack.folders;
+    if (!folders.size) {
+      ui.notifications.warn("No folders found in opfor-support compendium.");
+      return;
+    }
+
+    const buttons = [];
+    for (const folder of folders) {
+      buttons.push({
+        action: folder.id,
+        label: folder.name,
+        icon: "fas fa-skull-crossbones",
+        callback: () => this.#importFaction(index, folder),
+      });
+    }
+
+    await foundry.applications.api.DialogV2.wait({
+      window: { title: game.i18n.localize("HAYWIRE.OpforSupport.ImportFaction") },
+      content: `<p>${game.i18n.localize("HAYWIRE.OpforSupport.SelectFaction")}</p>`,
+      buttons,
+    });
+  }
+
+  static async #importFaction(index, folder) {
+    const entries = index.filter((e) => e.folder === folder._id);
+    if (!entries.length) {
+      ui.notifications.warn(`No cards found in folder "${folder.name}".`);
+      return;
+    }
+
+    // Set world faction setting
+    const factionKey = this.FACTION_KEYS[folder.name];
+    if (factionKey) {
+      await game.settings.set("haywire", "opforFaction", factionKey);
+    }
+
+    // Import support cards
+    const uuids = entries.map((e) => `Compendium.haywire.opfor-support.Item.${e._id}`);
+    await OpforSupportOverlay.addCards(uuids);
+    ui.notifications.info(`${entries.length} ${folder.name} support cards imported.`);
   }
 }
