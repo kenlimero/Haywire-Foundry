@@ -48,7 +48,7 @@ export class ReinforcementOverlay {
   }
 
   static get faction() {
-    return game.settings.get("haywire", "opforFaction") ?? "cartels";
+    return game.settings.get("haywire", "opforFaction") || "";
   }
 
   static async render() {

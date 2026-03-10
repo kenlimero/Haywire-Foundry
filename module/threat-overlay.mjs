@@ -46,7 +46,11 @@ export class ThreatOverlay {
   }
 
   static get faction() {
-    return game.settings.get("haywire", "opforFaction") ?? "cartels";
+    return game.settings.get("haywire", "opforFaction") || "";
+  }
+
+  static get hasFaction() {
+    return !!this.faction;
   }
 
   static async setLevel(value) {
@@ -87,7 +91,7 @@ export class ThreatOverlay {
         <button class="haywire-threat-btn" data-action="decrease" title="${i18n("HAYWIRE.Threat.Decrease")}" ${level <= 0 ? "disabled" : ""}>
           <i class="fas fa-minus"></i>
         </button>
-        <button class="haywire-threat-btn" data-action="increase" title="${i18n("HAYWIRE.Threat.Increase")}" ${level >= 9 ? "disabled" : ""}>
+        <button class="haywire-threat-btn" data-action="increase" title="${i18n("HAYWIRE.Threat.Increase")}" ${level >= 9 || !this.hasFaction ? "disabled" : ""}>
           <i class="fas fa-plus"></i>
         </button>
         <button class="haywire-threat-btn haywire-threat-alert-btn ${isAlert ? "active" : ""}" data-action="alert" title="${i18n("HAYWIRE.Threat.Alert")}" ${!isActive ? "disabled" : ""}>

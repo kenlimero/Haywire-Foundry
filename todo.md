@@ -92,6 +92,7 @@
 [x] affiche la carte du niveau
 [x] faire un bouton roll
 [x] supprimer le preview de l'overlay pour le remplacer par le preview standard
+[x] rendre impossible le (+) sur Threat Level si aucune faction n'est sélectionnée.
 ## OVerlay
 [x] faire disparaitre les overlay
 [-] faire des types opfor, player support, infil et opération pour ne pas drag les items des autres.
