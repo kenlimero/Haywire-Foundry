@@ -1,3 +1,5 @@
+import { resolveUuids, buildSkillsContext, parseItemDrop } from "./sheet-helpers.mjs";
+
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
 
@@ -16,30 +18,18 @@ export class ClassSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   };
 
   async #onDrop(event) {
-    event.preventDefault();
     if (!this.isEditable) return;
 
-    let data;
-    try {
-      data = JSON.parse(event.dataTransfer.getData("text/plain"));
-    } catch (e) {
-      return;
-    }
-    if (data?.type !== "Item" || !data.uuid) return;
+    const drop = await parseItemDrop(event);
+    if (!drop) return;
 
-    const item = await fromUuid(data.uuid);
-    if (!item) return;
-
-    // IMPORTANT : utiliser data.uuid car item.uuid est cassé pour les compendiums (_id: null)
-    const uuid = data.uuid;
+    const { uuid, item } = drop;
     if (item.type === "weapon") {
       if (this.item.system.defaultWeapons.includes(uuid)) return;
-      const weapons = [...this.item.system.defaultWeapons, uuid];
-      await this.item.update({ "system.defaultWeapons": weapons });
+      await this.item.update({ "system.defaultWeapons": [...this.item.system.defaultWeapons, uuid] });
     } else if (item.type === "skill") {
       if (this.item.system.skillIds.includes(uuid)) return;
-      const skills = [...this.item.system.skillIds, uuid];
-      await this.item.update({ "system.skillIds": skills });
+      await this.item.update({ "system.skillIds": [...this.item.system.skillIds, uuid] });
     } else {
       console.warn(`haywire | ClassSheet: ${game.i18n.localize("HAYWIRE.InvalidDrop")} (type: ${item.type})`);
     }
@@ -51,32 +41,18 @@ export class ClassSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.system = this.item.system;
     context.isEditable = this.isEditable;
     // Résoudre skills + armes en parallèle
-    const skillUuids = this.item.system.skillIds ?? [];
-    const weaponUuids = this.item.system.defaultWeapons ?? [];
-
-    const [resolvedSkills, resolvedWeapons] = await Promise.all([
-      Promise.all(skillUuids.map(uuid => fromUuid(uuid))),
-      Promise.all(weaponUuids.map(uuid => fromUuid(uuid))),
+    const [skillEntries, weaponEntries] = await Promise.all([
+      resolveUuids(this.item.system.skillIds ?? []),
+      resolveUuids(this.item.system.defaultWeapons ?? []),
     ]);
 
-    context.skills = skillUuids.map((uuid, i) => {
-      const s = resolvedSkills[i];
-      return {
-        uuid,
-        name: s?.name ?? `[${uuid}]`,
-        description: s?.system?.description ?? "",
-        missing: !s,
-      };
-    });
+    context.skills = buildSkillsContext(skillEntries);
 
-    context.defaultWeapons = weaponUuids.map((uuid, i) => {
-      const w = resolvedWeapons[i];
-      return {
-        uuid,
-        name: w?.name ?? `[${uuid}]`,
-        missing: !w,
-      };
-    });
+    context.defaultWeapons = weaponEntries.map(({ uuid, resolved: w, missing }) => ({
+      uuid,
+      name: w?.name ?? `[${uuid}]`,
+      missing,
+    }));
 
     return context;
   }

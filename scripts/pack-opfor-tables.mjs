@@ -1,5 +1,4 @@
-import { ClassicLevel } from "classic-level";
-import { rm } from "fs/promises";
+import { openDb, writeFolders } from "./pack-utils.mjs";
 
 const OUTPUT = "packs/opfor-tables";
 
@@ -434,28 +433,10 @@ for (const table of allTables) {
   }
 }
 
-await rm(OUTPUT, { recursive: true, force: true });
-const db = new ClassicLevel(OUTPUT, { keyEncoding: "utf8", valueEncoding: "utf8" });
+const db = await openDb(OUTPUT);
 
 // Write folders
-let folderSort = 0;
-for (const [key, f] of Object.entries(FOLDERS)) {
-  const folderKey = `!folders!${f.id}`;
-  const folder = {
-    _id: f.id,
-    _key: folderKey,
-    name: f.name,
-    type: "RollTable",
-    sorting: "a",
-    sort: ++folderSort * 100000,
-    color: null,
-    folder: f.parent,
-    flags: {},
-    _stats: STATS,
-  };
-  await db.put(folderKey, JSON.stringify(folder));
-  console.log(`Folder: ${f.name}${f.parent ? ` (child of ${f.parent})` : ""}`);
-}
+await writeFolders(db, Object.values(FOLDERS), "RollTable", STATS);
 
 // Create sublevel for results (Foundry V13 embedded collection pattern)
 const resultsSublevel = db.sublevel("tables.results", { keyEncoding: "utf8", valueEncoding: "utf8" });

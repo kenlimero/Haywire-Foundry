@@ -1,5 +1,4 @@
-import { ClassicLevel } from "classic-level";
-import { rm } from "fs/promises";
+import { openDb } from "./pack-utils.mjs";
 
 const OUTPUT = "packs/player-units";
 const STATS = { systemId: "haywire", systemVersion: "0.8.6", coreVersion: "13" };
@@ -238,8 +237,7 @@ const UNITS = [
 // ═════════════════════════════════════════════════════════════════════════════
 //  PACK INTO LEVELDB
 // ═════════════════════════════════════════════════════════════════════════════
-await rm(OUTPUT, { recursive: true, force: true });
-const db = new ClassicLevel(OUTPUT, { keyEncoding: "utf8", valueEncoding: "utf8" });
+const db = await openDb(OUTPUT);
 
 // Create folders: Tier 1 Main, Tier 1 Additional, Tier 2
 const folders = [

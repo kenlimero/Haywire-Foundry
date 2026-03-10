@@ -27,9 +27,8 @@ import { ThreatOverlay } from "./module/threat-overlay.mjs";
 import { SupportOverlay } from "./module/support-overlay.mjs";
 import { OpforSupportOverlay } from "./module/opfor-support-overlay.mjs";
 
-// Infil & Operations card overlays
-import { InfilOverlay } from "./module/infil-overlay.mjs";
-import { OperationsOverlay } from "./module/operations-overlay.mjs";
+// Infil & Operations card overlays (using shared SimpleCardOverlay)
+import { SimpleCardOverlay } from "./module/simple-card-overlay.mjs";
 
 // Fog of War overlay
 import { FogOfWarOverlay } from "./module/fog-of-war-overlay.mjs";
@@ -147,7 +146,8 @@ Hooks.once("init", () => {
     "systems/haywire/templates/actor/soldier-card.hbs",
     "systems/haywire/templates/actor/opfor-unit-sheet.hbs",
     "systems/haywire/templates/actor/opfor-unit-card.hbs",
-    "systems/haywire/templates/item/opfor-skill-sheet.hbs",
+    "systems/haywire/templates/partials/conditions.hbs",
+    "systems/haywire/templates/partials/combat-stats.hbs",
     "systems/haywire/templates/item/class-sheet.hbs",
     "systems/haywire/templates/item/weapon-sheet.hbs",
     "systems/haywire/templates/item/skill-sheet.hbs",
@@ -256,13 +256,34 @@ Hooks.once("init", () => {
   console.log("haywire | Système Haywire initialisé");
 });
 
-// Initialiser l'overlay Threat Level une fois le jeu prêt
+// Instances des overlays simples (cartes infil / opérations)
+const infilOverlay = new SimpleCardOverlay({
+  settingKey: "infilCardIds",
+  deckName: "Infiltration",
+  elId: "haywire-infil-overlay",
+  previewId: "haywire-infil-preview",
+  backcover: "systems/haywire/assets/cards/backcovers/infil.webp",
+  altText: "Infil",
+  labelKey: "HAYWIRE.Infil.Label",
+});
+
+const operationsOverlay = new SimpleCardOverlay({
+  settingKey: "operationsCardIds",
+  deckName: "Operations",
+  elId: "haywire-operations-overlay",
+  previewId: "haywire-operations-preview",
+  backcover: "systems/haywire/assets/cards/backcovers/operation.webp",
+  altText: "Operations",
+  labelKey: "HAYWIRE.Operations.Label",
+});
+
+// Initialiser les overlays une fois le jeu prêt
 Hooks.once("ready", () => {
   ThreatOverlay.init();
   SupportOverlay.init();
   OpforSupportOverlay.init();
-  InfilOverlay.init();
-  OperationsOverlay.init();
+  infilOverlay.init();
+  operationsOverlay.init();
   FogOfWarOverlay.init();
   ReinforcementOverlay.init();
 });

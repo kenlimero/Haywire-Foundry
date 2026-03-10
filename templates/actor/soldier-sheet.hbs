@@ -42,80 +42,12 @@
     </div>
   </div>
 
-  {{!-- Suppression --}}
-  <div class="haywire-sheet-suppression">
-    <label>{{localize "HAYWIRE.SuppressionLabel"}}</label>
-    <input type="number" name="system.suppression" value="{{system.suppression}}" min="0" max="6" {{#unless isEditable}}disabled{{/unless}} />
-  </div>
-
-  {{!-- Conditions avec gestion manuelle --}}
-  <div class="haywire-sheet-conditions">
-    <label>{{localize "HAYWIRE.Conditions.Label"}}</label>
-    <div class="haywire-conditions-list">
-      {{#each conditions}}
-        <span class="haywire-condition-badge haywire-condition-{{this.key}}" data-condition="{{this.key}}">
-          {{this.label}}
-          {{#if ../isEditable}}
-            <button type="button" class="haywire-condition-remove" data-action="removeCondition">
-              <i class="fas fa-times"></i>
-            </button>
-          {{/if}}
-        </span>
-      {{/each}}
-    </div>
-    {{#if isEditable}}
-    {{#if availableConditions.length}}
-      <select class="haywire-condition-select">
-        <option value="">{{localize "HAYWIRE.SelectCondition"}}</option>
-        {{#each availableConditions}}
-          <option value="{{this.key}}">{{this.label}}</option>
-        {{/each}}
-      </select>
-    {{/if}}
-    {{/if}}
-  </div>
+  {{!-- Suppression + Conditions --}}
+  {{> "systems/haywire/templates/partials/conditions.hbs"}}
 
   {{!-- Combat Stats (seuils) --}}
   {{#if hasClass}}
-    <div class="haywire-sheet-combat">
-      <label>{{localize "HAYWIRE.CombatStats.Label"}}</label>
-      <div class="haywire-combat-thresholds">
-        <div class="haywire-threshold">
-          <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Easy"}}</span>
-          <span class="haywire-threshold-value">
-            {{#if isEditable}}
-              <input type="number" name="system.combatStats.easy" value="{{combatStats.easy}}" min="1" />
-            {{else}}
-              {{combatStats.easy}}
-            {{/if}}
-          </span>
-        </div>
-        <div class="haywire-threshold">
-          <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Medium"}}</span>
-          <span class="haywire-threshold-value">
-            {{#if isEditable}}
-              <input type="number" name="system.combatStats.medium" value="{{combatStats.medium}}" min="1" />
-            {{else}}
-              {{combatStats.medium}}
-            {{/if}}
-          </span>
-        </div>
-        <div class="haywire-threshold">
-          <span class="haywire-threshold-label">{{localize "HAYWIRE.CombatStats.Hard"}}</span>
-          <span class="haywire-threshold-value">
-            {{#if isEditable}}
-              <input type="number" name="system.combatStats.hard" value="{{combatStats.hard}}" min="1" />
-            {{else}}
-              {{combatStats.hard}}
-            {{/if}}
-          </span>
-        </div>
-      </div>
-      <button type="button" class="haywire-roll-btn" data-action="rollD20">
-        <i class="fas fa-dice-d20"></i>
-        {{localize "HAYWIRE.RollD20"}}
-      </button>
-    </div>
+    {{> "systems/haywire/templates/partials/combat-stats.hbs"}}
   {{/if}}
 
   {{!-- Skills (classe + propres) --}}
