@@ -7,11 +7,11 @@
  * - Bouton alerte (GM) : active/désactive l'alerte (lueur rouge pulsante)
  */
 import { OpforSupportOverlay } from "./opfor-support-overlay.mjs";
-import { D20_SVG, rollCompendiumTable, getOrCreateElement } from "./overlay-helpers.mjs";
+import { D20_SVG, rollCompendiumTable, getOrCreateElement, showPreview, hidePreview } from "./overlay-helpers.mjs";
 
 export class ThreatOverlay {
   static #el = null;
-  static #cardEl = null;
+  static #previewEl = null;
 
   static FACTION_PATHS = {
     cartels: "systems/haywire/assets/opfor_cartels/cartel_threat_level_",
@@ -27,7 +27,7 @@ export class ThreatOverlay {
 
   static init() {
     this.#el = getOrCreateElement(this.#el, "haywire-threat-overlay");
-    this.#cardEl = getOrCreateElement(this.#cardEl, "haywire-threat-card");
+    this.#previewEl = getOrCreateElement(this.#previewEl, "haywire-threat-preview");
     this.render();
 
     Hooks.on("updateSetting", (setting) => {
@@ -126,26 +126,13 @@ export class ThreatOverlay {
 
   static #showCard() {
     const level = this.level;
-    const card = this.#cardEl;
-
-    if (level <= 0) {
-      card.classList.remove("visible");
-      return;
-    }
+    if (level <= 0) return;
 
     const pathPrefix = this.FACTION_PATHS[this.faction];
-
-    if (!pathPrefix) {
-      const i18n = (k) => game.i18n.localize(k);
-      card.innerHTML = `<div class="haywire-threat-card-msg">${i18n("HAYWIRE.Threat.NoFaction")}</div>`;
-      card.classList.add("visible");
-      return;
-    }
+    if (!pathPrefix) return;
 
     const src = `${pathPrefix}${String(level).padStart(2, "0")}.webp`;
-    const alertClass = this.alert ? " alert" : "";
-    card.innerHTML = `<img class="haywire-threat-card-img${alertClass}" src="${src}" />`;
-    card.classList.add("visible");
+    showPreview(this.#previewEl, src, `Threat Level ${level}`);
   }
 
   static async #rollThreatTable() {
@@ -156,7 +143,7 @@ export class ThreatOverlay {
   }
 
   static #hideCard() {
-    this.#cardEl?.classList.remove("visible");
+    hidePreview(this.#previewEl);
   }
 
   static FACTION_KEYS = {

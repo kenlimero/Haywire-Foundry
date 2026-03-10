@@ -1293,8 +1293,8 @@
   }
 
   .haywire-threat-btn {
-    width: 22px;
-    height: 22px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     border: 1px solid #555;
     background: #1a1a1a;
@@ -1303,7 +1303,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 0.6rem;
+    font-size: 0.85rem;
     padding: 0;
     transition: background 0.15s, border-color 0.15s;
   }
@@ -1330,51 +1330,32 @@
     cursor: not-allowed;
   }
 
-  /* ---- Threat hover card ---- */
+  /* ---- Threat hover preview ---- */
 
-  #haywire-threat-card {
+  #haywire-threat-preview {
     position: fixed;
-    top: 90px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-8px);
-    z-index: 99;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
     pointer-events: none;
     opacity: 0;
+    transform: translateY(-8px);
     transition: opacity 0.15s ease, transform 0.15s ease;
   }
 
-  #haywire-threat-card.visible {
+  #haywire-threat-preview.visible {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
 
-  /* Faction threat level card image */
-  #haywire-threat-card .haywire-threat-card-img {
+  #haywire-threat-preview img {
     display: block;
-    max-width: 240px;
+    max-width: 350px;
+    max-height: 500px;
     border-radius: 6px;
-    padding: 4px;
-    border: 2px solid #1a5c2a;
-    background: var(--haywire-color-bg);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-    transition: border-color 0.3s;
-  }
-
-  #haywire-threat-card .haywire-threat-card-img.alert {
-    border-color: #5c1a1a;
-  }
-
-  .haywire-threat-card-msg {
-    background: var(--haywire-color-bg);
-    border: 2px solid #555;
-    border-radius: 6px;
-    padding: 0.75rem 1rem;
-    color: var(--haywire-color-secondary);
-    font-size: 0.75rem;
-    font-style: italic;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-    max-width: 240px;
+    border: 2px solid var(--haywire-color-accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
   }
 
   /* ============================================ */
