@@ -61,6 +61,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       return {
         uuid,
         name: c?.name ?? `[${uuid}]`,
+        img: c?.system?.imagePath ?? c?.img ?? null,
         missing: !c,
       };
     });
@@ -84,11 +85,47 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
   _onRender(context, options) {
     super._onRender(context, options);
 
+    // Hover preview for classes and support cards
+    this.#bindHoverPreview();
+
     if (!this.isEditable) return;
 
     // Drop handler (editing only)
     this.element.addEventListener("dragover", (e) => e.preventDefault());
     this.element.addEventListener("drop", (e) => this.#onDrop(e));
+  }
+
+  #bindHoverPreview() {
+    const el = this.element;
+    el.querySelectorAll("[data-preview-img]").forEach((node) => {
+      const orientation = node.closest(".haywire-support-entry") ? "landscape" : "portrait";
+      node.addEventListener("mouseenter", () => {
+        this.#showPreview(node.dataset.previewImg, node.dataset.previewName, orientation);
+      });
+      node.addEventListener("mouseleave", () => this.#hidePreview());
+    });
+  }
+
+  #showPreview(img, name, orientation = "portrait") {
+    if (!img) return;
+    if (!this._previewEl) {
+      this._previewEl = document.createElement("div");
+      this._previewEl.id = "haywire-unit-preview";
+      document.body.appendChild(this._previewEl);
+    }
+    this._previewEl.innerHTML = `<img src="${img}" alt="${name}" />`;
+    this._previewEl.classList.remove("portrait", "landscape");
+    this._previewEl.classList.add("visible", orientation);
+  }
+
+  #hidePreview() {
+    this._previewEl?.classList.remove("visible");
+  }
+
+  _onClose(options) {
+    this._previewEl?.remove();
+    this._previewEl = null;
+    return super._onClose(options);
   }
 
   // ── Actions (work even from compendium via ApplicationV2 delegation) ─────

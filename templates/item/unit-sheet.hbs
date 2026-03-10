@@ -26,7 +26,7 @@
     <label>{{localize "HAYWIRE.Unit.Classes"}}</label>
     <div class="haywire-classes-list">
       {{#each classes}}
-        <div class="haywire-class-entry {{#if this.missing}}haywire-missing{{/if}}">
+        <div class="haywire-class-entry {{#if this.missing}}haywire-missing{{/if}}" {{#if this.img}}data-preview-img="{{this.img}}" data-preview-name="{{this.name}}"{{/if}}>
           <span class="haywire-class-name">{{this.name}}</span>
           {{#if ../isEditable}}
           <button type="button" class="haywire-remove-button" data-action="removeClass" data-class-uuid="{{this.uuid}}">
@@ -47,7 +47,7 @@
     {{#if supportCards.length}}
     <div class="haywire-support-list">
       {{#each supportCards}}
-        <div class="haywire-support-entry">
+        <div class="haywire-support-entry" {{#if this.img}}data-preview-img="{{this.img}}" data-preview-name="{{this.name}}"{{/if}}>
           {{#if this.img}}
           <img src="{{this.img}}" class="haywire-support-thumb" data-action="showSupport" data-src="{{this.img}}" data-title="{{this.name}}" />
           {{/if}}

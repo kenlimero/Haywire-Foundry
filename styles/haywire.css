@@ -1657,6 +1657,46 @@
     color: #000;
   }
 
+  .haywire-class-entry[data-preview-img],
+  .haywire-support-entry[data-preview-img] {
+    cursor: pointer;
+  }
+
+  /* Unit sheet hover preview */
+  #haywire-unit-preview {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  #haywire-unit-preview.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #haywire-unit-preview img {
+    display: block;
+    border-radius: 6px;
+    border: 2px solid var(--haywire-color-accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    object-fit: contain;
+  }
+
+  #haywire-unit-preview.portrait img {
+    max-width: 350px;
+    max-height: 556px;
+  }
+
+  #haywire-unit-preview.landscape img {
+    max-width: 556px;
+    max-height: 350px;
+  }
+
   /* ============================================ */
   /*  Support Cards Overlay                       */
   /* ============================================ */
