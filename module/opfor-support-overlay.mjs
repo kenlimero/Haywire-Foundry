@@ -350,11 +350,24 @@ export class OpforSupportOverlay {
     });
   }
 
+  /** Maps compendium folder names to opforFaction setting keys. */
+  static FACTION_KEYS = {
+    Cartel: "cartels",
+    Insurgents: "insurgents",
+    Russians: "russians",
+  };
+
   static async #importFaction(index, folder) {
     const entries = index.filter((e) => e.folder === folder._id);
     if (!entries.length) {
       ui.notifications.warn(`No cards found in folder "${folder.name}".`);
       return;
+    }
+
+    // Update the world faction setting to match the selected faction
+    const factionKey = this.FACTION_KEYS[folder.name];
+    if (factionKey) {
+      await game.settings.set("haywire", "opforFaction", factionKey);
     }
 
     const uuids = entries.map((e) => `Compendium.haywire.opfor-support.Item.${e._id}`);
