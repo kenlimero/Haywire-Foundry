@@ -118,7 +118,7 @@
 [x] Overlay Infil
 [x] chat de la carte tirée
 ### Overlay renfor
-[-] si le roll est une carte support afficher la carte
+[x] si le roll est une carte support afficher la carte
 
 # Mécanisme de jeu
 [-] Implémenter les mécanismes de jeu
