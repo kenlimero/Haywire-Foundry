@@ -71,7 +71,7 @@ export class ThreatOverlay {
     el.className = `haywire-threat ${isActive ? "active" : "inactive"}${isAlert ? " alert" : ""}`;
 
     const factionBtn = !isActive && isGM
-      ? `<button class="haywire-threat-btn haywire-threat-faction-btn" title="${i18n("HAYWIRE.OpforSupport.SelectFaction")}"><i class="fas fa-skull-crossbones"></i></button>`
+      ? `<button class="haywire-threat-btn haywire-threat-faction-btn" title="${i18n("HAYWIRE.Threat.FactionHint")}"><i class="fas fa-skull-crossbones"></i></button>`
       : "";
 
     el.innerHTML = `
@@ -177,8 +177,8 @@ export class ThreatOverlay {
     }
 
     await foundry.applications.api.DialogV2.wait({
-      window: { title: game.i18n.localize("HAYWIRE.OpforSupport.ImportFaction") },
-      content: `<p>${game.i18n.localize("HAYWIRE.OpforSupport.SelectFaction")}</p>`,
+      window: { title: game.i18n.localize("HAYWIRE.Threat.ImportFaction") },
+      content: `<p>${game.i18n.localize("HAYWIRE.Threat.FactionHint")}</p>`,
       buttons,
     });
   }

@@ -265,6 +265,8 @@ const infilOverlay = new SimpleCardOverlay({
   backcover: "systems/haywire/assets/cards/backcovers/infil.webp",
   altText: "Infil",
   labelKey: "HAYWIRE.Infil.Label",
+  chatLabelKey: "HAYWIRE.Infil.CardDrawn",
+  iconClass: "fa-id-card",
 });
 
 const operationsOverlay = new SimpleCardOverlay({
@@ -275,6 +277,8 @@ const operationsOverlay = new SimpleCardOverlay({
   backcover: "systems/haywire/assets/cards/backcovers/operation.webp",
   altText: "Operations",
   labelKey: "HAYWIRE.Operations.Label",
+  chatLabelKey: "HAYWIRE.Operations.CardDrawn",
+  iconClass: "fa-map",
 });
 
 // Initialiser les overlays une fois le jeu prêt

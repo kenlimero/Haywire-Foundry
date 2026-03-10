@@ -90,7 +90,8 @@
     "Threat": {
       "Label": "Niveau de menace",
       "Faction": "Faction OPFOR",
-      "FactionHint": "Sélectionnez la faction ennemie pour les cartes de niveau de menace",
+      "ImportFaction": "Importation de la Faction",
+      "FactionHint": "Sélectionnez la faction ennemie pour les cartes de niveau de menace et les cartes de support",
       "NoFaction": "Sélectionnez une faction OPFOR dans les paramètres",
       "Increase": "Augmenter le niveau de menace",
       "Decrease": "Diminuer le niveau de menace",
@@ -107,15 +108,15 @@
       "Purge": "Retirer toutes les cartes"
     },
     "OpforSupport": {
-      "Label": "Support OPFOR",
-      "ImportFaction": "Importer une faction",
-      "SelectFaction": "Choisissez une faction pour importer ses 3 cartes de support"
+      "Label": "Support OPFOR"
     },
     "Infil": {
-      "Label": "Infiltration"
+      "Label": "Infiltration",
+      "CardDrawn": "Infiltration"
     },
     "Operations": {
-      "Label": "Opérations"
+      "Label": "Opérations",
+      "CardDrawn": "Opérations"
     },
     "Reinforcement": {
       "Roll": "Jet de renforts (d20)"

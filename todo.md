@@ -32,6 +32,9 @@
 [x] Unlock par défaut
 [x] ajouter le support au actorsheet
 [-] **Retransformer les classes en simple actor configurable**
+[-] lorsque drag une nouvelle classe, le nom et le token ne change pas
+    - Normalement indépendant mais devrait pour le faire pour éviter de se perdre.
+    - Le token posé ne change pas mais celui de l'actor oui
 
 # Token
 [x] conditions rondes mais carré autour quand posé.
@@ -83,11 +86,12 @@
     [x] créer les decks et l'affichage.
     [x] trouver un moyen de faire automatiquement. 
 [x] **Avoir un bouton de reset de game**
+[-] Ajout des messages d'erreurs au besoin
 ## Alarme et threat level
 [x] changer l'Alarme pour être toujours en vert et deviendra rouge en cas d'alerte pour tous les niveaux.
 [x] affiche la carte du niveau
 [x] faire un bouton roll
-[-] supprimer le preview de l'overlay pour le remplacer par le preview standard
+[x] supprimer le preview de l'overlay pour le remplacer par le preview standard
 ## OVerlay
 [x] faire disparaitre les overlay
 [-] faire des types opfor, player support, infil et opération pour ne pas drag les items des autres.
@@ -109,10 +113,10 @@
 [x] le premier est un roll
 ### Overlay Infil
 [x] Overlay Infil
-[-] chat de la carte tirée
+[x] chat de la carte tirée
 ### Overlay Operation
 [x] Overlay Infil
-[-] chat de la carte tirée
+[x] chat de la carte tirée
 ### Overlay renfor
 [-] si le roll est une carte support afficher la carte
 

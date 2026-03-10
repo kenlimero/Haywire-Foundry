@@ -98,5 +98,22 @@ export class SimpleCardOverlay {
     const result = await drawRandomCard(this.#config.deckName);
     if (!result) return;
     await this.setCardIds([result.uuid]);
+
+    const card = result.card;
+    const faceImg = card.faces?.[0]?.img ?? card.img ?? "";
+    const cardName = card.name ?? "???";
+    const cfg = this.#config;
+    const label = game.i18n.localize(cfg.chatLabelKey ?? cfg.labelKey);
+    const icon = cfg.iconClass ?? "fa-cards";
+
+    ChatMessage.create({
+      content: `<div class="haywire-card-chat">
+        <div class="haywire-card-chat-header">
+          <i class="fas ${icon}"></i> ${label}
+        </div>
+        <img class="haywire-card-chat-img" src="${faceImg}" alt="${cardName}" data-action="showCard" data-src="${faceImg}" data-title="${cardName}"/>
+      </div>`,
+      speaker: { alias: label },
+    });
   }
 }

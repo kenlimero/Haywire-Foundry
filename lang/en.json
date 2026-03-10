@@ -90,7 +90,8 @@
     "Threat": {
       "Label": "Threat Level",
       "Faction": "OPFOR Faction",
-      "FactionHint": "Select the enemy faction for threat level cards",
+      "ImportFaction": "Import Faction",
+      "FactionHint": "Select the enemy faction for threat level cards and support cards",
       "NoFaction": "Select an OPFOR faction in Settings",
       "Increase": "Increase threat level",
       "Decrease": "Decrease threat level",
@@ -107,15 +108,15 @@
       "Purge": "Remove all cards"
     },
     "OpforSupport": {
-      "Label": "OPFOR Support",
-      "ImportFaction": "Import Faction",
-      "SelectFaction": "Select a faction to import its 3 support cards"
+      "Label": "OPFOR Support"
     },
     "Infil": {
-      "Label": "Infiltration"
+      "Label": "Infiltration",
+      "CardDrawn": "Infiltration"
     },
     "Operations": {
-      "Label": "Operations"
+      "Label": "Operations",
+      "CardDrawn": "Operations"
     },
     "Reinforcement": {
       "Roll": "Roll Reinforcements (d20)"
