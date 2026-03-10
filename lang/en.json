@@ -101,6 +101,8 @@
     },
     "Threat": {
       "Label": "Threat Level",
+      "Faction": "OPFOR Faction",
+      "FactionHint": "Select the enemy faction for threat level cards",
       "Increase": "Increase threat level",
       "Decrease": "Decrease threat level",
       "NoAlert": "No Alert",

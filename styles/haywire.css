@@ -1228,14 +1228,11 @@
     background: #1a1a1a;
   }
 
-  /* Active states — dome color */
-  .haywire-threat.severity-low .haywire-threat-beacon-dome {
+  /* Active states — dome color: green when no alert, red when alert */
+  .haywire-threat.active .haywire-threat-beacon-dome {
     background: linear-gradient(to bottom, #0a2a0a, #143d14);
   }
-  .haywire-threat.severity-medium .haywire-threat-beacon-dome {
-    background: linear-gradient(to bottom, #2a1a00, #3d2800);
-  }
-  .haywire-threat.severity-high .haywire-threat-beacon-dome {
+  .haywire-threat.alert .haywire-threat-beacon-dome {
     background: linear-gradient(to bottom, #2a0505, #3d0808);
   }
 
@@ -1244,13 +1241,10 @@
     opacity: 0.4;
   }
 
-  .haywire-threat.severity-low .haywire-threat-beacon-glow {
+  .haywire-threat.active .haywire-threat-beacon-glow {
     background: radial-gradient(ellipse at 50% 30%, var(--haywire-color-success), transparent 70%);
   }
-  .haywire-threat.severity-medium .haywire-threat-beacon-glow {
-    background: radial-gradient(ellipse at 50% 30%, #e67e22, transparent 70%);
-  }
-  .haywire-threat.severity-high .haywire-threat-beacon-glow {
+  .haywire-threat.alert .haywire-threat-beacon-glow {
     background: radial-gradient(ellipse at 50% 30%, var(--haywire-color-danger), transparent 70%);
   }
 
@@ -1259,17 +1253,8 @@
     animation: haywire-alert-glow 1s ease-in-out infinite;
   }
 
-  .haywire-threat.alert.severity-low .haywire-threat-beacon {
-    animation: haywire-alert-halo-low 1s ease-in-out infinite;
-  }
-  .haywire-threat.alert.severity-medium .haywire-threat-beacon {
-    animation: haywire-alert-halo-medium 1s ease-in-out infinite;
-  }
-  .haywire-threat.alert.severity-high .haywire-threat-beacon {
-    animation: haywire-alert-halo-high 1s ease-in-out infinite;
-  }
-  .haywire-threat.alert.severity-none .haywire-threat-beacon {
-    animation: haywire-alert-halo-none 1s ease-in-out infinite;
+  .haywire-threat.alert .haywire-threat-beacon {
+    animation: haywire-alert-halo-red 1s ease-in-out infinite;
   }
 
   @keyframes haywire-alert-glow {
@@ -1277,21 +1262,9 @@
     50% { opacity: 0.8; }
   }
 
-  @keyframes haywire-alert-halo-low {
-    0%, 100% { filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.4)) drop-shadow(0 0 16px rgba(46, 204, 113, 0.2)); }
-    50% { filter: drop-shadow(0 0 16px rgba(46, 204, 113, 0.8)) drop-shadow(0 0 32px rgba(46, 204, 113, 0.4)); }
-  }
-  @keyframes haywire-alert-halo-medium {
-    0%, 100% { filter: drop-shadow(0 0 8px rgba(230, 126, 34, 0.4)) drop-shadow(0 0 16px rgba(230, 126, 34, 0.2)); }
-    50% { filter: drop-shadow(0 0 16px rgba(230, 126, 34, 0.8)) drop-shadow(0 0 32px rgba(230, 126, 34, 0.4)); }
-  }
-  @keyframes haywire-alert-halo-high {
+  @keyframes haywire-alert-halo-red {
     0%, 100% { filter: drop-shadow(0 0 8px rgba(192, 57, 43, 0.4)) drop-shadow(0 0 16px rgba(192, 57, 43, 0.2)); }
     50% { filter: drop-shadow(0 0 16px rgba(192, 57, 43, 0.8)) drop-shadow(0 0 32px rgba(192, 57, 43, 0.4)); }
-  }
-  @keyframes haywire-alert-halo-none {
-    0%, 100% { filter: drop-shadow(0 0 8px rgba(100, 100, 100, 0.3)) drop-shadow(0 0 16px rgba(100, 100, 100, 0.15)); }
-    50% { filter: drop-shadow(0 0 16px rgba(100, 100, 100, 0.6)) drop-shadow(0 0 32px rgba(100, 100, 100, 0.3)); }
   }
 
   /* Level number centered in dome */
@@ -1314,9 +1287,8 @@
     user-select: none;
   }
 
-  .haywire-threat.severity-low .haywire-threat-level { color: var(--haywire-color-success); }
-  .haywire-threat.severity-medium .haywire-threat-level { color: #e67e22; }
-  .haywire-threat.severity-high .haywire-threat-level { color: var(--haywire-color-danger); }
+  .haywire-threat.active .haywire-threat-level { color: var(--haywire-color-success); }
+  .haywire-threat.alert .haywire-threat-level { color: var(--haywire-color-danger); }
 
   /* GM controls — below the beacon */
   .haywire-threat-controls {
@@ -1387,110 +1359,20 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  .haywire-threat-card-inner {
+  /* Faction threat level card image */
+  #haywire-threat-card .haywire-threat-card-img {
+    display: block;
+    max-width: 240px;
+    border-radius: 6px;
+    padding: 4px;
+    border: 2px solid #1a5c2a;
     background: var(--haywire-color-bg);
-    border: 2px solid #555;
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
-    min-width: 180px;
-    text-align: center;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-    color: var(--haywire-color-text);
+    transition: border-color 0.3s;
   }
 
-  .haywire-threat-card-inner.severity-low { border-color: var(--haywire-color-success); }
-  .haywire-threat-card-inner.severity-medium { border-color: #e67e22; }
-  .haywire-threat-card-inner.severity-high { border-color: var(--haywire-color-danger); }
-
-  .haywire-threat-card-header {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--haywire-color-secondary);
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-  }
-
-  .haywire-threat-card-level {
-    font-family: var(--haywire-font-heading);
-    font-size: 3rem;
-    font-weight: bold;
-    line-height: 1;
-    margin-bottom: 0.25rem;
-    color: #666;
-  }
-
-  .severity-none .haywire-threat-card-level { color: #666; }
-  .severity-low .haywire-threat-card-level { color: var(--haywire-color-success); }
-  .severity-medium .haywire-threat-card-level { color: #e67e22; }
-  .severity-high .haywire-threat-card-level { color: var(--haywire-color-danger); }
-
-  .haywire-threat-card-severity {
-    font-size: 0.8rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.75rem;
-  }
-
-  .severity-none .haywire-threat-card-severity { color: #666; }
-  .severity-low .haywire-threat-card-severity { color: var(--haywire-color-success); }
-  .severity-medium .haywire-threat-card-severity { color: #e67e22; }
-  .severity-high .haywire-threat-card-severity { color: var(--haywire-color-danger); }
-
-  /* Threat bars */
-  .haywire-threat-bars {
-    display: flex;
-    gap: 3px;
-    justify-content: center;
-    margin-bottom: 0.5rem;
-  }
-
-  .haywire-threat-bar {
-    width: 14px;
-    height: 6px;
-    border-radius: 2px;
-    background: #333;
-    transition: background 0.2s;
-  }
-
-  .haywire-threat-bar.filled.severity-low { background: var(--haywire-color-success); }
-  .haywire-threat-bar.filled.severity-medium { background: #e67e22; }
-  .haywire-threat-bar.filled.severity-high { background: var(--haywire-color-danger); }
-
-  .haywire-threat-card-hint {
-    font-size: 0.65rem;
-    color: var(--haywire-color-secondary);
-    font-style: italic;
-  }
-
-  /* Alert badge in hover card */
-  .haywire-threat-card-alert {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    background: var(--haywire-color-danger);
-    color: #fff;
-    font-size: 0.65rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 0.2rem 0.6rem;
-    border-radius: 3px;
-    margin-bottom: 0.4rem;
-    animation: haywire-alert-badge-pulse 1s ease-in-out infinite;
-  }
-
-  @keyframes haywire-alert-badge-pulse {
-    0%, 100% { opacity: 0.8; }
-    50% { opacity: 1; }
-  }
-
-  .haywire-threat-card-inner.alert {
-    border-color: var(--haywire-color-danger);
+  .haywire-threat-card-img.alert {
+    border-color: #5c1a1a;
   }
 
   /* ============================================ */

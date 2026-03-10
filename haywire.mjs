@@ -153,6 +153,21 @@ Hooks.once("init", () => {
     "systems/haywire/templates/chat/roll-result.hbs",
   ]);
 
+  // OPFOR faction setting (world-scoped, visible in settings)
+  game.settings.register("haywire", "opforFaction", {
+    name: "HAYWIRE.Threat.Faction",
+    hint: "HAYWIRE.Threat.FactionHint",
+    scope: "world",
+    config: true,
+    type: String,
+    default: "cartels",
+    choices: {
+      cartels: "Cartel",
+      insurgents: "Insurgents",
+      russians: "Russians",
+    },
+  });
+
   // Threat level setting (world-scoped, GM only)
   game.settings.register("haywire", "threatLevel", {
     name: "HAYWIRE.Threat.Label",

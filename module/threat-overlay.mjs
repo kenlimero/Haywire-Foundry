@@ -10,6 +10,13 @@ export class ThreatOverlay {
   static #el = null;
   static #cardEl = null;
 
+  /** Maps faction setting value to asset path prefix. */
+  static FACTION_PATHS = {
+    cartels: "systems/haywire/assets/opfor_cartels/cartel_threat_level_",
+    insurgents: "systems/haywire/assets/opfor_insurgents/insurgents_threat_level_",
+    russians: "systems/haywire/assets/opfor_russians/russians_threat_level_",
+  };
+
   /** Crée le widget et écoute les changements de setting. */
   static init() {
     this.#getOrCreate();
@@ -17,7 +24,7 @@ export class ThreatOverlay {
 
     // Re-render quand un setting pertinent change
     Hooks.on("updateSetting", (setting) => {
-      if (setting.key === "haywire.threatLevel" || setting.key === "haywire.threatAlert") {
+      if (setting.key === "haywire.threatLevel" || setting.key === "haywire.threatAlert" || setting.key === "haywire.opforFaction") {
         this.render();
       }
     });
@@ -31,6 +38,11 @@ export class ThreatOverlay {
   /** Alerte active ? */
   static get alert() {
     return game.settings.get("haywire", "threatAlert");
+  }
+
+  /** Faction OPFOR sélectionnée. */
+  static get faction() {
+    return game.settings.get("haywire", "opforFaction") ?? "cartels";
   }
 
   /** Met à jour le niveau (GM only). */
@@ -54,9 +66,7 @@ export class ThreatOverlay {
     const isAlert = this.alert;
     const isGM = game.user.isGM;
     const i18n = (k) => game.i18n.localize(k);
-    const severity = this.#getSeverity(level);
-
-    el.className = `haywire-threat ${isActive ? "active" : "inactive"} severity-${severity}${isAlert ? " alert" : ""}`;
+    el.className = `haywire-threat ${isActive ? "active" : "inactive"}${isAlert ? " alert" : ""}`;
 
     el.innerHTML = `
       <div class="haywire-threat-beacon">
@@ -97,13 +107,6 @@ export class ThreatOverlay {
 
   /* ---- Private ---- */
 
-  static #getSeverity(level) {
-    if (level === 0) return "none";
-    if (level <= 3) return "low";
-    if (level <= 6) return "medium";
-    return "high";
-  }
-
   static #getOrCreate() {
     if (!this.#el) {
       this.#el = document.createElement("div");
@@ -120,39 +123,16 @@ export class ThreatOverlay {
 
   static #showCard() {
     const level = this.level;
-    const isAlert = this.alert;
     const card = this.#cardEl;
-    const i18n = (k) => game.i18n.localize(k);
-    const severity = this.#getSeverity(level);
 
-    const severityLabel = level === 0
-      ? i18n("HAYWIRE.Threat.NoAlert")
-      : i18n(`HAYWIRE.Threat.Severity.${severity.charAt(0).toUpperCase() + severity.slice(1)}`);
+    if (level <= 0) {
+      card.classList.remove("visible");
+      return;
+    }
 
-    const levelBars = Array.from({ length: 9 }, (_, i) => {
-      const n = i + 1;
-      const filled = n <= level;
-      const barSeverity = this.#getSeverity(n);
-      return `<div class="haywire-threat-bar ${filled ? "filled" : ""} severity-${barSeverity}"></div>`;
-    }).join("");
-
-    const alertBadge = isAlert
-      ? `<div class="haywire-threat-card-alert"><i class="fas fa-bell"></i> ${i18n("HAYWIRE.Threat.AlertActive")}</div>`
-      : "";
-
-    card.innerHTML = `
-      <div class="haywire-threat-card-inner severity-${severity}${isAlert ? " alert" : ""}">
-        <div class="haywire-threat-card-header">
-          <i class="fas fa-radiation"></i>
-          ${i18n("HAYWIRE.Threat.Label")}
-        </div>
-        ${alertBadge}
-        <div class="haywire-threat-card-level">${level === 0 ? "—" : level}</div>
-        <div class="haywire-threat-card-severity">${severityLabel}</div>
-        <div class="haywire-threat-bars">${levelBars}</div>
-        ${level > 0 ? `<div class="haywire-threat-card-hint">${i18n("HAYWIRE.Threat.TableHint")}</div>` : ""}
-      </div>`;
-
+    const src = `${this.FACTION_PATHS[this.faction]}${String(level).padStart(2, "0")}.webp`;
+    const alertClass = this.alert ? " alert" : "";
+    card.innerHTML = `<img class="haywire-threat-card-img${alertClass}" src="${src}" />`;
     card.classList.add("visible");
   }
 
