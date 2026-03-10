@@ -130,11 +130,11 @@ export class ReinforcementOverlay {
         ${pinSvg}
       </div>`;
 
-    const thumb = el.querySelector(".haywire-reinforcement-thumb");
+    const card = el.querySelector(".haywire-reinforcement-card");
 
-    // Preview on hover
-    thumb.addEventListener("mouseenter", () => this.#showPreview(imgSrc));
-    thumb.addEventListener("mouseleave", () => this.#hidePreview());
+    // Preview on hover (on the whole card container so d20 button doesn't cancel it)
+    card.addEventListener("mouseenter", () => this.#showPreview(imgSrc));
+    card.addEventListener("mouseleave", () => this.#hidePreview());
 
     // Pin toggle
     el.querySelector(".haywire-overlay-pin")?.addEventListener("click", (e) => {

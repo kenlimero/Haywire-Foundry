@@ -107,7 +107,6 @@
 ### Overlay FOG
 [x] sauvegarde des cartes dans world settings pour ne pas tirer encore la même.
 [x] le premier est un roll
-
 ### Overlay Infil
 [x] Overlay Infil
 ### Overlay Operation
