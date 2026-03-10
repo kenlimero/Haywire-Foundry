@@ -126,7 +126,6 @@ export class OpforSupportOverlay {
       <div class="haywire-support-thumb" title="${i18n("HAYWIRE.OpforSupport.Label")}">
         <img src="systems/haywire/assets/cards/backcovers/support-opfor.webp" alt="OPFOR Support" />
         ${pinSvg}
-        ${count > 0 ? `<span class="haywire-support-badge">${count}</span>` : ""}
       </div>`;
 
     const thumb = el.querySelector(".haywire-support-thumb");
@@ -215,13 +214,12 @@ export class OpforSupportOverlay {
 
     const resolved = await Promise.all(cardIds.map((uuid) => fromUuid(uuid)));
     const cardsHtml = cardIds
-      .map((uuid, i) => {
+      .map((_uuid, i) => {
         const card = resolved[i];
         const name = card?.name ?? "???";
         const img = card?.img ?? "icons/svg/card-hand.svg";
         return `
         <div class="haywire-support-card" data-preview-img="${img}" data-preview-name="${name}">
-          <span class="haywire-support-card-remove" data-uuid="${uuid}" title="${i18n("HAYWIRE.Support.Remove")}"><i class="fas fa-times"></i></span>
           <img class="haywire-support-card-img" src="${img}" alt="${name}" />
         </div>`;
       })
@@ -231,8 +229,6 @@ export class OpforSupportOverlay {
       <div class="haywire-support-panel-inner">
         <div class="haywire-support-panel-header">
           <i class="fas fa-skull-crossbones"></i> ${i18n("HAYWIRE.OpforSupport.Label")}
-          <span class="haywire-support-count">${count}</span>
-          <span class="haywire-support-purge" title="${i18n("HAYWIRE.Support.Purge")}"><i class="fas fa-trash"></i></span>
         </div>
         <div class="haywire-support-cards">${cardsHtml}</div>
       </div>`;
@@ -250,19 +246,6 @@ export class OpforSupportOverlay {
       });
     });
 
-    // Remove button
-    panel.querySelectorAll(".haywire-support-card-remove").forEach((btn) => {
-      btn.addEventListener("click", async (e) => {
-        e.stopPropagation();
-        await this.removeCard(btn.dataset.uuid);
-      });
-    });
-
-    // Purge all cards
-    panel.querySelector(".haywire-support-purge")?.addEventListener("click", async (e) => {
-      e.stopPropagation();
-      await this.setCardIds([]);
-    });
   }
 
   static async #onDrop(event, thumb) {
