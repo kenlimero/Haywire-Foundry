@@ -52,14 +52,22 @@ export class InfilOverlay {
       }
     }
 
+    const pinSvg = `<span class="haywire-overlay-pin" title="${i18n("HAYWIRE.Pin")}"><svg viewBox="0 0 384 512"><path d="M300.8 203.9L290 213.1H273c-7.7 0-15 3.2-20.3 8.5L194.7 279.6 104.4 189.3l58-58c5.3-5.3 8.5-12.6 8.5-20.3V94.1l9.2-10.9C196.3 64.5 220.2 54 245.2 54h48c23.2 0 45.6 8.2 63.1 23L384 101.3 282.7 202.6zM96 297.4l87.6 87.6L57.6 511c-5.8 5.8-14.3 8-22.2 5.7S21.5 508.5 19.3 500.6c-2.3-7.9-.1-16.4 5.7-22.2L96 297.4z"/></svg></span>`;
     el.innerHTML = `
       <div class="haywire-support-thumb" title="${i18n("HAYWIRE.Infil.Label")}">
         <img src="${imgSrc}" alt="${imgAlt}" />
+        ${pinSvg}
         ${hasCard ? `<span class="haywire-overlay-remove" title="${i18n("HAYWIRE.Support.Remove")}"><i class="fas fa-times"></i></span>` : ""}
         ${!hasCard ? `<span class="haywire-overlay-roll" title="${i18n("HAYWIRE.Roll")}"><i class="fas fa-dice"></i></span>` : ""}
       </div>`;
 
     const thumb = el.querySelector(".haywire-support-thumb");
+
+    // Pin toggle
+    el.querySelector(".haywire-overlay-pin")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      el.classList.toggle("user-pinned");
+    });
 
     // Drag-and-drop — replaces the current card
     thumb.addEventListener("dragover", (e) => {

@@ -61,8 +61,8 @@
     [x] Les actors importés ont tous 1HP sur 1
 [x] faire un pack de carte support et retirer du pack deck
 [x] les cartes support dans l'unit ne sont pas en paysage (css global du type de carte résolu lorsque overlay à été fait)
-[-] faire un overlay des classes
-[-] faire un overlay des cartes support sans clic
+[x] faire un overlay des classes
+[x] faire un overlay des cartes support sans clic
 [x] Lorsqu'une unité est déployé, l'actor team leader ou squad leader ont l'UUID des cartes support de l'unité. Ces cartes supports seront importéés dans l'overlay.
 
 # System

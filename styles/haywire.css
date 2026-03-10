@@ -1712,7 +1712,8 @@
   }
 
   #haywire-support-overlay:hover,
-  #haywire-support-overlay.pinned {
+  #haywire-support-overlay.pinned,
+  #haywire-support-overlay.user-pinned {
     left: 0px;
   }
 
@@ -2024,7 +2025,8 @@
   }
 
   #haywire-opfor-support-overlay:hover,
-  #haywire-opfor-support-overlay.pinned {
+  #haywire-opfor-support-overlay.pinned,
+  #haywire-opfor-support-overlay.user-pinned {
     top: 0px;
   }
 
@@ -2169,7 +2171,8 @@
   }
 
   #haywire-infil-overlay:hover,
-  #haywire-infil-overlay.pinned {
+  #haywire-infil-overlay.pinned,
+  #haywire-infil-overlay.user-pinned {
     left: 0px;
   }
 
@@ -2213,7 +2216,8 @@
   }
 
   #haywire-operations-overlay:hover,
-  #haywire-operations-overlay.pinned {
+  #haywire-operations-overlay.pinned,
+  #haywire-operations-overlay.user-pinned {
     left: 0px;
   }
 
@@ -2257,7 +2261,8 @@
   }
 
   #haywire-fog-overlay:hover,
-  #haywire-fog-overlay.pinned {
+  #haywire-fog-overlay.pinned,
+  #haywire-fog-overlay.user-pinned {
     top: 0px;
   }
 
@@ -2319,6 +2324,44 @@
     border: 2px solid var(--haywire-color-accent);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
     object-fit: contain;
+  }
+
+  /* ── Overlay pin button ─────────────────────────────────────────────────── */
+
+  .haywire-overlay-pin {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    pointer-events: auto;
+    color: rgba(255, 255, 255, 0.5);
+    transition: color 0.15s, transform 0.15s;
+  }
+
+  .haywire-overlay-pin svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+    transition: transform 0.2s ease;
+    transform: rotate(30deg);
+  }
+
+  .haywire-overlay-pin:hover {
+    color: var(--haywire-color-accent);
+  }
+
+  .user-pinned .haywire-overlay-pin {
+    color: var(--haywire-color-accent);
+  }
+
+  .user-pinned .haywire-overlay-pin svg {
+    transform: rotate(0deg);
   }
 
   /* ── Support card sheet ──────────────────────────────────────────────────── */

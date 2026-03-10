@@ -86,9 +86,11 @@ export class SupportOverlay {
 
     // Thumbnail toujours visible — bordure rouge uniquement si plus aucune carte activable
     const noActiveCards = activeCount === 0 && count > 0;
+    const pinSvg = `<span class="haywire-overlay-pin" title="${i18n("HAYWIRE.Pin")}"><svg viewBox="0 0 384 512"><path d="M300.8 203.9L290 213.1H273c-7.7 0-15 3.2-20.3 8.5L194.7 279.6 104.4 189.3l58-58c5.3-5.3 8.5-12.6 8.5-20.3V94.1l9.2-10.9C196.3 64.5 220.2 54 245.2 54h48c23.2 0 45.6 8.2 63.1 23L384 101.3 282.7 202.6zM96 297.4l87.6 87.6L57.6 511c-5.8 5.8-14.3 8-22.2 5.7S21.5 508.5 19.3 500.6c-2.3-7.9-.1-16.4 5.7-22.2L96 297.4z"/></svg></span>`;
     el.innerHTML = `
       <div class="haywire-support-thumb${noActiveCards ? " leader-downed" : ""}" title="${i18n("HAYWIRE.Support.Label")}">
         <img src="systems/haywire/assets/cards/backcovers/support.webp" alt="Support" />
+        ${pinSvg}
         ${activeCount > 0 ? `<span class="haywire-support-badge">${activeCount}</span>` : ""}
         ${downedCount > 0 ? `<span class="haywire-support-downed-icon" title="${i18n("HAYWIRE.Support.LeaderDowned")}"><i class="fas fa-skull"></i> ${downedCount}</span>` : ""}
       </div>`;
@@ -107,6 +109,12 @@ export class SupportOverlay {
       thumb.classList.remove("drag-over");
     });
     thumb.addEventListener("drop", (e) => this.#onDrop(e, thumb));
+
+    // Pin toggle
+    el.querySelector(".haywire-overlay-pin")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      el.classList.toggle("user-pinned");
+    });
 
     // Keep panel visible when hovering the panel itself
     panel.addEventListener("mouseenter", () => this.#showPanel());

@@ -122,9 +122,11 @@ export class OpforSupportOverlay {
     const activatable = await this.isActivatable();
     const i18n = (k) => game.i18n.localize(k);
 
+    const pinSvg = `<span class="haywire-overlay-pin" title="${i18n("HAYWIRE.Pin")}"><svg viewBox="0 0 384 512"><path d="M300.8 203.9L290 213.1H273c-7.7 0-15 3.2-20.3 8.5L194.7 279.6 104.4 189.3l58-58c5.3-5.3 8.5-12.6 8.5-20.3V94.1l9.2-10.9C196.3 64.5 220.2 54 245.2 54h48c23.2 0 45.6 8.2 63.1 23L384 101.3 282.7 202.6zM96 297.4l87.6 87.6L57.6 511c-5.8 5.8-14.3 8-22.2 5.7S21.5 508.5 19.3 500.6c-2.3-7.9-.1-16.4 5.7-22.2L96 297.4z"/></svg></span>`;
     el.innerHTML = `
       <div class="haywire-support-thumb${!activatable && count > 0 ? " leader-downed" : ""}" title="${i18n("HAYWIRE.OpforSupport.Label")}">
         <img src="systems/haywire/assets/cards/backcovers/support-opfor.webp" alt="OPFOR Support" />
+        ${pinSvg}
         ${count > 0 ? `<span class="haywire-support-badge">${activatable ? count : 0}</span>` : ""}
         ${!activatable && count > 0 ? `<span class="haywire-support-downed-icon" title="${i18n("HAYWIRE.OpforSupport.Locked")}"><i class="fas fa-lock"></i> ${count}</span>` : ""}
       </div>`;
@@ -132,6 +134,12 @@ export class OpforSupportOverlay {
     const thumb = el.querySelector(".haywire-support-thumb");
     thumb.addEventListener("mouseenter", () => this.#showPanel());
     thumb.addEventListener("mouseleave", () => this.#hidePanel());
+
+    // Pin toggle
+    el.querySelector(".haywire-overlay-pin")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      el.classList.toggle("user-pinned");
+    });
 
     // Drag-and-drop support items onto the backcover
     thumb.addEventListener("dragover", (e) => {
