@@ -252,7 +252,8 @@ export class ThreatOverlay {
       await game.settings.set("haywire", "opforFaction", factionKey);
     }
 
-    // Import support cards
+    // Replace existing support cards with new faction's cards
+    await OpforSupportOverlay.setCardIds([]);
     const uuids = entries.map((e) => `Compendium.haywire.opfor-support.Item.${e._id}`);
     await OpforSupportOverlay.addCards(uuids);
     ui.notifications.info(`${entries.length} ${folder.name} support cards imported.`);
