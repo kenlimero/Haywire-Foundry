@@ -61,12 +61,11 @@ export class ReinforcementOverlay {
     const i18n = (k) => game.i18n.localize(k);
 
     if (!activatable || !imgSrc) {
-      el.classList.remove("pinned");
-      el.innerHTML = "";
+      if (!el.classList.contains("user-pinned")) {
+        el.innerHTML = "";
+      }
       return;
     }
-
-    el.classList.add("pinned");
 
     el.innerHTML = `
       <div class="haywire-reinforcement-card">

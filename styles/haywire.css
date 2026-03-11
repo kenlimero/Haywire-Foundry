@@ -1947,7 +1947,7 @@
 
   #haywire-reinforcement-overlay {
     position: fixed;
-    top: -42px;
+    top: -65px;
     left: calc(50% - 250px);
     transform: translateX(-100%);
     z-index: 100;
@@ -1956,7 +1956,6 @@
   }
 
   #haywire-reinforcement-overlay:hover,
-  #haywire-reinforcement-overlay.pinned,
   #haywire-reinforcement-overlay.user-pinned {
     top: 0px;
   }
