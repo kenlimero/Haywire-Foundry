@@ -2238,6 +2238,18 @@
     transition: background 0.15s, color 0.15s, transform 0.15s;
   }
 
+  .haywire-fog-die .fog-die-icon {
+    display: none;
+  }
+
+  .haywire-fog-die:hover .fog-die-number {
+    display: none;
+  }
+
+  .haywire-fog-die:hover .fog-die-icon {
+    display: inline;
+  }
+
   .haywire-fog-die:hover {
     background: var(--haywire-color-accent);
     color: #000;

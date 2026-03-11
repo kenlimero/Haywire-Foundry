@@ -1,11 +1,10 @@
 /**
  * Fog of War Overlay — miniature backcover en haut, entre OPFOR support et le threat level.
- * - die=0 : affiche un bouton Roll d6 (1ère fois uniquement)
- * - Clic roll : lance un d6, affiche le résultat, message chat
- * - Si 6 : tire immédiatement une carte fog of war
- * - Si <6 : décompte -1 par clic
- * - À 1 (sans afficher) : tire une carte automatiquement
- * - Après tirage/suppression : compteur repart à 6 (pas de nouveau roll)
+ * - die=5 : état initial, affiche un dé cliquable avec la valeur cible
+ * - Clic dé : lance 1d6, si résultat >= valeur cible → tire une carte fog of war
+ *   puis décrémente la valeur cible de 1 (la brume devient plus probable)
+ * - Après tirage : la carte s'affiche, le compteur continue sa descente
+ * - die=0 : plus de checks fog disponibles (reset mission pour recommencer)
  */
 import {
   pinSvg, parseDropData, bindPinToggle, bindDragDrop,
@@ -31,7 +30,7 @@ export class FogOfWarOverlay {
   }
 
   static get die() {
-    return game.settings.get("haywire", "fogOfWarDie") ?? 0;
+    return game.settings.get("haywire", "fogOfWarDie") || 6;
   }
 
   static async setCardId(id) {
@@ -65,16 +64,13 @@ export class FogOfWarOverlay {
       "Fog of War",
     );
 
-    const needsRoll = die === 0 && !hasCard;
-    const showDie = die > 0 && !hasCard;
+    const showDie = die > 0;
 
     el.innerHTML = `
       <div class="haywire-support-thumb" title="${i18n("HAYWIRE.FogOfWar.Label")}">
         <img src="${imgSrc}" alt="${imgAlt}" />
         ${pinSvg(i18n("HAYWIRE.Pin"))}
-        ${hasCard ? `<span class="haywire-overlay-remove" title="${i18n("HAYWIRE.Support.Remove")}"><i class="fas fa-times"></i></span>` : ""}
-        ${needsRoll ? `<span class="haywire-overlay-roll" title="${i18n("HAYWIRE.Roll")}"><i class="fas fa-dice"></i></span>` : ""}
-        ${showDie ? `<span class="haywire-fog-die" title="${i18n("HAYWIRE.FogOfWar.DieHint")}">${die}</span>` : ""}
+        ${showDie ? `<span class="haywire-fog-die" title="${i18n("HAYWIRE.FogOfWar.DieHint")}"><span class="fog-die-number">${die}+</span><span class="fog-die-icon"><i class="fas fa-dice-d6"></i></span></span>` : ""}
       </div>`;
 
     const thumb = el.querySelector(".haywire-support-thumb");
@@ -86,19 +82,9 @@ export class FogOfWarOverlay {
       thumb.addEventListener("mouseleave", () => hidePreview(this.#previewEl));
     }
 
-    el.querySelector(".haywire-overlay-remove")?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      hidePreview(this.#previewEl);
-      this.setCardId("");
-    });
-
-    el.querySelector(".haywire-overlay-roll")?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      this.#onRollDie();
-    });
-
     el.querySelector(".haywire-fog-die")?.addEventListener("click", (e) => {
       e.stopPropagation();
+      hidePreview(this.#previewEl);
       this.#onDieClick();
     });
   }
@@ -112,38 +98,40 @@ export class FogOfWarOverlay {
     this.setCardId(data.uuid);
   }
 
-  static async #onRollDie() {
+  static async #onDieClick() {
+    const target = this.die;
+    if (target <= 0) return;
+
     const roll = await new Roll("1d6").evaluate();
     const result = roll.total;
     const label = game.i18n.localize("HAYWIRE.FogOfWar.Label");
-    const rolled = game.i18n.localize("HAYWIRE.FogOfWar.DieRolled");
+    const triggered = result >= target;
+
+    const outcomeKey = triggered ? "HAYWIRE.FogOfWar.Triggered" : "HAYWIRE.FogOfWar.Safe";
+    const outcomeText = game.i18n.localize(outcomeKey);
+    const outcomeClass = triggered ? "fog-triggered" : "fog-safe";
 
     ChatMessage.create({
       content: `<div class="haywire-card-chat">
         <div class="haywire-card-chat-header">
           <i class="fas fa-cloud-fog"></i> ${label}
         </div>
-        <p style="padding:0.5rem;font-size:1.2rem;margin:0;"><strong>${rolled} ${result}</strong></p>
+        <p style="padding:0.5rem;font-size:1.2rem;margin:0;">
+          <strong>${game.i18n.localize("HAYWIRE.FogOfWar.DieRolled")} ${result}</strong>
+          (${target}+)
+          — <span class="${outcomeClass}">${outcomeText}</span>
+        </p>
       </div>`,
       speaker: { alias: label },
     });
 
-    if (result === 6) {
+    if (triggered) {
       await this.#rollCard();
-      await this.setDie(6);
     } else {
-      await this.setDie(result);
+      await this.setCardId("");
     }
-  }
 
-  static async #onDieClick() {
-    const current = this.die;
-    if (current <= 2) {
-      await this.#rollCard();
-      await this.setDie(6);
-    } else {
-      await this.setDie(current - 1);
-    }
+    await this.setDie(target - 1);
   }
 
   static async #rollCard() {

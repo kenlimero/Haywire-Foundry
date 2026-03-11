@@ -124,8 +124,10 @@
     },
     "FogOfWar": {
       "Label": "Fog of War",
-      "DieHint": "Click to decrement countdown",
+      "DieHint": "Click to roll — fog check",
       "DieRolled": "Rolled:",
+      "Triggered": "Fog of War!",
+      "Safe": "All clear.",
       "DeckExhausted": "Fog of War deck exhausted — reshuffling.",
       "CardDrawn": "Fog of War"
     },

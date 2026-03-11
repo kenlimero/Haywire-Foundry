@@ -124,8 +124,10 @@
     },
     "FogOfWar": {
       "Label": "Brouillard de guerre",
-      "DieHint": "Cliquez pour décrémenter le compte à rebours",
+      "DieHint": "Cliquez pour lancer — test brouillard",
       "DieRolled": "Résultat :",
+      "Triggered": "Brouillard de guerre !",
+      "Safe": "Rien à signaler.",
       "DeckExhausted": "Deck Brouillard de guerre épuisé — redistribution.",
       "CardDrawn": "Brouillard de guerre"
     },
