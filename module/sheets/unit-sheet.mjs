@@ -1,4 +1,11 @@
+/**
+ * Sheet for the Unit item type.
+ * Supports deploying soldiers from class roster, drag-drop of classes,
+ * support card display, and hover previews.
+ * @module unit-sheet
+ */
 import { resolveUuids, parseItemDrop } from "./sheet-helpers.mjs";
+import { escapeHtml } from "../overlay-helpers.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -23,6 +30,10 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     },
   };
 
+  /**
+   * Handle class item drops.
+   * @param {DragEvent} event
+   */
   async #onDrop(event) {
     if (!this.isEditable) return;
 
@@ -37,6 +48,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     }
   }
 
+  /** @override */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.item = this.item;
@@ -66,15 +78,14 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     return context;
   }
 
+  /** @override */
   _onRender(context, options) {
     super._onRender(context, options);
 
-    // Hover preview for classes and support cards
     this.#bindHoverPreview();
 
     if (!this.isEditable) return;
 
-    // Drop handler (editing only)
     this.element.addEventListener("dragover", (e) => e.preventDefault());
     this.element.addEventListener("drop", (e) => this.#onDrop(e));
   }
@@ -90,6 +101,11 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     });
   }
 
+  /**
+   * @param {string} img - Image source
+   * @param {string} name - Alt text
+   * @param {"portrait"|"landscape"} [orientation="portrait"]
+   */
   #showPreview(img, name, orientation = "portrait") {
     if (!img) return;
     if (!this._previewEl) {
@@ -97,7 +113,7 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       this._previewEl.id = "haywire-unit-preview";
       document.body.appendChild(this._previewEl);
     }
-    this._previewEl.innerHTML = `<img src="${img}" alt="${name}" />`;
+    this._previewEl.innerHTML = `<img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" />`;
     this._previewEl.classList.remove("portrait", "landscape");
     this._previewEl.classList.add("visible", orientation);
   }
@@ -106,14 +122,19 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     this._previewEl?.classList.remove("visible");
   }
 
+  /** @override */
   _onClose(options) {
     this._previewEl?.remove();
     this._previewEl = null;
     return super._onClose(options);
   }
 
-  // ── Actions (work even from compendium via ApplicationV2 delegation) ─────
+  // ── Actions ─────
 
+  /**
+   * Deploy unit: create soldier actors from class roster.
+   * Assigns support cards to the leader.
+   */
   static async #onDeployUnit() {
     const unit = this.item;
     const unitName = unit.name;
@@ -130,10 +151,15 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       folder = await Folder.create({ name: unitName, type: "Actor" });
     }
 
-    // Resolve all classes and create soldiers
-    const resolvedClasses = await Promise.all(classUuids.map(uuid => fromUuid(uuid)));
-    const actorsData = [];
+    // Resolve all classes in parallel
+    const resolvedClasses = await Promise.all(
+      classUuids.map(uuid => fromUuid(uuid).catch((err) => {
+        console.warn(`haywire | UnitSheet.deploy: failed to resolve class "${uuid}"`, err);
+        return null;
+      })),
+    );
 
+    const actorsData = [];
     for (let i = 0; i < classUuids.length; i++) {
       const cls = resolvedClasses[i];
       if (!cls) continue;
@@ -141,8 +167,6 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       const classUuid = classUuids[i];
       const combatStats = cls.system.combatStats ?? { easy: 5, medium: 9, hard: 13 };
 
-      // Weapons & skills are loaded automatically from the class via classId
-      // so we don't set weaponIds/skillIds here to avoid duplication
       actorsData.push({
         name: cls.name,
         type: "soldier",
@@ -155,6 +179,11 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
           combatStats,
         },
       });
+    }
+
+    if (!actorsData.length) {
+      ui.notifications.warn("No valid classes found to deploy.");
+      return;
     }
 
     const created = await Actor.createDocuments(actorsData);
@@ -171,9 +200,15 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     ui.notifications.info(`${created.length} soldiers created in folder "${unitName}".`);
   }
 
+  /**
+   * Show a support card image in a popout.
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
   static #onShowSupport(event, target) {
     const src = target.dataset.src;
     const title = target.dataset.title;
+    if (!src) return;
     const popout = new foundry.applications.apps.ImagePopout({
       src,
       uuid: null,
@@ -183,6 +218,10 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     popout.render(true).then(() => popout.setPosition({ width: 556, height: 450 }));
   }
 
+  /**
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
   static async #onRemoveClass(event, target) {
     if (!this.isEditable) return;
     const uuid = target.dataset.classUuid;
@@ -190,6 +229,10 @@ export class UnitSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     await this.item.update({ "system.classIds": classIds });
   }
 
+  /**
+   * @param {Event} event
+   * @param {HTMLElement} target
+   */
   static async #onRemoveSupport(event, target) {
     if (!this.isEditable) return;
     const uuid = target.dataset.supportUuid;

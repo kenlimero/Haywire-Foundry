@@ -1,3 +1,8 @@
+/**
+ * Sheet for the Class item type.
+ * Supports drag-drop of weapons and skills, image browsing.
+ * @module class-sheet
+ */
 import { resolveUuids, buildSkillsContext, parseItemDrop } from "./sheet-helpers.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -17,6 +22,10 @@ export class ClassSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     window: { resizable: true },
   };
 
+  /**
+   * Handle item drops (weapons and skills).
+   * @param {DragEvent} event
+   */
   async #onDrop(event) {
     if (!this.isEditable) return;
 
@@ -35,19 +44,20 @@ export class ClassSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     }
   }
 
+  /** @override */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.item = this.item;
     context.system = this.item.system;
     context.isEditable = this.isEditable;
-    // Résoudre skills + armes en parallèle
+
+    // Resolve skills + weapons in parallel
     const [skillEntries, weaponEntries] = await Promise.all([
       resolveUuids(this.item.system.skillIds ?? []),
       resolveUuids(this.item.system.defaultWeapons ?? []),
     ]);
 
     context.skills = buildSkillsContext(skillEntries);
-
     context.defaultWeapons = weaponEntries.map(({ uuid, resolved: w, missing }) => ({
       uuid,
       name: w?.name ?? `[${uuid}]`,
@@ -57,15 +67,15 @@ export class ClassSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     return context;
   }
 
+  /** @override */
   _onRender(context, options) {
     super._onRender(context, options);
     if (!this.isEditable) return;
 
-    // Drop d'un Item Weapon → ajouter son UUID aux armes par défaut
     this.element.addEventListener("dragover", (e) => e.preventDefault());
     this.element.addEventListener("drop", (e) => this.#onDrop(e));
 
-    // Remove skill (par UUID)
+    // Remove skill by UUID
     this.element.querySelectorAll("[data-action='remove-skill']").forEach((btn) => {
       btn.addEventListener("click", (event) => {
         const uuid = event.currentTarget.dataset.skillUuid;
@@ -74,7 +84,7 @@ export class ClassSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
       });
     });
 
-    // Remove default weapon (par UUID)
+    // Remove default weapon by UUID
     this.element.querySelectorAll("[data-action='remove-weapon']").forEach((btn) => {
       btn.addEventListener("click", (event) => {
         const uuid = event.currentTarget.dataset.weaponUuid;

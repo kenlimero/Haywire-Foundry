@@ -1,11 +1,17 @@
 import {
   buildConditionsContext, resolveUuids, buildSkillsContext, buildWeaponsContext,
   bindConditionSelect, onRollD20, onRollShoot, onRemoveCondition, onOpenItem,
+  registerItemHooks, unregisterItemHooks,
 } from "./sheet-helpers.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 
+/**
+ * Sheet for the OpFor Unit actor type.
+ * Supports sheet view and card view, lock toggle, behavior editing, drag-drop of weapon/opfor-skill items.
+ * @extends ActorSheetV2
+ */
 export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static PARTS = {
     sheet: {
@@ -35,10 +41,12 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     },
   };
 
+  /** @returns {boolean} Whether the sheet is locked */
   get _locked() {
     return this.actor.getFlag("haywire", "locked") ?? false;
   }
 
+  /** @override */
   _getHeaderControls() {
     const controls = super._getHeaderControls();
     controls.unshift({
@@ -78,6 +86,7 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     this.render();
   }
 
+  /** @override */
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
     const hasCard = !!this.actor.system.cardImage;
@@ -101,38 +110,40 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /*  Item hooks                              */
   /* ---------------------------------------- */
 
+  /** @override */
   _onFirstRender(context, options) {
     super._onFirstRender(context, options);
-    this._itemHooks = [
-      Hooks.on("updateItem", (item) => {
-        if (this.#isRelevantItem(item)) this.render();
-      }),
-      Hooks.on("deleteItem", (item) => {
-        if (this.#isRelevantItem(item)) this.render();
-      }),
-    ];
+    this._itemHooks = registerItemHooks(this, (item) => this.#isRelevantItem(item));
   }
 
+  /**
+   * Check if a changed item is relevant to this sheet's displayed data.
+   * @param {Item} item - The item that was updated or deleted
+   * @returns {boolean}
+   */
   #isRelevantItem(item) {
     const system = this.actor.system;
-    if (system.weaponIds.includes(item.uuid)) return true;
-    if (system.opforSkillIds.includes(item.uuid)) return true;
-    return false;
+    return system.weaponIds.includes(item.uuid) || system.opforSkillIds.includes(item.uuid);
   }
 
+  /** @override */
   _onClose(options) {
     super._onClose(options);
     this._editingBehavior = false;
-    if (this._itemHooks) {
-      Hooks.off("updateItem", this._itemHooks[0]);
-      Hooks.off("deleteItem", this._itemHooks[1]);
-    }
+    unregisterItemHooks(this._itemHooks);
   }
 
   /* ---------------------------------------- */
   /*  Drag & Drop                             */
   /* ---------------------------------------- */
 
+  /**
+   * Handle item drops onto the opfor unit sheet.
+   * @param {DragEvent} event - The drop event
+   * @param {object} data - Drop data containing uuid
+   * @returns {Promise<void|null>}
+   * @override
+   */
   async _onDropItem(event, data) {
     if (!this.isEditable || this._locked) return null;
 
@@ -162,20 +173,21 @@ export class OpforUnitSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /*  Rendering                               */
   /* ---------------------------------------- */
 
+  /** @override */
   _onRender(context, options) {
     super._onRender(context, options);
 
     const hasCard = !!this.actor.system.cardImage;
     const cardView = hasCard && (this.actor.getFlag("haywire", "cardView") ?? true);
-    if (cardView) {
-      this.setPosition({ width: 750, height: 556 });
-    } else {
-      this.setPosition({ width: 860, height: 600 });
-    }
+    this.setPosition(cardView ? { width: 750, height: 556 } : { width: 860, height: 600 });
 
     bindConditionSelect(this.element, this.actor, this.isEditable);
   }
 
+  /**
+   * Prepare render context: resolve weapons, skills from UUIDs.
+   * @override
+   */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.actor = this.actor;

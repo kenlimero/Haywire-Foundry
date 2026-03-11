@@ -5,6 +5,7 @@
  * - Hover : affiche une carte résumé du niveau de menace
  * - Boutons +/- (GM uniquement) pour ajuster le niveau
  * - Bouton alerte (GM) : active/désactive l'alerte (lueur rouge pulsante)
+ * @module threat-overlay
  */
 import { OpforSupportOverlay } from "./opfor-support-overlay.mjs";
 import { rollCompendiumTable, getOrCreateElement, showPreview, hidePreview } from "./overlay-helpers.mjs";
@@ -13,12 +14,14 @@ export class ThreatOverlay {
   static #el = null;
   static #previewEl = null;
 
+  /** @type {Record<string, string>} Faction key → threat card image path prefix */
   static FACTION_PATHS = {
     cartels: "systems/haywire/assets/opfor_cartels/cartel_threat_level_",
     insurgents: "systems/haywire/assets/opfor_insurgents/insurgents_threat_level_",
     russians: "systems/haywire/assets/opfor_russians/russians_threat_level_",
   };
 
+  /** @type {Record<string, string>} Faction key → threat table name prefix */
   static FACTION_TABLE_NAMES = {
     cartels: "Cartel Threat Level",
     insurgents: "Insurgent Threat Level",
@@ -37,28 +40,37 @@ export class ThreatOverlay {
     });
   }
 
+  /** @returns {number} Current threat level (0-9) */
   static get level() {
     return game.settings.get("haywire", "threatLevel");
   }
 
+  /** @returns {boolean} Whether alert is active */
   static get alert() {
     return game.settings.get("haywire", "threatAlert");
   }
 
+  /** @returns {string} Current faction key */
   static get faction() {
     return game.settings.get("haywire", "opforFaction") || "";
   }
 
+  /** @returns {boolean} Whether a faction is selected */
   static get hasFaction() {
     return !!this.faction;
   }
 
+  /**
+   * Set the threat level (clamped 0-9). Disables alert if set to 0.
+   * @param {number} value - New threat level
+   */
   static async setLevel(value) {
     const clamped = Math.clamp(value, 0, 9);
     await game.settings.set("haywire", "threatLevel", clamped);
     if (clamped === 0 && this.alert) await this.toggleAlert();
   }
 
+  /** Toggle the alert state. */
   static async toggleAlert() {
     await game.settings.set("haywire", "threatAlert", !this.alert);
   }
@@ -127,7 +139,6 @@ export class ThreatOverlay {
 
   /* ---- Private ---- */
 
-
   static #showCard() {
     const level = this.level;
     if (level <= 0) return;
@@ -150,6 +161,7 @@ export class ThreatOverlay {
     hidePreview(this.#previewEl);
   }
 
+  /** @type {Record<string, string>} Compendium folder name → setting key */
   static FACTION_KEYS = {
     Cartel: "cartels",
     Insurgents: "insurgents",
@@ -187,6 +199,11 @@ export class ThreatOverlay {
     });
   }
 
+  /**
+   * Import a faction's support cards and set the faction setting.
+   * @param {Collection} index - Pack index
+   * @param {Folder} folder - The faction folder
+   */
   static async #importFaction(index, folder) {
     const entries = index.filter((e) => e.folder === folder._id);
     if (!entries.length) {

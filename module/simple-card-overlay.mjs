@@ -2,27 +2,37 @@
  * Simple Card Overlay — generic single-card overlay with drag-drop and random draw.
  * Used for Infiltration and Operations decks.
  * Instantiated with a config object to avoid class duplication.
+ * @module simple-card-overlay
  */
 import {
   pinSvg, parseDropData, bindPinToggle, bindDragDrop,
   onSettingsChange, resolveCardImage, drawRandomCard,
-  showPreview, hidePreview, getOrCreateElement,
+  showPreview, hidePreview, getOrCreateElement, escapeHtml,
 } from "./overlay-helpers.mjs";
 
+/**
+ * @typedef {object} SimpleCardOverlayConfig
+ * @property {string} settingKey   - e.g. "infilCardIds"
+ * @property {string} deckName     - e.g. "Infiltration"
+ * @property {string} elId         - e.g. "haywire-infil-overlay"
+ * @property {string} previewId    - e.g. "haywire-infil-preview"
+ * @property {string} backcover    - e.g. "systems/haywire/assets/cards/backcovers/infil.webp"
+ * @property {string} altText      - e.g. "Infil"
+ * @property {string} labelKey     - e.g. "HAYWIRE.Infil.Label"
+ * @property {string} [chatLabelKey] - e.g. "HAYWIRE.Infil.CardDrawn"
+ * @property {string} [iconClass]  - e.g. "fa-id-card"
+ */
+
 export class SimpleCardOverlay {
+  /** @type {HTMLElement|null} */
   #el = null;
+  /** @type {HTMLElement|null} */
   #previewEl = null;
+  /** @type {SimpleCardOverlayConfig} */
   #config;
 
   /**
-   * @param {Object} config
-   * @param {string} config.settingKey   - e.g. "infilCardIds"
-   * @param {string} config.deckName     - e.g. "Infiltration"
-   * @param {string} config.elId         - e.g. "haywire-infil-overlay"
-   * @param {string} config.previewId    - e.g. "haywire-infil-preview"
-   * @param {string} config.backcover    - e.g. "systems/haywire/assets/cards/backcovers/infil.webp"
-   * @param {string} config.altText      - e.g. "Infil"
-   * @param {string} config.labelKey     - e.g. "HAYWIRE.Infil.Label"
+   * @param {SimpleCardOverlayConfig} config
    */
   constructor(config) {
     this.#config = config;
@@ -35,10 +45,12 @@ export class SimpleCardOverlay {
     onSettingsChange([this.#config.settingKey], () => this.render());
   }
 
+  /** @returns {string[]} Current card UUIDs */
   get cardIds() {
     return game.settings.get("haywire", this.#config.settingKey) ?? [];
   }
 
+  /** @param {string[]} ids */
   async setCardIds(ids) {
     await game.settings.set("haywire", this.#config.settingKey, ids);
   }
@@ -58,7 +70,7 @@ export class SimpleCardOverlay {
     const i18n = (k) => game.i18n.localize(k);
     el.innerHTML = `
       <div class="haywire-support-thumb" title="${i18n(cfg.labelKey)}">
-        <img src="${imgSrc}" alt="${imgAlt}" />
+        <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(imgAlt)}" />
         ${pinSvg(i18n("HAYWIRE.Pin"))}
         ${hasCard ? `<span class="haywire-overlay-remove" title="${i18n("HAYWIRE.Support.Remove")}"><i class="fas fa-times"></i></span>` : ""}
         ${!hasCard ? `<span class="haywire-overlay-roll" title="${i18n("HAYWIRE.Roll")}"><i class="fas fa-dice"></i></span>` : ""}
@@ -87,7 +99,7 @@ export class SimpleCardOverlay {
 
   /* ---- Private ---- */
 
-
+  /** @param {DragEvent} event */
   #onDrop(event) {
     const data = parseDropData(event);
     if (!data) return;
@@ -106,12 +118,12 @@ export class SimpleCardOverlay {
     const label = game.i18n.localize(cfg.chatLabelKey ?? cfg.labelKey);
     const icon = cfg.iconClass ?? "fa-cards";
 
-    ChatMessage.create({
+    await ChatMessage.create({
       content: `<div class="haywire-card-chat">
         <div class="haywire-card-chat-header">
-          <i class="fas ${icon}"></i> ${label}
+          <i class="fas ${icon}"></i> ${escapeHtml(label)}
         </div>
-        <img class="haywire-card-chat-img" src="${faceImg}" alt="${cardName}" data-action="showCard" data-src="${faceImg}" data-title="${cardName}"/>
+        <img class="haywire-card-chat-img" src="${escapeHtml(faceImg)}" alt="${escapeHtml(cardName)}" data-action="showCard" data-src="${escapeHtml(faceImg)}" data-title="${escapeHtml(cardName)}"/>
       </div>`,
       speaker: { alias: label },
     });

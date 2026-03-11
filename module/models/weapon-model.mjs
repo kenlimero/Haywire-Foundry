@@ -1,3 +1,8 @@
+/**
+ * Data model for the Weapon item type.
+ * @module weapon-model
+ */
+/** @extends foundry.abstract.TypeDataModel */
 export class WeaponModel extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const fields = foundry.data.fields;

@@ -1,5 +1,10 @@
+/**
+ * Data model for the Class item type.
+ * @module class-model
+ */
 import { uuidArrayField, combatStatsField } from "./model-helpers.mjs";
 
+/** @extends foundry.abstract.TypeDataModel */
 export class ClassModel extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const fields = foundry.data.fields;

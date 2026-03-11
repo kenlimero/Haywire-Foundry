@@ -1,5 +1,6 @@
 /**
  * Shared schema field helpers for Haywire data models.
+ * @module model-helpers
  */
 
 const fields = foundry.data.fields;

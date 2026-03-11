@@ -1,5 +1,10 @@
+/**
+ * Data model for the Unit item type.
+ * @module unit-model
+ */
 import { uuidArrayField } from "./model-helpers.mjs";
 
+/** @extends foundry.abstract.TypeDataModel */
 export class UnitModel extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const fields = foundry.data.fields;

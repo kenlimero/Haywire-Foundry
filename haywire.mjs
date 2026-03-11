@@ -1,4 +1,8 @@
-// Haywire — Système FoundryVTT V13 pour le wargame tactique HAYWIRE V2
+/**
+ * Haywire — FoundryVTT V13 system for the HAYWIRE V2 tactical wargame.
+ * Main entry point: registers document classes, data models, sheets, overlays, and hooks.
+ * @module haywire
+ */
 
 // Data Models
 import { SoldierModel } from "./module/models/soldier-model.mjs";
@@ -17,23 +21,13 @@ import { HaywireItem } from "./module/documents/haywire-item.mjs";
 // Rolls
 import { HaywireRoll } from "./module/rolls/haywire-roll.mjs";
 
-// Token overlay
+// Overlays
 import { TokenOverlay } from "./module/token-overlay.mjs";
-
-// Threat level overlay
 import { ThreatOverlay } from "./module/threat-overlay.mjs";
-
-// Support cards overlay
 import { SupportOverlay } from "./module/support-overlay.mjs";
 import { OpforSupportOverlay } from "./module/opfor-support-overlay.mjs";
-
-// Infil & Operations card overlays (using shared SimpleCardOverlay)
 import { SimpleCardOverlay } from "./module/simple-card-overlay.mjs";
-
-// Fog of War overlay
 import { FogOfWarOverlay } from "./module/fog-of-war-overlay.mjs";
-
-// Reinforcement overlay
 import { ReinforcementOverlay } from "./module/reinforcement-overlay.mjs";
 
 // Mission reset
@@ -49,6 +43,71 @@ import { OpforSkillSheet } from "./module/sheets/opfor-skill-sheet.mjs";
 import { UnitSheet } from "./module/sheets/unit-sheet.mjs";
 import { SupportSheet } from "./module/sheets/support-sheet.mjs";
 
+import { escapeHtml } from "./module/overlay-helpers.mjs";
+
+/* ─── Settings Registration ──────────────────────────────────────────────── */
+
+/** @type {Array<[string, object]>} World-scoped settings definitions */
+const WORLD_SETTINGS = [
+  ["opforFaction", {
+    name: "HAYWIRE.Threat.Faction",
+    hint: "HAYWIRE.Threat.FactionHint",
+    config: true,
+    type: String,
+    default: "cartels",
+    choices: { cartels: "Cartel", insurgents: "Insurgents", russians: "Russians" },
+  }],
+  ["threatLevel", { name: "HAYWIRE.Threat.Label", type: Number, default: 0, range: { min: 0, max: 9, step: 1 } }],
+  ["threatAlert", { name: "HAYWIRE.Threat.Alert", type: Boolean, default: false }],
+  ["supportCardIds", { name: "HAYWIRE.Support.Label", type: Array, default: [] }],
+  ["opforSupportCardIds", { name: "HAYWIRE.OpforSupport.Label", type: Array, default: [] }],
+  ["infilCardIds", { name: "HAYWIRE.Infil.Label", type: Array, default: [] }],
+  ["operationsCardIds", { name: "HAYWIRE.Operations.Label", type: Array, default: [] }],
+  ["fogOfWarCardId", { name: "HAYWIRE.FogOfWar.Label", type: String, default: "" }],
+  ["fogOfWarDie", { name: "HAYWIRE.FogOfWar.DieHint", type: Number, default: 6 }],
+  ["fogOfWarDrawnCards", { name: "Fog of War Drawn Cards", type: Array, default: [] }],
+];
+
+/**
+ * Register all world-scoped settings.
+ * Settings without explicit config:true are hidden from the settings UI.
+ */
+function registerSettings() {
+  for (const [key, def] of WORLD_SETTINGS) {
+    game.settings.register("haywire", key, {
+      scope: "world",
+      config: false,
+      ...def,
+    });
+  }
+}
+
+/* ─── Sheet Registration ─────────────────────────────────────────────────── */
+
+/** @type {Array<{docClass: typeof Document, sheet: typeof Application, types: string[], label: string}>} */
+const SHEET_REGISTRATIONS = [
+  { docClass: Actor, sheet: SoldierSheet, types: ["soldier"], label: "HAYWIRE.SheetSoldier" },
+  { docClass: Actor, sheet: OpforUnitSheet, types: ["opfor-unit"], label: "HAYWIRE.SheetOpforUnit" },
+  { docClass: Item, sheet: ClassSheet, types: ["class"], label: "HAYWIRE.SheetClass" },
+  { docClass: Item, sheet: WeaponSheet, types: ["weapon"], label: "HAYWIRE.SheetWeapon" },
+  { docClass: Item, sheet: SkillSheet, types: ["skill"], label: "HAYWIRE.SheetSkill" },
+  { docClass: Item, sheet: OpforSkillSheet, types: ["opfor-skill"], label: "HAYWIRE.SheetOpforSkill" },
+  { docClass: Item, sheet: UnitSheet, types: ["unit"], label: "HAYWIRE.SheetUnit" },
+  { docClass: Item, sheet: SupportSheet, types: ["support"], label: "HAYWIRE.SheetSupport" },
+];
+
+function registerSheets() {
+  for (const { docClass, sheet, types, label } of SHEET_REGISTRATIONS) {
+    foundry.applications.apps.DocumentSheetConfig.registerSheet(docClass, "haywire", sheet, {
+      types,
+      makeDefault: true,
+      label,
+    });
+  }
+}
+
+/* ─── Init Hook ──────────────────────────────────────────────────────────── */
+
 Hooks.once("init", () => {
   // Expose API for third-party modules
   game.haywire ??= {};
@@ -58,7 +117,7 @@ Hooks.once("init", () => {
   CONFIG.Actor.documentClass = HaywireActor;
   CONFIG.Item.documentClass = HaywireItem;
 
-  // Data models — clés = noms des sous-types dans system.json > documentTypes
+  // Data models
   CONFIG.Actor.dataModels = {
     soldier: SoldierModel,
     "opfor-unit": OpforUnitModel,
@@ -72,47 +131,7 @@ Hooks.once("init", () => {
     support: SupportModel,
   };
 
-  // Sheets — V13 utilise le namespace complet
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Actor, "haywire", SoldierSheet, {
-    types: ["soldier"],
-    makeDefault: true,
-    label: "HAYWIRE.SheetSoldier",
-  });
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, "haywire", ClassSheet, {
-    types: ["class"],
-    makeDefault: true,
-    label: "HAYWIRE.SheetClass",
-  });
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, "haywire", WeaponSheet, {
-    types: ["weapon"],
-    makeDefault: true,
-    label: "HAYWIRE.SheetWeapon",
-  });
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, "haywire", SkillSheet, {
-    types: ["skill"],
-    makeDefault: true,
-    label: "HAYWIRE.SheetSkill",
-  });
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, "haywire", OpforSkillSheet, {
-    types: ["opfor-skill"],
-    makeDefault: true,
-    label: "HAYWIRE.SheetOpforSkill",
-  });
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Actor, "haywire", OpforUnitSheet, {
-    types: ["opfor-unit"],
-    makeDefault: true,
-    label: "HAYWIRE.SheetOpforUnit",
-  });
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, "haywire", UnitSheet, {
-    types: ["unit"],
-    makeDefault: true,
-    label: "HAYWIRE.SheetUnit",
-  });
-  foundry.applications.apps.DocumentSheetConfig.registerSheet(Item, "haywire", SupportSheet, {
-    types: ["support"],
-    makeDefault: true,
-    label: "HAYWIRE.SheetSupport",
-  });
+  registerSheets();
 
   // Token bar attributes
   CONFIG.Actor.trackableAttributes = {
@@ -126,7 +145,7 @@ Hooks.once("init", () => {
     },
   };
 
-  // Remplacer les conditions token par défaut par celles de Haywire
+  // Replace default token conditions with Haywire's
   CONFIG.statusEffects = [
     { id: "downed", name: "HAYWIRE.Conditions.Downed", img: "systems/haywire/assets/tokens/downed.webp" },
     { id: "hidden", name: "HAYWIRE.Conditions.Hidden", img: "systems/haywire/assets/tokens/hidden.webp" },
@@ -140,7 +159,7 @@ Hooks.once("init", () => {
     { id: "sup-6", name: "HAYWIRE.Suppression.6", img: "systems/haywire/assets/icons/sup-6.svg" },
   ];
 
-  // Pré-chargement templates
+  // Preload templates
   foundry.applications.handlebars.loadTemplates([
     "systems/haywire/templates/actor/soldier-sheet.hbs",
     "systems/haywire/templates/actor/soldier-card.hbs",
@@ -156,107 +175,14 @@ Hooks.once("init", () => {
     "systems/haywire/templates/chat/roll-result.hbs",
   ]);
 
-  // OPFOR faction setting (world-scoped, visible in settings)
-  game.settings.register("haywire", "opforFaction", {
-    name: "HAYWIRE.Threat.Faction",
-    hint: "HAYWIRE.Threat.FactionHint",
-    scope: "world",
-    config: true,
-    type: String,
-    default: "cartels",
-    choices: {
-      cartels: "Cartel",
-      insurgents: "Insurgents",
-      russians: "Russians",
-    },
-  });
-
-  // Threat level setting (world-scoped, GM only)
-  game.settings.register("haywire", "threatLevel", {
-    name: "HAYWIRE.Threat.Label",
-    scope: "world",
-    config: false,
-    type: Number,
-    default: 0,
-    range: { min: 0, max: 9, step: 1 },
-  });
-
-  game.settings.register("haywire", "threatAlert", {
-    name: "HAYWIRE.Threat.Alert",
-    scope: "world",
-    config: false,
-    type: Boolean,
-    default: false,
-  });
-
-  // Support cards overlay setting (world-scoped, array of {uuid, leaderId} entries)
-  game.settings.register("haywire", "supportCardIds", {
-    name: "HAYWIRE.Support.Label",
-    scope: "world",
-    config: false,
-    type: Array,
-    default: [],
-  });
-
-  // OPFOR support cards overlay setting (world-scoped, array of card UUIDs)
-  game.settings.register("haywire", "opforSupportCardIds", {
-    name: "HAYWIRE.OpforSupport.Label",
-    scope: "world",
-    config: false,
-    type: Array,
-    default: [],
-  });
-
-  // Infil cards overlay setting (world-scoped, array of card UUIDs)
-  game.settings.register("haywire", "infilCardIds", {
-    name: "HAYWIRE.Infil.Label",
-    scope: "world",
-    config: false,
-    type: Array,
-    default: [],
-  });
-
-  // Operations cards overlay setting (world-scoped, array of card UUIDs)
-  game.settings.register("haywire", "operationsCardIds", {
-    name: "HAYWIRE.Operations.Label",
-    scope: "world",
-    config: false,
-    type: Array,
-    default: [],
-  });
-
-  // Fog of War overlay settings
-  game.settings.register("haywire", "fogOfWarCardId", {
-    name: "HAYWIRE.FogOfWar.Label",
-    scope: "world",
-    config: false,
-    type: String,
-    default: "",
-  });
-
-  game.settings.register("haywire", "fogOfWarDie", {
-    name: "HAYWIRE.FogOfWar.DieHint",
-    scope: "world",
-    config: false,
-    type: Number,
-    default: 6,
-  });
-
-  game.settings.register("haywire", "fogOfWarDrawnCards", {
-    name: "Fog of War Drawn Cards",
-    scope: "world",
-    config: false,
-    type: Array,
-    default: [],
-  });
-
-  // Register scene control button for mission reset (must be in init, before ready)
+  registerSettings();
   MissionReset.init();
 
   console.log("haywire | Système Haywire initialisé");
 });
 
-// Instances des overlays simples (cartes infil / opérations)
+/* ─── Simple Card Overlay Instances ──────────────────────────────────────── */
+
 const infilOverlay = new SimpleCardOverlay({
   settingKey: "infilCardIds",
   deckName: "Infiltration",
@@ -281,7 +207,8 @@ const operationsOverlay = new SimpleCardOverlay({
   iconClass: "fa-map",
 });
 
-// Initialiser les overlays une fois le jeu prêt
+/* ─── Ready Hook — Initialize Overlays ───────────────────────────────────── */
+
 Hooks.once("ready", () => {
   ThreatOverlay.init();
   SupportOverlay.init();
@@ -292,7 +219,9 @@ Hooks.once("ready", () => {
   ReinforcementOverlay.init();
 });
 
-// Masquer le carré de fond derrière les icônes d'effets sur les tokens (garder uniquement le sprite rond)
+/* ─── Token Hooks ────────────────────────────────────────────────────────── */
+
+// Hide square background behind token status effect icons (keep only the round sprite)
 Hooks.on("refreshToken", (token) => {
   if (!token.effects) return;
   for (const child of token.effects.children) {
@@ -300,18 +229,25 @@ Hooks.on("refreshToken", (token) => {
   }
 });
 
-// Overlay au survol d'un token
+// Token hover overlay
 Hooks.on("hoverToken", (token, hovered) => {
   if (hovered) TokenOverlay.show(token);
   else TokenOverlay.hide();
 });
 
-// Masquer l'overlay si le token affiché est supprimé
+// Hide overlay if the displayed token is deleted
 Hooks.on("deleteToken", (tokenDoc) => {
   if (TokenOverlay.currentTokenId === tokenDoc.id) TokenOverlay.hide();
 });
 
-// ─── Card draw display in chat ──────────────────────────────────────────────
+/* ─── Card Draw Chat Display ─────────────────────────────────────────────── */
+
+/**
+ * Post a chat message for each card in a card operation (deal/draw/play).
+ * @param {object} origin - The source deck/hand
+ * @param {object[]} cards - Array of card data objects
+ * @param {string} action - Action label (e.g. "Deal", "Draw")
+ */
 function _postCardChatMessage(origin, cards, action) {
   for (const cardData of cards) {
     const faceImg = cardData.faces?.[0]?.img ?? cardData.face?.img ?? origin.img;
@@ -319,31 +255,32 @@ function _postCardChatMessage(origin, cards, action) {
     ChatMessage.create({
       content: `<div class="haywire-card-chat">
         <div class="haywire-card-chat-header">
-          <i class="fas fa-cards"></i> ${origin.name} — ${action}
+          <i class="fas fa-cards"></i> ${escapeHtml(origin.name)} — ${escapeHtml(action)}
         </div>
-        <img class="haywire-card-chat-img" src="${faceImg}" alt="${cardName}" data-action="showCard" data-src="${faceImg}" data-title="${cardName}"/>
-        <div class="haywire-card-chat-name">${cardName}</div>
+        <img class="haywire-card-chat-img" src="${escapeHtml(faceImg)}" alt="${escapeHtml(cardName)}" data-action="showCard" data-src="${escapeHtml(faceImg)}" data-title="${escapeHtml(cardName)}"/>
+        <div class="haywire-card-chat-name">${escapeHtml(cardName)}</div>
       </div>`,
       speaker: { alias: origin.name },
     });
   }
 }
 
-// dealCards: deck → hand(s) via Deal
 Hooks.on("dealCards", (origin, destinations, context) => {
   const cards = context.toCreate?.flat() ?? [];
   _postCardChatMessage(origin, cards, "Deal");
 });
 
-// passCards: covers draw, play, pass, discard
 Hooks.on("passCards", (origin, destination, context) => {
   const cards = context.toCreate ?? [];
   _postCardChatMessage(origin, cards, context.action ?? "Draw");
 });
 
-// Hover on card image in chat → show preview overlay (top-right)
+/* ─── Chat Card Image Preview ────────────────────────────────────────────── */
+
 {
+  /** @type {HTMLElement|null} */
   let chatPreviewEl = null;
+
   function getChatPreview() {
     if (!chatPreviewEl) {
       chatPreviewEl = document.createElement("div");
@@ -357,7 +294,7 @@ Hooks.on("passCards", (origin, destination, context) => {
     html.querySelectorAll(".haywire-card-chat-img")?.forEach(img => {
       img.addEventListener("mouseenter", () => {
         const preview = getChatPreview();
-        preview.innerHTML = `<img src="${img.src}" alt="${img.alt}" />`;
+        preview.innerHTML = `<img src="${escapeHtml(img.src)}" alt="${escapeHtml(img.alt)}" />`;
         preview.classList.add("visible");
       });
       img.addEventListener("mouseleave", () => {
@@ -367,7 +304,8 @@ Hooks.on("passCards", (origin, destination, context) => {
   });
 }
 
-// Quand un token est posé sur la carte, importer ses cartes support dans l'overlay
+/* ─── Auto-import Support Cards on Token Creation ────────────────────────── */
+
 Hooks.on("createToken", (tokenDoc) => {
   const actor = tokenDoc.actor;
   if (!actor || actor.type !== "soldier") return;
@@ -376,7 +314,8 @@ Hooks.on("createToken", (tokenDoc) => {
   SupportOverlay.addCards(supportIds, actor.id);
 });
 
-// Prototype token defaults pour les nouveaux Actors Soldier
+/* ─── Prototype Token Defaults for New Soldier Actors ────────────────────── */
+
 Hooks.on("preCreateActor", (actor) => {
   if (actor.type !== "soldier") return;
   actor.updateSource({

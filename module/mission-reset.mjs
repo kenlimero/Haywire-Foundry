@@ -2,7 +2,23 @@
  * Mission Reset — toolbar buttons that reset game state.
  * Two options: reset state only, or reset state + delete all tokens.
  * GM only, with confirmation dialog.
+ * @module mission-reset
  */
+
+/** @type {Array<[string, unknown]>} Settings to reset: [key, defaultValue] */
+const RESET_SETTINGS = [
+  ["fogOfWarDrawnCards", []],
+  ["fogOfWarCardId", ""],
+  ["fogOfWarDie", 6],
+  ["supportCardIds", []],
+  ["opforSupportCardIds", []],
+  ["infilCardIds", []],
+  ["operationsCardIds", []],
+  ["threatLevel", 0],
+  ["threatAlert", false],
+  ["opforFaction", ""],
+];
+
 export class MissionReset {
   /** Register the toolbar buttons via Foundry's scene controls API. */
   static init() {
@@ -33,6 +49,10 @@ export class MissionReset {
     });
   }
 
+  /**
+   * Show confirmation dialog before resetting.
+   * @param {boolean} deleteTokens - Whether to also delete all tokens
+   */
   static async #confirmReset(deleteTokens) {
     const key = deleteTokens ? "ConfirmContentAll" : "ConfirmContent";
     const confirmed = await foundry.applications.api.DialogV2.confirm({
@@ -46,40 +66,36 @@ export class MissionReset {
     await this.#resetAll(deleteTokens);
   }
 
+  /**
+   * Reset all world settings and optionally delete tokens.
+   * Settings are reset in parallel for better performance.
+   * @param {boolean} deleteTokens - Whether to also delete all tokens
+   */
   static async #resetAll(deleteTokens) {
-    // Reset all world settings
-    await game.settings.set("haywire", "fogOfWarDrawnCards", []);
-    await game.settings.set("haywire", "fogOfWarCardId", "");
-    await game.settings.set("haywire", "fogOfWarDie", 6);
-    await game.settings.set("haywire", "supportCardIds", []);
-    await game.settings.set("haywire", "opforSupportCardIds", []);
-    await game.settings.set("haywire", "infilCardIds", []);
-    await game.settings.set("haywire", "operationsCardIds", []);
-    await game.settings.set("haywire", "threatLevel", 0);
-    await game.settings.set("haywire", "threatAlert", false);
-    await game.settings.set("haywire", "opforFaction", "");
+    // Reset all world settings in parallel
+    await Promise.all(
+      RESET_SETTINGS.map(([key, value]) => game.settings.set("haywire", key, value)),
+    );
 
     const tokens = canvas.tokens?.placeables ?? [];
 
     if (deleteTokens) {
-      // Delete all tokens from the scene
       const ids = tokens.map((t) => t.id);
       if (ids.length) await canvas.scene.deleteEmbeddedDocuments("Token", ids);
     } else {
-      // Reset soldier tokens HP, suppression, conditions
-      for (const token of tokens) {
-        const actor = token.actor;
-        if (!actor || actor.type !== "soldier") continue;
-        await actor.update({
-          "system.hitPoints.value": actor.system.hitPoints.max,
+      // Reset soldier tokens HP, suppression, conditions in parallel
+      const updates = tokens
+        .filter((t) => t.actor?.type === "soldier")
+        .map((t) => t.actor.update({
+          "system.hitPoints.value": t.actor.system.hitPoints.max,
           "system.suppression": 0,
           "system.conditions": [],
-        });
-      }
+        }));
+      if (updates.length) await Promise.all(updates);
     }
 
     // Confirmation chat message (whisper to GM)
-    ChatMessage.create({
+    await ChatMessage.create({
       content: `<p><strong><i class="fas fa-bomb"></i> ${game.i18n.localize("HAYWIRE.MissionReset.Done")}</strong></p>`,
       whisper: ChatMessage.getWhisperRecipients("GM"),
     });

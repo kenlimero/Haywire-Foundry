@@ -5,22 +5,26 @@
  * - Bouton "Activate" sur chaque carte → message chat + retrait de la carte
  * - Chaque carte est liée à un leader : si le leader est downed, ses cartes sont désactivées
  * - Quand un token avec des supportIds est posé sur la carte, ses cartes sont ajoutées
+ * @module support-overlay
  */
 import {
   pinSvg, parseDropData, bindPinToggle, bindDragDrop,
   onSettingsChange, showPreview, hidePreview, getOrCreateElement,
+  createPanelToggle, escapeHtml,
 } from "./overlay-helpers.mjs";
 
 export class SupportOverlay {
   static #el = null;
   static #panelEl = null;
   static #previewEl = null;
-  static #hideTimeout = null;
+  /** @type {{ show: () => void, hide: () => void } | null} */
+  static #panelToggle = null;
 
   static init() {
     this.#el = getOrCreateElement(this.#el, "haywire-support-overlay");
     this.#panelEl = getOrCreateElement(this.#panelEl, "haywire-support-panel");
     this.#previewEl = getOrCreateElement(this.#previewEl, "haywire-support-preview");
+    this.#panelToggle = createPanelToggle(this.#panelEl, this.#el, this.#previewEl);
     this.render();
     onSettingsChange(["supportCardIds"], () => this.render());
 
@@ -30,24 +34,41 @@ export class SupportOverlay {
     });
   }
 
+  /** @returns {Array<{uuid: string, leaderId: string}>} */
   static get cardEntries() {
     return game.settings.get("haywire", "supportCardIds") ?? [];
   }
 
+  /**
+   * @returns {Set<string>} Set of leader actor IDs
+   */
   static #getLeaderIds() {
     return new Set(this.cardEntries.map((e) => e.leaderId).filter(Boolean));
   }
 
+  /**
+   * Check if a leader actor is downed.
+   * @param {string} actorId - Actor ID to check
+   * @returns {boolean}
+   */
   static #isActorDowned(actorId) {
     if (!actorId) return false;
     const actor = game.actors.get(actorId);
     return actor?.system.conditions?.has("downed") ?? false;
   }
 
+  /**
+   * @param {Array<{uuid: string, leaderId: string}>} entries
+   */
   static async setCardEntries(entries) {
     await game.settings.set("haywire", "supportCardIds", entries);
   }
 
+  /**
+   * Add support card UUIDs linked to a leader.
+   * @param {string[]} uuids - Card UUIDs to add
+   * @param {string} [leaderId=""] - Leader actor ID
+   */
   static async addCards(uuids, leaderId) {
     const current = this.cardEntries;
     const existingUuids = new Set(current.map((e) => e.uuid));
@@ -58,6 +79,10 @@ export class SupportOverlay {
     await this.setCardEntries([...current, ...newEntries]);
   }
 
+  /**
+   * Remove a card by UUID.
+   * @param {string} uuid - Card UUID to remove
+   */
   static async removeCard(uuid) {
     await this.setCardEntries(this.cardEntries.filter((e) => e.uuid !== uuid));
   }
@@ -83,35 +108,26 @@ export class SupportOverlay {
       </div>`;
 
     const thumb = el.querySelector(".haywire-support-thumb");
-    thumb.addEventListener("mouseenter", () => this.#showPanel());
-    thumb.addEventListener("mouseleave", () => this.#hidePanel());
+    thumb.addEventListener("mouseenter", () => this.#panelToggle.show());
+    thumb.addEventListener("mouseleave", () => this.#panelToggle.hide());
     bindDragDrop(thumb, (e) => this.#onDrop(e));
     bindPinToggle(el);
 
-    panel.addEventListener("mouseenter", () => this.#showPanel());
-    panel.addEventListener("mouseleave", () => this.#hidePanel());
+    panel.addEventListener("mouseenter", () => this.#panelToggle.show());
+    panel.addEventListener("mouseleave", () => this.#panelToggle.hide());
 
     await this.#renderPanel(panel, entries, count, i18n);
   }
 
   /* ---- Private ---- */
 
-
-  static #showPanel() {
-    clearTimeout(this.#hideTimeout);
-    this.#panelEl?.classList.add("visible");
-    this.#el?.classList.add("pinned");
-  }
-
-  static #hidePanel() {
-    clearTimeout(this.#hideTimeout);
-    this.#hideTimeout = setTimeout(() => {
-      this.#panelEl?.classList.remove("visible");
-      this.#el?.classList.remove("pinned");
-      hidePreview(this.#previewEl);
-    }, 100);
-  }
-
+  /**
+   * Render the panel content with resolved card data.
+   * @param {HTMLElement} panel
+   * @param {Array<{uuid: string, leaderId: string}>} entries
+   * @param {number} count
+   * @param {(key: string) => string} i18n
+   */
   static async #renderPanel(panel, entries, count, i18n) {
     if (count === 0) {
       panel.innerHTML = `
@@ -134,11 +150,11 @@ export class SupportOverlay {
         const leaderActor = entry.leaderId ? game.actors.get(entry.leaderId) : null;
         const leaderName = leaderActor?.name ?? "";
         return `
-        <div class="haywire-support-card${downed ? " disabled" : ""}" data-preview-img="${img}" data-preview-name="${name}">
-          <span class="haywire-support-card-remove" data-uuid="${entry.uuid}" title="${i18n("HAYWIRE.Support.Remove")}"><i class="fas fa-times"></i></span>
-          <img class="haywire-support-card-img" src="${img}" alt="${name}" />
-          ${leaderName ? `<span class="haywire-support-card-leader${downed ? " downed" : ""}" title="${leaderName}"><i class="fas ${downed ? "fa-skull" : "fa-user-shield"}"></i> ${leaderName}</span>` : ""}
-          <button class="haywire-support-activate" data-uuid="${entry.uuid}" data-name="${name}" data-img="${img}"
+        <div class="haywire-support-card${downed ? " disabled" : ""}" data-preview-img="${escapeHtml(img)}" data-preview-name="${escapeHtml(name)}">
+          <span class="haywire-support-card-remove" data-uuid="${escapeHtml(entry.uuid)}" title="${i18n("HAYWIRE.Support.Remove")}"><i class="fas fa-times"></i></span>
+          <img class="haywire-support-card-img" src="${escapeHtml(img)}" alt="${escapeHtml(name)}" />
+          ${leaderName ? `<span class="haywire-support-card-leader${downed ? " downed" : ""}" title="${escapeHtml(leaderName)}"><i class="fas ${downed ? "fa-skull" : "fa-user-shield"}"></i> ${escapeHtml(leaderName)}</span>` : ""}
+          <button class="haywire-support-activate" data-uuid="${escapeHtml(entry.uuid)}" data-name="${escapeHtml(name)}" data-img="${escapeHtml(img)}"
                   title="${downed ? i18n("HAYWIRE.Support.LeaderDowned") : i18n("HAYWIRE.Support.Activate")}"
                   ${downed ? "disabled" : ""}>
             <i class="fas fa-bullseye"></i> ${i18n("HAYWIRE.Support.Activate")}
@@ -160,6 +176,9 @@ export class SupportOverlay {
     this.#bindPanelEvents(panel);
   }
 
+  /**
+   * @param {HTMLElement} panel
+   */
   static #bindPanelEvents(panel) {
     panel.querySelectorAll(".haywire-support-card").forEach((card) => {
       card.addEventListener("mouseenter", () => showPreview(this.#previewEl, card.dataset.previewImg, card.dataset.previewName));
@@ -187,6 +206,9 @@ export class SupportOverlay {
     });
   }
 
+  /**
+   * @param {DragEvent} event
+   */
   static async #onDrop(event) {
     const data = parseDropData(event);
     if (!data) return;
@@ -199,6 +221,12 @@ export class SupportOverlay {
     await this.addCards([data.uuid], "");
   }
 
+  /**
+   * Activate a support card: post to chat and remove from overlay.
+   * @param {string} uuid
+   * @param {string} name
+   * @param {string} img
+   */
   static async #activateCard(uuid, name, img) {
     const i18n = (k) => game.i18n.localize(k);
 
@@ -208,11 +236,11 @@ export class SupportOverlay {
           <div class="haywire-card-chat-header">
             <i class="fas fa-bullseye"></i> ${i18n("HAYWIRE.Support.Activated")}
           </div>
-          <img class="haywire-card-chat-img" src="${img}" alt="${name}" />
+          <img class="haywire-card-chat-img" src="${escapeHtml(img)}" alt="${escapeHtml(name)}" />
         </div>`,
       });
     } catch (err) {
-      console.error("SupportOverlay | ChatMessage.create failed", err);
+      console.error("haywire | SupportOverlay: ChatMessage.create failed", err);
     }
 
     await this.removeCard(uuid);

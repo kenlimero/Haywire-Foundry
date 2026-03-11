@@ -1,5 +1,10 @@
+/**
+ * Data model for the Soldier actor type.
+ * @module soldier-model
+ */
 import { uuidArrayField, combatStatsField, conditionsField, suppressionField } from "./model-helpers.mjs";
 
+/** @extends foundry.abstract.TypeDataModel */
 export class SoldierModel extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const fields = foundry.data.fields;

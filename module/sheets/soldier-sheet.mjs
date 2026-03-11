@@ -1,11 +1,17 @@
 import {
   buildConditionsContext, resolveUuids, buildSkillsContext, buildWeaponsContext,
   bindConditionSelect, onRollD20, onRollShoot, onRemoveCondition, onOpenItem,
+  registerItemHooks, unregisterItemHooks,
 } from "./sheet-helpers.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 
+/**
+ * Sheet for the Soldier actor type.
+ * Supports sheet view and card view, lock toggle, drag-drop of class/weapon/skill/support items.
+ * @extends ActorSheetV2
+ */
 export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static PARTS = {
     sheet: {
@@ -36,10 +42,12 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     },
   };
 
+  /** @returns {boolean} Whether the sheet is locked */
   get _locked() {
     return this.actor.getFlag("haywire", "locked") ?? false;
   }
 
+  /** @override */
   _getHeaderControls() {
     const controls = super._getHeaderControls();
     controls.unshift({
@@ -68,6 +76,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     this.render({ force: true });
   }
 
+  /** @override */
   _configureRenderOptions(options) {
     super._configureRenderOptions(options);
     const cardView = this.actor.getFlag("haywire", "cardView") ?? false;
@@ -96,8 +105,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static async #onRemoveWeapon(event, target) {
     const uuid = target.dataset.weaponUuid;
-    const isFromClass = target.dataset.fromClass === "true";
-    if (isFromClass) {
+    if (target.dataset.fromClass === "true") {
       const excluded = [...this.actor.system.excludedWeaponIds, uuid];
       await this.actor.update({ "system.excludedWeaponIds": excluded });
     } else {
@@ -108,8 +116,7 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
   static async #onRemoveSkill(event, target) {
     const uuid = target.dataset.skillUuid;
-    const isFromClass = target.dataset.fromClass === "true";
-    if (isFromClass) {
+    if (target.dataset.fromClass === "true") {
       const excluded = [...this.actor.system.excludedSkillIds, uuid];
       await this.actor.update({ "system.excludedSkillIds": excluded });
     } else {
@@ -124,71 +131,71 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     await this.actor.update({ "system.supportIds": supportIds });
   }
 
+  /** @override */
   _onFirstRender(context, options) {
     super._onFirstRender(context, options);
-    this._itemHooks = [
-      Hooks.on("updateItem", (item) => {
-        if (this.#isRelevantItem(item)) this.render();
-      }),
-      Hooks.on("deleteItem", (item) => {
-        if (this.#isRelevantItem(item)) this.render();
-      }),
-    ];
+    this._itemHooks = registerItemHooks(this, (item) => this.#isRelevantItem(item));
   }
 
+  /**
+   * Check if a changed item is relevant to this sheet's displayed data.
+   * @param {Item} item - The item that was updated or deleted
+   * @returns {boolean}
+   */
   #isRelevantItem(item) {
     const system = this.actor.system;
     if (item.uuid === system.classId) return true;
     if (system.weaponIds.includes(item.uuid)) return true;
     if (system.skillIds.includes(item.uuid)) return true;
     if (system.supportIds.includes(item.uuid)) return true;
-    // Utiliser le cache résolu au dernier render (évite fromUuidSync sur compendium)
     if (this._classWeaponUuids?.includes(item.uuid)) return true;
     if (this._classSkillUuids?.includes(item.uuid)) return true;
     return false;
   }
 
+  /** @override */
   _onClose(options) {
     super._onClose(options);
-    if (this._itemHooks) {
-      Hooks.off("updateItem", this._itemHooks[0]);
-      Hooks.off("deleteItem", this._itemHooks[1]);
-    }
+    unregisterItemHooks(this._itemHooks);
   }
 
   /* ---------------------------------------- */
-  /*  Drag & Drop — Références uniquement     */
+  /*  Drag & Drop — References only           */
   /* ---------------------------------------- */
 
+  /**
+   * Handle item drops onto the soldier sheet.
+   * @param {DragEvent} event - The drop event
+   * @param {object} data - Drop data containing uuid
+   * @returns {Promise<void|null>}
+   * @override
+   */
   async _onDropItem(event, data) {
     if (!this.isEditable || this._locked) return null;
 
-    // Résoudre l'item depuis le UUID des données de drop
-    // IMPORTANT : garder data.uuid car item.uuid est cassé pour les compendiums (_id: null)
     const uuid = data.uuid;
     const item = await fromUuid(uuid);
     if (!item) return null;
 
-    if (item.type === "class") {
-      return this.#onDropClassItem(item, uuid);
+    switch (item.type) {
+      case "class": return this.#onDropClassItem(item, uuid);
+      case "weapon": return this.#onDropWeaponItem(item, uuid);
+      case "skill": return this.#onDropSkillItem(item, uuid);
+      case "support": return this.#onDropSupportItem(item, uuid);
+      default:
+        console.warn(`haywire | SoldierSheet: ${game.i18n.localize("HAYWIRE.InvalidDrop")} (type: ${item.type})`);
+        return null;
     }
-    if (item.type === "weapon") {
-      return this.#onDropWeaponItem(item, uuid);
-    }
-    if (item.type === "skill") {
-      return this.#onDropSkillItem(item, uuid);
-    }
-    if (item.type === "support") {
-      return this.#onDropSupportItem(item, uuid);
-    }
-
-    console.warn(`haywire | SoldierSheet: ${game.i18n.localize("HAYWIRE.InvalidDrop")} (type: ${item.type})`);
-    return null;
   }
 
+  /**
+   * @param {Item} item - The class item
+   * @param {string} uuid - The class UUID
+   */
   async #onDropClassItem(item, uuid) {
     const hadPreviousClass = !!this.actor.system.classId;
 
+    /** @type {Record<string, unknown>} */
     const updateData = {
       "system.classId": uuid,
       "system.excludedWeaponIds": [],
@@ -210,26 +217,21 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   }
 
   async #onDropWeaponItem(_item, uuid) {
-    // Éviter les doublons (utilise le cache résolu au dernier render)
     if (this._classWeaponUuids?.includes(uuid)) return;
     if (this.actor.system.weaponIds.includes(uuid)) return;
-
     const weaponIds = [...this.actor.system.weaponIds, uuid];
     await this.actor.update({ "system.weaponIds": weaponIds });
   }
 
   async #onDropSkillItem(_item, uuid) {
-    // Éviter les doublons (utilise le cache résolu au dernier render)
     if (this._classSkillUuids?.includes(uuid)) return;
     if (this.actor.system.skillIds.includes(uuid)) return;
-
     const skillIds = [...this.actor.system.skillIds, uuid];
     await this.actor.update({ "system.skillIds": skillIds });
   }
 
   async #onDropSupportItem(_item, uuid) {
     if (this.actor.system.supportIds.includes(uuid)) return;
-
     const supportIds = [...this.actor.system.supportIds, uuid];
     await this.actor.update({ "system.supportIds": supportIds });
   }
@@ -238,16 +240,12 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   /*  Rendering & Visual Feedback             */
   /* ---------------------------------------- */
 
+  /** @override */
   _onRender(context, options) {
     super._onRender(context, options);
 
-    // Ajuster la taille selon le mode carte/sheet
     const cardView = this.actor.getFlag("haywire", "cardView") ?? false;
-    if (cardView) {
-      this.setPosition({ width: 400, height: 600 });
-    } else {
-      this.setPosition({ width: 550, height: 550 });
-    }
+    this.setPosition(cardView ? { width: 400, height: 600 } : { width: 550, height: 550 });
 
     const dropZone = this.element.querySelector(".haywire-sheet-class-image");
     if (dropZone) {
@@ -266,13 +264,17 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     bindConditionSelect(this.element, this.actor, this.isEditable);
   }
 
+  /**
+   * Prepare render context: resolve class, weapons, skills, supports from UUIDs.
+   * @override
+   */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.actor = this.actor;
     context.system = this.actor.system;
     context.isEditable = this.isEditable && !this._locked;
 
-    // Résolution classe par UUID (async pour charger les données complètes du compendium)
+    // Resolve class by UUID (async to load full compendium data)
     const classId = context.system.classId;
     const classItem = classId ? (await fromUuid(classId)) : null;
     if (classId && !classItem) {
@@ -287,25 +289,24 @@ export class SoldierSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       : (classItem?.system?.imagePath || null);
     context.classCardImage = classItem?.system?.imagePath || null;
 
-    // CombatStats : utiliser celles de l'actor (modifiables), fallback sur la classe
+    // CombatStats: use actor's (editable) values, fallback to class
     const actorStats = context.system.combatStats;
     const hasActorStats = actorStats.easy > 0 || actorStats.medium > 0 || actorStats.hard > 0;
     context.combatStats = hasActorStats
       ? actorStats
       : (classItem?.system?.combatStats ?? actorStats);
 
-    // Cache des UUIDs classe pour le hook synchrone #isRelevantItem
+    // Cache class UUIDs for the synchronous #isRelevantItem hook
     this._classWeaponUuids = classItem?.system?.defaultWeapons ?? [];
     this._classSkillUuids = classItem?.system?.skillIds ?? [];
 
-    // Skills + Weapons — résolution parallèle par UUID (filtrage des exclus)
+    // Skills + Weapons — parallel UUID resolution (filtering excluded)
     const excludedWeapons = context.system.excludedWeaponIds ?? [];
     const excludedSkills = context.system.excludedSkillIds ?? [];
     const classSkillIds = this._classSkillUuids.filter(id => !excludedSkills.includes(id));
     const classWeaponIds = this._classWeaponUuids.filter(id => !excludedWeapons.includes(id));
     const allSkillUuids = [...classSkillIds, ...(context.system.skillIds ?? [])];
     const allWeaponUuids = [...classWeaponIds, ...context.system.weaponIds];
-
     const allSupportUuids = context.system.supportIds ?? [];
 
     const [skillEntries, weaponEntries, supportEntries] = await Promise.all([

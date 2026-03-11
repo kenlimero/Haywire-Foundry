@@ -1,15 +1,21 @@
+/**
+ * Custom Actor class for the Haywire system.
+ * Manages soldier and opfor-unit derived data, conditions, and token sync.
+ * @extends Actor
+ */
 export class HaywireActor extends Actor {
 
-  // Conditions synchro sheet ↔ token (hors suppressed/pinned qui sont gérés via suppression)
+  /** Conditions synced between sheet and token (excluding suppressed/pinned managed via suppression). */
   static TOKEN_CONDITIONS = ["downed", "hidden", "injured", "overwatch"];
 
+  /** @override */
   prepareDerivedData() {
     super.prepareDerivedData();
-    if (this.type === "soldier") this._prepareSoldierData();
-    else if (this.type === "opfor-unit") this._prepareOpforData();
+    if (this.type === "soldier") this.#prepareSoldierData();
+    else if (this.type === "opfor-unit") this.#prepareOpforData();
   }
 
-  _prepareSoldierData() {
+  #prepareSoldierData() {
     const system = this.system;
 
     // Clamp HP to max
@@ -31,9 +37,9 @@ export class HaywireActor extends Actor {
     }
 
     // Suppression → conditions
-    this._prepareSuppression();
+    this.#applySuppression();
 
-    // AP = HP - pénalité conditions (suppressed: -1, pinned: -2)
+    // AP = HP - penalty from suppression conditions (suppressed: -1, pinned: -2)
     let apPenalty = 0;
     if (system.conditions.has("pinned")) apPenalty = 2;
     else if (system.conditions.has("suppressed")) apPenalty = 1;
@@ -41,17 +47,22 @@ export class HaywireActor extends Actor {
     system.actionPoints.value = Math.max(0, system.hitPoints.value - apPenalty);
   }
 
-  _prepareOpforData() {
-    this._prepareSuppression();
+  #prepareOpforData() {
+    this.#applySuppression();
   }
 
-  /** Apply suppression level → conditions (pinned supersedes suppressed) */
-  _prepareSuppression() {
+  /**
+   * Apply suppression level → conditions (pinned supersedes suppressed).
+   * Shared between soldier and opfor-unit.
+   */
+  #applySuppression() {
     const system = this.system;
-    if (system.suppression >= 6) {
+    const suppression = system.suppression;
+
+    if (suppression >= 6) {
       system.conditions.add("pinned");
       system.conditions.delete("suppressed");
-    } else if (system.suppression >= 3) {
+    } else if (suppression >= 3) {
       system.conditions.add("suppressed");
       system.conditions.delete("pinned");
     } else {
@@ -64,30 +75,36 @@ export class HaywireActor extends Actor {
   /*  Conditions ↔ Token Status Effects Sync  */
   /* ---------------------------------------- */
 
+  /**
+   * Toggle a status effect on this actor.
+   * Routes suppression-related statuses through the suppression value,
+   * and Haywire conditions through the conditions set.
+   * @param {string} statusId - The status effect ID
+   * @param {object} [options={}] - Options including {active: boolean}
+   * @override
+   */
   async toggleStatusEffect(statusId, options = {}) {
-    // Suppression levels (sup-1 à sup-6) : clic token → set suppression value
+    // Suppression levels (sup-1 to sup-6): token click → set suppression value
     if (statusId.startsWith("sup-")) {
       const level = parseInt(statusId.split("-")[1], 10);
+      if (Number.isNaN(level) || level < 1 || level > 6) return;
       const newSuppression = this.system.suppression === level ? 0 : level;
       await this.update({ "system.suppression": newSuppression });
       return;
     }
 
-    // Suppressed/pinned via la fiche → route vers suppression value
-    if (statusId === "suppressed") {
-      const shouldBeActive = options.active ?? !this.system.conditions.has("suppressed");
-      const newSuppression = shouldBeActive ? Math.max(this.system.suppression, 3) : Math.min(this.system.suppression, 2);
-      await this.update({ "system.suppression": newSuppression });
-      return;
-    }
-    if (statusId === "pinned") {
-      const shouldBeActive = options.active ?? !this.system.conditions.has("pinned");
-      const newSuppression = shouldBeActive ? Math.max(this.system.suppression, 6) : Math.min(this.system.suppression, 5);
+    // Suppressed/pinned via sheet → route to suppression value
+    if (statusId === "suppressed" || statusId === "pinned") {
+      const threshold = statusId === "pinned" ? 6 : 3;
+      const shouldBeActive = options.active ?? !this.system.conditions.has(statusId);
+      const newSuppression = shouldBeActive
+        ? Math.max(this.system.suppression, threshold)
+        : Math.min(this.system.suppression, threshold - 1);
       await this.update({ "system.suppression": newSuppression });
       return;
     }
 
-    // Conditions Haywire standard (downed, hidden, injured, overwatch)
+    // Standard Haywire conditions (downed, hidden, injured, overwatch)
     if (!HaywireActor.TOKEN_CONDITIONS.includes(statusId)) {
       return super.toggleStatusEffect(statusId, options);
     }
@@ -100,9 +117,10 @@ export class HaywireActor extends Actor {
     if (shouldBeActive) conditions.add(statusId);
     else conditions.delete(statusId);
 
+    /** @type {Record<string, unknown>} */
     const updateData = { "system.conditions": [...conditions] };
 
-    // Sync mécanique inverse : toggle condition ↔ HP (soldats uniquement)
+    // Inverse mechanic sync: toggle condition ↔ HP (soldiers only)
     if (this.type === "soldier") {
       if (statusId === "injured") {
         updateData["system.hitPoints.value"] = shouldBeActive ? 1 : this.system.hitPoints.max;
@@ -114,22 +132,28 @@ export class HaywireActor extends Actor {
     await this.update(updateData);
   }
 
+  /**
+   * After update, sync token status effects if conditions/suppression/HP changed.
+   * @override
+   */
   _onUpdate(changed, options, userId) {
     super._onUpdate(changed, options, userId);
     if (!["soldier", "opfor-unit"].includes(this.type) || userId !== game.user.id) return;
 
-    // Sync token seulement si conditions ou suppression ont changé
     const s = changed.system;
     if (!s) return;
     if (s.conditions !== undefined || s.suppression !== undefined || s.hitPoints !== undefined) {
-      this._syncTokenConditions();
+      this.#syncTokenConditions();
     }
   }
 
-  async _syncTokenConditions() {
+  /**
+   * Synchronize all token status effects to match current actor conditions and suppression.
+   */
+  async #syncTokenConditions() {
     const toggles = [];
 
-    // Sync conditions standard (downed, hidden, injured, overwatch)
+    // Sync standard conditions (downed, hidden, injured, overwatch)
     for (const id of HaywireActor.TOKEN_CONDITIONS) {
       const hasCondition = this.system.conditions.has(id);
       const hasEffect = this.statuses.has(id);
@@ -138,7 +162,7 @@ export class HaywireActor extends Actor {
       }
     }
 
-    // Sync suppression level marker (seul le niveau actuel est visible)
+    // Sync suppression level marker (only the current level is visible)
     const suppression = Math.min(this.system.suppression, 6);
     for (let i = 1; i <= 6; i++) {
       const id = `sup-${i}`;
