@@ -22,6 +22,7 @@ _bmad-output/
 .claude/
 .superpowers/
 docs/
+plans/
 
 # Environment
 .env
