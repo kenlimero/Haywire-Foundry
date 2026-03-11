@@ -23,12 +23,12 @@ import { HaywireRoll } from "./module/rolls/haywire-roll.mjs";
 
 // Overlays
 import { TokenOverlay } from "./module/token-overlay.mjs";
-import { ThreatOverlay } from "./module/threat-overlay.mjs";
-import { SupportOverlay } from "./module/support-overlay.mjs";
-import { OpforSupportOverlay } from "./module/opfor-support-overlay.mjs";
+import threatOverlay from "./module/threat-overlay.mjs";
+import supportOverlay from "./module/support-overlay.mjs";
+import opforSupportOverlay from "./module/opfor-support-overlay.mjs";
 import { SimpleCardOverlay } from "./module/simple-card-overlay.mjs";
-import { FogOfWarOverlay } from "./module/fog-of-war-overlay.mjs";
-import { ReinforcementOverlay } from "./module/reinforcement-overlay.mjs";
+import fogOfWarOverlay from "./module/fog-of-war-overlay.mjs";
+import reinforcementOverlay from "./module/reinforcement-overlay.mjs";
 
 // Mission reset
 import { MissionReset } from "./module/mission-reset.mjs";
@@ -210,13 +210,13 @@ const operationsOverlay = new SimpleCardOverlay({
 /* ─── Ready Hook — Initialize Overlays ───────────────────────────────────── */
 
 Hooks.once("ready", () => {
-  ThreatOverlay.init();
-  SupportOverlay.init();
-  OpforSupportOverlay.init();
+  threatOverlay.init();
+  supportOverlay.init();
+  opforSupportOverlay.init();
   infilOverlay.init();
   operationsOverlay.init();
-  FogOfWarOverlay.init();
-  ReinforcementOverlay.init();
+  fogOfWarOverlay.init();
+  reinforcementOverlay.init();
 });
 
 /* ─── Token Hooks ────────────────────────────────────────────────────────── */
@@ -311,7 +311,7 @@ Hooks.on("createToken", (tokenDoc) => {
   if (!actor || actor.type !== "soldier") return;
   const supportIds = actor.system.supportIds ?? [];
   if (!supportIds.length) return;
-  SupportOverlay.addCards(supportIds, actor.id);
+  supportOverlay.addCards(supportIds, actor.id);
 });
 
 /* ─── Prototype Token Defaults for New Soldier Actors ────────────────────── */
