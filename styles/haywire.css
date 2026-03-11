@@ -1263,10 +1263,8 @@
     transition: opacity 0.15s ease, background 0.15s;
   }
 
-  .haywire-threat-d20 svg {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
+  .haywire-threat-d20 i {
+    font-size: 20px;
     filter: drop-shadow(0 0 4px rgba(201, 168, 0, 0.6));
   }
 
@@ -2000,10 +1998,8 @@
     box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
   }
 
-  #haywire-reinforcement-overlay .haywire-overlay-roll svg {
-    width: 18px;
-    height: 18px;
-    fill: currentColor;
+  #haywire-reinforcement-overlay .haywire-overlay-roll i {
+    font-size: 18px;
   }
 
   #haywire-reinforcement-overlay .haywire-overlay-roll:hover {

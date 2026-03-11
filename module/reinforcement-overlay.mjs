@@ -6,7 +6,7 @@
  * - Disparaît si le leader/skill support est retiré ou alert désactivée
  */
 import {
-  pinSvg, D20_SVG, onSettingsChange, getOrCreateElement,
+  pinSvg, onSettingsChange, getOrCreateElement,
   isOpforActivatable, rollCompendiumTable, showPreview, hidePreview,
   bindOpforActivityHooks,
 } from "./overlay-helpers.mjs";
@@ -71,7 +71,7 @@ export class ReinforcementOverlay {
     el.innerHTML = `
       <div class="haywire-reinforcement-card">
         <img class="haywire-reinforcement-thumb" src="${imgSrc}" alt="Reinforcements" />
-        <button class="haywire-overlay-roll" title="${i18n("HAYWIRE.Reinforcement.Roll")}">${D20_SVG}</button>
+        <button class="haywire-overlay-roll" title="${i18n("HAYWIRE.Reinforcement.Roll")}"><i class="fas fa-dice-d20"></i></button>
         ${pinSvg(i18n("HAYWIRE.Pin"))}
       </div>`;
 

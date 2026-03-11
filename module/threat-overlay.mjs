@@ -7,7 +7,7 @@
  * - Bouton alerte (GM) : active/désactive l'alerte (lueur rouge pulsante)
  */
 import { OpforSupportOverlay } from "./opfor-support-overlay.mjs";
-import { D20_SVG, rollCompendiumTable, getOrCreateElement, showPreview, hidePreview } from "./overlay-helpers.mjs";
+import { rollCompendiumTable, getOrCreateElement, showPreview, hidePreview } from "./overlay-helpers.mjs";
 
 export class ThreatOverlay {
   static #el = null;
@@ -85,7 +85,7 @@ export class ThreatOverlay {
         <div class="haywire-threat-beacon-dome"></div>
         <div class="haywire-threat-beacon-glow"></div>
         <div class="haywire-threat-level">${isActive ? level : "—"}</div>
-        ${isActive && isGM ? `<button class="haywire-threat-d20" title="${i18n("HAYWIRE.Threat.RollTable")}">${D20_SVG}</button>` : ""}
+        ${isActive && isGM ? `<button class="haywire-threat-d20" title="${i18n("HAYWIRE.Threat.RollTable")}"><i class="fas fa-dice-d20"></i></button>` : ""}
       </div>
       ${isGM ? `<div class="haywire-threat-controls">
         <button class="haywire-threat-btn" data-action="decrease" title="${i18n("HAYWIRE.Threat.Decrease")}" ${level <= 0 ? "disabled" : ""}>
