@@ -7,12 +7,9 @@
  * @module reinforcement-overlay
  */
 import { BaseOverlay, escapeHtml } from "./overlays/base-overlay.mjs";
-import { isOpforActivatable, rollCompendiumTable, bindOpforActivityHooks } from "./overlay-helpers.mjs";
+import { rollCompendiumTable, OpforActivityMixin } from "./overlay-helpers.mjs";
 
-export class ReinforcementOverlay extends BaseOverlay {
-  /** @type {boolean|null} */
-  #cachedActivatable = null;
-
+export class ReinforcementOverlay extends OpforActivityMixin(BaseOverlay) {
   /** @type {Record<string, string>} Faction key → reinforcement table name */
   static FACTION_TABLE_NAMES = {
     cartels: "Cartel Reinforcements",
@@ -53,25 +50,6 @@ export class ReinforcementOverlay extends BaseOverlay {
 
   /** @returns {string|undefined} Card image path for current faction */
   get imgSrc() { return ReinforcementOverlay.FACTION_CARD_PATHS[this.faction]; }
-
-  /** @override */
-  bindHooks() {
-    bindOpforActivityHooks(() => { this.#cachedActivatable = null; this.render(); });
-  }
-
-  /** @override */
-  async isVisible() {
-    if (this.#cachedActivatable !== null) return this.#cachedActivatable;
-    this.#cachedActivatable = await isOpforActivatable();
-    return this.#cachedActivatable;
-  }
-
-  /** @override — invalidate cache before re-checking visibility */
-  async render() {
-    // Invalidate cache on every render triggered by settings change
-    this.#cachedActivatable = null;
-    await super.render();
-  }
 
   /** @override */
   async buildHTML() {

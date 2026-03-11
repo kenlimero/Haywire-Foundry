@@ -3,7 +3,7 @@
  * @module sheet-helpers
  */
 
-/** All Haywire condition keys. */
+/** @type {string[]} All Haywire condition keys. */
 const HAYWIRE_CONDITIONS = ["suppressed", "pinned", "downed", "hidden", "injured", "overwatch"];
 
 /**
@@ -21,11 +21,10 @@ export function conditionLabel(c) {
  * @returns {{ conditions: Array<{key: string, label: string}>, availableConditions: Array<{key: string, label: string}> }}
  */
 export function buildConditionsContext(conditions) {
-  const current = [...conditions];
   return {
-    conditions: current.map((c) => ({ key: c, label: conditionLabel(c) })),
+    conditions: [...conditions].map((c) => ({ key: c, label: conditionLabel(c) })),
     availableConditions: HAYWIRE_CONDITIONS
-      .filter((c) => !current.includes(c))
+      .filter((c) => !conditions.has(c))
       .map((c) => ({ key: c, label: conditionLabel(c) })),
   };
 }

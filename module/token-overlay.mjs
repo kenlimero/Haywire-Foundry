@@ -141,9 +141,10 @@ export class TokenOverlay {
     }
 
     const system = actor.system;
+    const safeResolve = (uuid) => fromUuid(uuid).catch(() => null);
     const [weapons, skills] = await Promise.all([
-      Promise.all((system.weaponIds ?? []).map((uuid) => fromUuid(uuid))),
-      Promise.all((system.opforSkillIds ?? []).map((uuid) => fromUuid(uuid))),
+      Promise.all((system.weaponIds ?? []).map(safeResolve)),
+      Promise.all((system.opforSkillIds ?? []).map(safeResolve)),
     ]);
 
     const behavior = system.behavior?.trim();
@@ -177,26 +178,27 @@ export class TokenOverlay {
     if (cardView) {
       const classId = actor.system.classId;
       if (!classId) return "";
-      const classItem = await fromUuid(classId);
+      const classItem = await fromUuid(classId).catch(() => null);
       const img = classItem?.system?.imagePath;
       return img ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(actor.name)}" />` : "";
     }
 
     const system = actor.system;
-    const classItem = system.classId ? await fromUuid(system.classId) : null;
+    const classItem = system.classId ? await fromUuid(system.classId).catch(() => null) : null;
     const combatStats = classItem?.type === "class" ? classItem.system.combatStats : system.combatStats;
 
-    const excludedWeapons = system.excludedWeaponIds ?? [];
-    const classWeaponIds = (classItem?.system?.defaultWeapons ?? []).filter((id) => !excludedWeapons.includes(id));
+    const excludedWeapons = new Set(system.excludedWeaponIds ?? []);
+    const classWeaponIds = (classItem?.system?.defaultWeapons ?? []).filter((id) => !excludedWeapons.has(id));
     const allWeaponUuids = [...classWeaponIds, ...system.weaponIds];
 
-    const excludedSkills = system.excludedSkillIds ?? [];
-    const classSkillIds = (classItem?.system?.skillIds ?? []).filter((id) => !excludedSkills.includes(id));
+    const excludedSkills = new Set(system.excludedSkillIds ?? []);
+    const classSkillIds = (classItem?.system?.skillIds ?? []).filter((id) => !excludedSkills.has(id));
     const allSkillUuids = [...classSkillIds, ...(system.skillIds ?? [])];
 
+    const safeResolve = (uuid) => fromUuid(uuid).catch(() => null);
     const [weapons, skills] = await Promise.all([
-      Promise.all(allWeaponUuids.map((uuid) => fromUuid(uuid))),
-      Promise.all(allSkillUuids.map((uuid) => fromUuid(uuid))),
+      Promise.all(allWeaponUuids.map(safeResolve)),
+      Promise.all(allSkillUuids.map(safeResolve)),
     ]);
 
     return `

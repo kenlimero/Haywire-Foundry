@@ -7,26 +7,26 @@
 import { BaseOverlay, escapeHtml } from "./base-overlay.mjs";
 import { resolveCardImage, parseDropData } from "../overlay-helpers.mjs";
 
+/**
+ * @typedef {import("./base-overlay.mjs").BaseOverlayConfig & {
+ *   backcoverImg: string,
+ *   altText: string,
+ *   cardSettingKey: string,
+ *   labelKey: string,
+ * }} CardOverlayConfig
+ */
+
 export class CardOverlay extends BaseOverlay {
-  /** @type {string} Path to the backcover image */
+  /** @type {string} */
   #backcoverImg;
-  /** @type {string} Alt text when no card is present */
+  /** @type {string} */
   #altText;
-  /** @type {string} Setting key storing card UUID(s) */
+  /** @type {string} */
   #cardSettingKey;
-  /** @type {string} i18n key for the overlay label */
+  /** @type {string} */
   #labelKey;
 
-  /**
-   * @param {object} config
-   * @param {string} config.elementId
-   * @param {string} [config.previewId]
-   * @param {string[]} [config.settingKeys]
-   * @param {string} config.backcoverImg   - Path to backcover image
-   * @param {string} config.altText        - Default alt text
-   * @param {string} config.cardSettingKey - Setting key for the card UUID
-   * @param {string} config.labelKey       - i18n key for the label
-   */
+  /** @param {CardOverlayConfig} config */
   constructor(config) {
     super(config);
     this.#backcoverImg = config.backcoverImg;

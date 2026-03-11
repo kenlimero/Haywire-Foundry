@@ -6,12 +6,9 @@
  * @module opfor-support-overlay
  */
 import { CardPanelOverlay } from "./overlays/card-panel-overlay.mjs";
-import { isOpforActivatable, bindOpforActivityHooks, parseDropData } from "./overlay-helpers.mjs";
+import { OpforActivityMixin, parseDropData } from "./overlay-helpers.mjs";
 
-export class OpforSupportOverlay extends CardPanelOverlay {
-  /** @type {boolean|null} */
-  #cachedActivatable = null;
-
+export class OpforSupportOverlay extends OpforActivityMixin(CardPanelOverlay) {
   constructor() {
     super({
       elementId: "haywire-opfor-support-overlay",
@@ -23,24 +20,6 @@ export class OpforSupportOverlay extends CardPanelOverlay {
       labelKey: "HAYWIRE.OpforSupport.Label",
       iconClass: "fa-skull-crossbones",
     });
-  }
-
-  /** @override */
-  bindHooks() {
-    bindOpforActivityHooks(() => { this.#cachedActivatable = null; this.render(); });
-  }
-
-  /** @override */
-  async isVisible() {
-    if (this.#cachedActivatable !== null) return this.#cachedActivatable;
-    this.#cachedActivatable = await isOpforActivatable();
-    return this.#cachedActivatable;
-  }
-
-  /** @override — invalidate cache before re-checking visibility */
-  async render() {
-    this.#cachedActivatable = null;
-    await super.render();
   }
 
   /** @override — also clear panel when not visible */

@@ -5,8 +5,8 @@
  */
 export class HaywireActor extends Actor {
 
-  /** Conditions synced between sheet and token (excluding suppressed/pinned managed via suppression). */
-  static TOKEN_CONDITIONS = ["downed", "hidden", "injured", "overwatch"];
+  /** @type {Set<string>} Conditions synced between sheet and token (excluding suppressed/pinned managed via suppression). */
+  static TOKEN_CONDITIONS = new Set(["downed", "hidden", "injured", "overwatch"]);
 
   /** @override */
   prepareDerivedData() {
@@ -105,7 +105,7 @@ export class HaywireActor extends Actor {
     }
 
     // Standard Haywire conditions (downed, hidden, injured, overwatch)
-    if (!HaywireActor.TOKEN_CONDITIONS.includes(statusId)) {
+    if (!HaywireActor.TOKEN_CONDITIONS.has(statusId)) {
       return super.toggleStatusEffect(statusId, options);
     }
 

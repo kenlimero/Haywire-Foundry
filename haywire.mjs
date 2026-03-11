@@ -261,7 +261,7 @@ function _postCardChatMessage(origin, cards, action) {
         <div class="haywire-card-chat-name">${escapeHtml(cardName)}</div>
       </div>`,
       speaker: { alias: origin.name },
-    });
+    }).catch((err) => console.error("haywire | _postCardChatMessage failed", err));
   }
 }
 

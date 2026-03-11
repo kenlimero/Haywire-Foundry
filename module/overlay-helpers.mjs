@@ -29,6 +29,7 @@ const LEADER_NAMES = /^(squad commander|cell leader|leader)$/i;
 /**
  * Check if OPFOR support/reinforcement overlays should be active.
  * Requires: alert active + at least one non-downed opfor-unit with leader name or "Support" skill.
+ * Resolves all skill UUIDs in parallel for performance.
  * @returns {Promise<boolean>}
  */
 export async function isOpforActivatable() {
@@ -38,24 +39,29 @@ export async function isOpforActivatable() {
   const scene = game.scenes?.active;
   if (!scene) return false;
 
+  // Collect all skill UUIDs from non-downed opfor-units (skip leaders — they match immediately)
+  const skillUuidsToResolve = [];
   for (const token of scene.tokens) {
     const actor = token.actor;
     if (!actor || actor.type !== "opfor-unit") continue;
     if (actor.system.conditions?.has("downed")) continue;
-
     if (LEADER_NAMES.test(actor.name)) return true;
 
-    const skillUuids = actor.system.opforSkillIds ?? [];
-    for (const uuid of skillUuids) {
-      try {
-        const skill = await fromUuid(uuid);
-        if (skill?.name?.toLowerCase() === "support") return true;
-      } catch (err) {
-        console.warn(`haywire | isOpforActivatable: failed to resolve skill UUID "${uuid}"`, err);
-      }
+    for (const uuid of actor.system.opforSkillIds ?? []) {
+      skillUuidsToResolve.push(uuid);
     }
   }
-  return false;
+
+  if (!skillUuidsToResolve.length) return false;
+
+  // Batch resolve all skill UUIDs in parallel
+  const skills = await Promise.all(
+    skillUuidsToResolve.map((uuid) => fromUuid(uuid).catch((err) => {
+      console.warn(`haywire | isOpforActivatable: failed to resolve skill UUID "${uuid}"`, err);
+      return null;
+    })),
+  );
+  return skills.some((skill) => skill?.name?.toLowerCase() === "support");
 }
 
 /**
@@ -107,50 +113,6 @@ export function parseDropData(event) {
 }
 
 /**
- * Bind pin toggle on an overlay element.
- * @param {HTMLElement} el - The overlay root element
- */
-export function bindPinToggle(el) {
-  el.querySelector(".haywire-overlay-pin")?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    el.classList.toggle("user-pinned");
-  });
-}
-
-/**
- * Bind standard drag-over/leave/drop on a thumbnail element.
- * @param {HTMLElement} thumb - The thumbnail element
- * @param {(event: DragEvent) => void} onDropCallback - Handler for drop events
- */
-export function bindDragDrop(thumb, onDropCallback) {
-  thumb.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    thumb.classList.add("drag-over");
-  });
-  thumb.addEventListener("dragleave", () => {
-    thumb.classList.remove("drag-over");
-  });
-  thumb.addEventListener("drop", (e) => {
-    e.preventDefault();
-    thumb.classList.remove("drag-over");
-    onDropCallback(e);
-  });
-}
-
-/**
- * Register setting change hooks (createSetting + updateSetting) for given keys.
- * @param {string[]} keys - Setting key suffixes (e.g. ["threatLevel", "threatAlert"])
- * @param {(setting: object) => void} callback - Handler called when a matching setting changes
- */
-export function onSettingsChange(keys, callback) {
-  const handler = (setting) => {
-    if (keys.some((k) => setting.key === `haywire.${k}`)) callback(setting);
-  };
-  Hooks.on("createSetting", handler);
-  Hooks.on("updateSetting", handler);
-}
-
-/**
  * Resolve a card image from a UUID. Returns {imgSrc, imgAlt} or defaults.
  * @param {string|null} uuid - Card UUID to resolve
  * @param {string} defaultImg - Fallback image path
@@ -197,8 +159,9 @@ export async function drawRandomCard(deckName, excludeIds = []) {
   if (!deck?.cards?.size) return null;
 
   const allCards = Array.from(deck.cards);
-  const available = excludeIds.length
-    ? allCards.filter((c) => !excludeIds.includes(c._id))
+  const excludeSet = excludeIds.length ? new Set(excludeIds) : null;
+  const available = excludeSet
+    ? allCards.filter((c) => !excludeSet.has(c._id))
     : allCards;
 
   if (!available.length) return null;
@@ -218,6 +181,38 @@ export function bindOpforActivityHooks(invalidateAndRender) {
   Hooks.on("updateActor", (actor) => {
     if (actor.type === "opfor-unit") invalidateAndRender();
   });
+}
+
+/**
+ * Mixin that adds opfor activity visibility caching to a BaseOverlay subclass.
+ * Overlays using this mixin are only visible when isOpforActivatable() returns true.
+ * The cache is invalidated on every render and on scene/actor changes.
+ * @param {typeof import("./overlays/base-overlay.mjs").BaseOverlay} Base
+ * @returns {typeof Base}
+ */
+export function OpforActivityMixin(Base) {
+  return class extends Base {
+    /** @type {boolean|null} */
+    #cachedActivatable = null;
+
+    /** @override */
+    bindHooks() {
+      bindOpforActivityHooks(() => { this.#cachedActivatable = null; this.render(); });
+    }
+
+    /** @override */
+    async isVisible() {
+      if (this.#cachedActivatable !== null) return this.#cachedActivatable;
+      this.#cachedActivatable = await isOpforActivatable();
+      return this.#cachedActivatable;
+    }
+
+    /** @override — invalidate cache before re-checking visibility */
+    async render() {
+      this.#cachedActivatable = null;
+      await super.render();
+    }
+  };
 }
 
 /**

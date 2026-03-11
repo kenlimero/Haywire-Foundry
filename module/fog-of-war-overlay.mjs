@@ -79,7 +79,14 @@ export class FogOfWarOverlay extends CardOverlay {
     const target = this.die;
     if (target <= 0) return;
 
-    const roll = await new Roll("1d6").evaluate();
+    let roll;
+    try {
+      roll = await new Roll("1d6").evaluate();
+    } catch (err) {
+      console.error("haywire | FogOfWarOverlay: roll evaluation failed", err);
+      return;
+    }
+
     const result = roll.total;
     const label = this.i18n("HAYWIRE.FogOfWar.Label");
     const triggered = result >= target;

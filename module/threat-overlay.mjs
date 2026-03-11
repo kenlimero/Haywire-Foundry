@@ -7,11 +7,11 @@
  * - Bouton alerte (GM) : active/désactive l'alerte (lueur rouge pulsante)
  * @module threat-overlay
  */
-import { SvgOverlay } from "./overlays/svg-overlay.mjs";
+import { BaseOverlay } from "./overlays/base-overlay.mjs";
 import { rollCompendiumTable } from "./overlay-helpers.mjs";
 import opforSupportOverlay from "./opfor-support-overlay.mjs";
 
-export class ThreatOverlay extends SvgOverlay {
+export class ThreatOverlay extends BaseOverlay {
   /** @type {Record<string, string>} Faction key → threat card image path prefix */
   static FACTION_PATHS = {
     cartels: "systems/haywire/assets/opfor_cartels/cartel_threat_level_",
@@ -72,7 +72,7 @@ export class ThreatOverlay extends SvgOverlay {
   async isVisible() { return true; }
 
   /** @override */
-  async buildSVG() {
+  async buildHTML() {
     const level = this.level;
     const isActive = level > 0;
     const isAlert = this.alert;

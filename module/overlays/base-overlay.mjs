@@ -9,24 +9,26 @@ import {
   hidePreview as hidePreviewHelper, parseDropData,
 } from "../overlay-helpers.mjs";
 
+/**
+ * @typedef {object} BaseOverlayConfig
+ * @property {string} elementId      - DOM id for the overlay root element
+ * @property {string} [previewId=""] - DOM id for the preview element
+ * @property {string[]} [settingKeys=[]] - Haywire setting keys that trigger re-render on change
+ */
+
 export class BaseOverlay {
   /** @type {HTMLElement|null} */
   #el = null;
   /** @type {HTMLElement|null} */
   #previewEl = null;
-  /** @type {string} DOM id for the overlay root element */
+  /** @type {string} */
   #elementId;
-  /** @type {string} DOM id for the preview element */
+  /** @type {string} */
   #previewId;
-  /** @type {string[]} Setting keys that trigger re-render */
+  /** @type {string[]} */
   #settingKeys;
 
-  /**
-   * @param {object} config
-   * @param {string} config.elementId   - DOM id for the overlay root element
-   * @param {string} [config.previewId] - DOM id for the preview element
-   * @param {string[]} [config.settingKeys] - Setting keys that trigger re-render on change
-   */
+  /** @param {BaseOverlayConfig} config */
   constructor({ elementId, previewId = "", settingKeys = [] }) {
     this.#elementId = elementId;
     this.#previewId = previewId;

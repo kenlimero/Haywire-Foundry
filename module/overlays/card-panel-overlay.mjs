@@ -7,33 +7,33 @@
 import { BaseOverlay, escapeHtml } from "./base-overlay.mjs";
 import { parseDropData, showPreview, hidePreview, createPanelToggle } from "../overlay-helpers.mjs";
 
+/**
+ * @typedef {import("./base-overlay.mjs").BaseOverlayConfig & {
+ *   panelId: string,
+ *   cardsSettingKey: string,
+ *   backcoverImg: string,
+ *   labelKey: string,
+ *   iconClass?: string,
+ * }} CardPanelOverlayConfig
+ */
+
 export class CardPanelOverlay extends BaseOverlay {
   /** @type {HTMLElement|null} */
   #panelEl = null;
   /** @type {{ show: () => void, hide: () => void }|null} */
   #panelToggle = null;
-  /** @type {string} Setting key storing the card array */
+  /** @type {string} */
   #cardsSettingKey;
-  /** @type {string} Path to backcover thumbnail image */
+  /** @type {string} */
   #backcoverImg;
-  /** @type {string} i18n key for the overlay label */
+  /** @type {string} */
   #labelKey;
-  /** @type {string} DOM id for the panel element */
+  /** @type {string} */
   #panelId;
-  /** @type {string} Icon class for the panel header */
+  /** @type {string} */
   #iconClass;
 
-  /**
-   * @param {object} config
-   * @param {string} config.elementId
-   * @param {string} [config.previewId]
-   * @param {string[]} [config.settingKeys]
-   * @param {string} config.panelId          - DOM id for the panel element
-   * @param {string} config.cardsSettingKey  - Setting key for card array
-   * @param {string} config.backcoverImg     - Path to backcover image
-   * @param {string} config.labelKey         - i18n key for label
-   * @param {string} [config.iconClass]      - FontAwesome icon class for header
-   */
+  /** @param {CardPanelOverlayConfig} config */
   constructor(config) {
     super(config);
     this.#cardsSettingKey = config.cardsSettingKey;
@@ -190,7 +190,7 @@ export class CardPanelOverlay extends BaseOverlay {
     }
 
     const uuids = this.getCardUuids();
-    const resolved = await Promise.all(uuids.map((uuid) => fromUuid(uuid)));
+    const resolved = await Promise.all(uuids.map((uuid) => fromUuid(uuid).catch(() => null)));
     panel.innerHTML = this.buildPanelHTML(entries, resolved);
     this.bindPanelEvents(panel);
   }
