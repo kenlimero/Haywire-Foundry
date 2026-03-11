@@ -70,7 +70,7 @@ export class FogOfWarOverlay {
       <div class="haywire-support-thumb" title="${i18n("HAYWIRE.FogOfWar.Label")}">
         <img src="${imgSrc}" alt="${imgAlt}" />
         ${pinSvg(i18n("HAYWIRE.Pin"))}
-        ${showDie ? `<span class="haywire-fog-die" title="${i18n("HAYWIRE.FogOfWar.DieHint")}"><span class="fog-die-number">${die}+</span><span class="fog-die-icon"><i class="fas fa-dice-d6"></i></span></span>` : ""}
+        ${showDie ? `<span class="haywire-fog-die" title="${i18n("HAYWIRE.FogOfWar.DieHint")}"><span class="fog-die-number">${die}+</span><span class="fog-die-icon"><i class="fas fa-dice"></i></span></span>` : ""}
       </div>`;
 
     const thumb = el.querySelector(".haywire-support-thumb");
