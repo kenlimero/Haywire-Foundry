@@ -7,115 +7,85 @@
  * - die=0 : plus de checks fog disponibles (reset mission pour recommencer)
  * @module fog-of-war-overlay
  */
-import {
-  pinSvg, parseDropData, bindPinToggle, bindDragDrop,
-  onSettingsChange, resolveCardImage, showPreview, hidePreview,
-  getOrCreateElement, drawRandomCard, escapeHtml,
-} from "./overlay-helpers.mjs";
+import { CardOverlay } from "./overlays/card-overlay.mjs";
+import { escapeHtml } from "./overlays/base-overlay.mjs";
+import { drawRandomCard } from "./overlay-helpers.mjs";
 
-export class FogOfWarOverlay {
-  static #el = null;
-  static #previewEl = null;
-
+export class FogOfWarOverlay extends CardOverlay {
   static DECK_NAME = "Fog of War";
 
-  static init() {
-    this.#el = getOrCreateElement(this.#el, "haywire-fog-overlay");
-    this.#previewEl = getOrCreateElement(this.#previewEl, "haywire-fog-preview");
-    this.render();
-    onSettingsChange(["fogOfWarCardId", "fogOfWarDie"], () => this.render());
-  }
-
-  /** @returns {string} Current fog card UUID */
-  static get cardId() {
-    return game.settings.get("haywire", "fogOfWarCardId") ?? "";
+  constructor() {
+    super({
+      elementId: "haywire-fog-overlay",
+      previewId: "haywire-fog-preview",
+      settingKeys: ["fogOfWarCardId", "fogOfWarDie"],
+      backcoverImg: "systems/haywire/assets/cards/backcovers/fog.webp",
+      altText: "Fog of War",
+      cardSettingKey: "fogOfWarCardId",
+      labelKey: "HAYWIRE.FogOfWar.Label",
+    });
   }
 
   /** @returns {number} Current die target value */
-  static get die() {
-    return game.settings.get("haywire", "fogOfWarDie") || 6;
-  }
-
-  /** @param {string} id */
-  static async setCardId(id) {
-    await game.settings.set("haywire", "fogOfWarCardId", id);
-  }
+  get die() { return this.getSetting("fogOfWarDie") || 6; }
 
   /** @param {number} value */
-  static async setDie(value) {
-    await game.settings.set("haywire", "fogOfWarDie", value);
-  }
+  async setDie(value) { await this.setSetting("fogOfWarDie", value); }
 
   /** @returns {string[]} Already drawn card IDs */
-  static get drawnCards() {
-    return game.settings.get("haywire", "fogOfWarDrawnCards") ?? [];
-  }
+  get drawnCards() { return this.getSetting("fogOfWarDrawnCards") ?? []; }
 
   /** @param {string[]} ids */
-  static async setDrawnCards(ids) {
-    await game.settings.set("haywire", "fogOfWarDrawnCards", ids);
+  async setDrawnCards(ids) { await this.setSetting("fogOfWarDrawnCards", ids); }
+
+  /* ─── Card state override ────────────────────────────────────────────── */
+
+  /**
+   * FogOfWar stores a single string, not an array.
+   * @override
+   */
+  get cardId() { return this.getSetting("fogOfWarCardId") ?? ""; }
+
+  /** @override */
+  async setCardIds(ids) { await this.setSetting("fogOfWarCardId", ids[0] ?? ""); }
+
+  /** @override */
+  async clearCard() { await this.setSetting("fogOfWarCardId", ""); }
+
+  /* ─── Render ─────────────────────────────────────────────────────────── */
+
+  /** @override — no remove button on fog overlay */
+  buildRemoveHTML() { return ""; }
+
+  /** @override — die counter instead of roll button */
+  buildControlsHTML(_hasCard) {
+    const die = this.die;
+    if (die <= 0) return "";
+    return `<span class="haywire-fog-die" title="${this.i18n("HAYWIRE.FogOfWar.DieHint")}"><span class="fog-die-number">${die}+</span><span class="fog-die-icon"><i class="fas fa-dice"></i></span></span>`;
   }
 
-  static async render() {
-    const el = this.#el;
-    if (!el) return;
-
-    const cardId = this.cardId;
-    const hasCard = !!cardId;
-    const die = this.die;
-    const i18n = (k) => game.i18n.localize(k);
-
-    const { imgSrc, imgAlt } = await resolveCardImage(
-      hasCard ? cardId : null,
-      "systems/haywire/assets/cards/backcovers/fog.webp",
-      "Fog of War",
-    );
-
-    const showDie = die > 0;
-
-    el.innerHTML = `
-      <div class="haywire-support-thumb" title="${i18n("HAYWIRE.FogOfWar.Label")}">
-        <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(imgAlt)}" />
-        ${pinSvg(i18n("HAYWIRE.Pin"))}
-        ${showDie ? `<span class="haywire-fog-die" title="${i18n("HAYWIRE.FogOfWar.DieHint")}"><span class="fog-die-number">${die}+</span><span class="fog-die-icon"><i class="fas fa-dice"></i></span></span>` : ""}
-      </div>`;
-
-    const thumb = el.querySelector(".haywire-support-thumb");
-    bindPinToggle(el);
-    bindDragDrop(thumb, (e) => this.#onDrop(e));
-
-    if (hasCard) {
-      thumb.addEventListener("mouseenter", () => showPreview(this.#previewEl, imgSrc, imgAlt));
-      thumb.addEventListener("mouseleave", () => hidePreview(this.#previewEl));
-    }
-
-    el.querySelector(".haywire-fog-die")?.addEventListener("click", (e) => {
+  /** @override */
+  bindCardEvents() {
+    this.el?.querySelector(".haywire-fog-die")?.addEventListener("click", (e) => {
       e.stopPropagation();
-      hidePreview(this.#previewEl);
+      this.hidePreview();
       this.#onDieClick();
     });
   }
 
-  /* ---- Private ---- */
+  /* ─── Private ────────────────────────────────────────────────────────── */
 
-  /** @param {DragEvent} event */
-  static #onDrop(event) {
-    const data = parseDropData(event);
-    if (!data) return;
-    this.setCardId(data.uuid);
-  }
-
-  static async #onDieClick() {
+  async #onDieClick() {
     const target = this.die;
     if (target <= 0) return;
 
     const roll = await new Roll("1d6").evaluate();
     const result = roll.total;
-    const label = game.i18n.localize("HAYWIRE.FogOfWar.Label");
+    const label = this.i18n("HAYWIRE.FogOfWar.Label");
     const triggered = result >= target;
 
     const outcomeKey = triggered ? "HAYWIRE.FogOfWar.Triggered" : "HAYWIRE.FogOfWar.Safe";
-    const outcomeText = game.i18n.localize(outcomeKey);
+    const outcomeText = this.i18n(outcomeKey);
     const outcomeClass = triggered ? "fog-triggered" : "fog-safe";
 
     await ChatMessage.create({
@@ -124,7 +94,7 @@ export class FogOfWarOverlay {
           <i class="fas fa-cloud-fog"></i> ${label}
         </div>
         <p style="padding:0.5rem;font-size:1.2rem;margin:0;">
-          <strong>${game.i18n.localize("HAYWIRE.FogOfWar.DieRolled")} ${result}</strong>
+          <strong>${this.i18n("HAYWIRE.FogOfWar.DieRolled")} ${result}</strong>
           (${target}+)
           — <span class="${outcomeClass}">${outcomeText}</span>
         </p>
@@ -135,49 +105,45 @@ export class FogOfWarOverlay {
     if (triggered) {
       await this.#rollCard();
     } else {
-      await this.setCardId("");
+      await this.clearCard();
     }
 
     await this.setDie(target - 1);
   }
 
-  /**
-   * Draw a random fog of war card, excluding already drawn ones.
-   * Uses the shared drawRandomCard helper with excludeIds for deduplication.
-   */
-  static async #rollCard() {
+  async #rollCard() {
     let drawnIds = this.drawnCards;
 
-    // First attempt: draw excluding already drawn cards
-    let result = await drawRandomCard(this.DECK_NAME, drawnIds);
+    let result = await drawRandomCard(FogOfWarOverlay.DECK_NAME, drawnIds);
 
-    // If deck exhausted, reset drawn cards and try again
     if (!result) {
       await ChatMessage.create({
-        content: `<p><strong>${game.i18n.localize("HAYWIRE.FogOfWar.DeckExhausted")}</strong></p>`,
+        content: `<p><strong>${this.i18n("HAYWIRE.FogOfWar.DeckExhausted")}</strong></p>`,
         whisper: ChatMessage.getWhisperRecipients("GM"),
       });
       drawnIds = [];
       await this.setDrawnCards([]);
-      result = await drawRandomCard(this.DECK_NAME);
+      result = await drawRandomCard(FogOfWarOverlay.DECK_NAME);
     }
 
     if (!result) return;
 
     const { uuid, card: picked } = result;
     await this.setDrawnCards([...drawnIds, picked._id]);
-    await this.setCardId(uuid);
+    await this.setCardIds([uuid]);
 
     const faceImg = picked.faces?.[0]?.img ?? picked.img;
     const cardName = picked.name ?? "???";
     await ChatMessage.create({
       content: `<div class="haywire-card-chat">
       <div class="haywire-card-chat-header">
-        <i class="fas fa-cloud-fog"></i> ${game.i18n.localize("HAYWIRE.FogOfWar.CardDrawn")}
+        <i class="fas fa-cloud-fog"></i> ${this.i18n("HAYWIRE.FogOfWar.CardDrawn")}
       </div>
       <img class="haywire-card-chat-img" src="${escapeHtml(faceImg)}" alt="${escapeHtml(cardName)}" data-action="showCard" data-src="${escapeHtml(faceImg)}" data-title="${escapeHtml(cardName)}"/>
     </div>`,
-      speaker: { alias: game.i18n.localize("HAYWIRE.FogOfWar.Label") },
+      speaker: { alias: this.i18n("HAYWIRE.FogOfWar.Label") },
     });
   }
 }
+
+export default new FogOfWarOverlay();

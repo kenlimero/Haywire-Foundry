@@ -6,17 +6,12 @@
  * - Disparaît si le leader/skill support est retiré ou alert désactivée
  * @module reinforcement-overlay
  */
-import {
-  pinSvg, onSettingsChange, getOrCreateElement,
-  isOpforActivatable, rollCompendiumTable, showPreview, hidePreview,
-  bindOpforActivityHooks, escapeHtml,
-} from "./overlay-helpers.mjs";
+import { BaseOverlay, escapeHtml } from "./overlays/base-overlay.mjs";
+import { isOpforActivatable, rollCompendiumTable, bindOpforActivityHooks } from "./overlay-helpers.mjs";
 
-export class ReinforcementOverlay {
-  static #el = null;
-  static #previewEl = null;
+export class ReinforcementOverlay extends BaseOverlay {
   /** @type {boolean|null} */
-  static #cachedActivatable = null;
+  #cachedActivatable = null;
 
   /** @type {Record<string, string>} Faction key → reinforcement table name */
   static FACTION_TABLE_NAMES = {
@@ -32,74 +27,6 @@ export class ReinforcementOverlay {
     russians: "systems/haywire/assets/opfor_russians/reinforcements.webp",
   };
 
-  static init() {
-    this.#el = getOrCreateElement(this.#el, "haywire-reinforcement-overlay");
-    this.#previewEl = getOrCreateElement(this.#previewEl, "haywire-reinforcement-preview");
-    this.render();
-
-    onSettingsChange(["threatAlert", "opforFaction"], () => {
-      this.#cachedActivatable = null;
-      this.render();
-    });
-
-    bindOpforActivityHooks(() => { this.#cachedActivatable = null; this.render(); });
-  }
-
-  /**
-   * Check if the overlay should be visible (cached).
-   * @returns {Promise<boolean>}
-   */
-  static async isActivatable() {
-    if (this.#cachedActivatable !== null) return this.#cachedActivatable;
-    this.#cachedActivatable = await isOpforActivatable();
-    return this.#cachedActivatable;
-  }
-
-  /** @returns {string} Current OPFOR faction key */
-  static get faction() {
-    return game.settings.get("haywire", "opforFaction") || "";
-  }
-
-  static async render() {
-    const el = this.#el;
-    if (!el) return;
-
-    const activatable = await this.isActivatable();
-    const faction = this.faction;
-    const imgSrc = this.FACTION_CARD_PATHS[faction];
-    const i18n = (k) => game.i18n.localize(k);
-
-    if (!activatable || !imgSrc) {
-      if (!el.classList.contains("user-pinned")) {
-        el.innerHTML = "";
-      }
-      return;
-    }
-
-    el.innerHTML = `
-      <div class="haywire-reinforcement-card">
-        <img class="haywire-reinforcement-thumb" src="${escapeHtml(imgSrc)}" alt="Reinforcements" />
-        <button class="haywire-overlay-roll" title="${i18n("HAYWIRE.Reinforcement.Roll")}"><i class="fas fa-dice-d20"></i></button>
-        ${pinSvg(i18n("HAYWIRE.Pin"))}
-      </div>`;
-
-    const card = el.querySelector(".haywire-reinforcement-card");
-    card.addEventListener("mouseenter", () => showPreview(this.#previewEl, imgSrc, "Reinforcements"));
-    card.addEventListener("mouseleave", () => hidePreview(this.#previewEl));
-
-    el.querySelector(".haywire-overlay-pin")?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      el.classList.toggle("user-pinned");
-    });
-
-    el.querySelector(".haywire-overlay-roll")?.addEventListener("click", (e) => {
-      e.stopPropagation();
-      this.#rollReinforcementTable();
-    });
-  }
-
-  /* ---- Private ---- */
-
   /** Map reinforcement result text (lowercased) to opfor-support card name. */
   static SUPPORT_CARD_NAMES = {
     "blend in support": "Blend In",
@@ -113,19 +40,80 @@ export class ReinforcementOverlay {
     "medallon mine": "Medallon Mine",
   };
 
-  static async #rollReinforcementTable() {
-    const tableName = this.FACTION_TABLE_NAMES[this.faction];
+  constructor() {
+    super({
+      elementId: "haywire-reinforcement-overlay",
+      previewId: "haywire-reinforcement-preview",
+      settingKeys: ["threatAlert", "opforFaction"],
+    });
+  }
+
+  /** @returns {string} Current OPFOR faction key */
+  get faction() { return this.getSetting("opforFaction") || ""; }
+
+  /** @returns {string|undefined} Card image path for current faction */
+  get imgSrc() { return ReinforcementOverlay.FACTION_CARD_PATHS[this.faction]; }
+
+  /** @override */
+  bindHooks() {
+    bindOpforActivityHooks(() => { this.#cachedActivatable = null; this.render(); });
+  }
+
+  /** @override */
+  async isVisible() {
+    if (this.#cachedActivatable !== null) return this.#cachedActivatable;
+    this.#cachedActivatable = await isOpforActivatable();
+    return this.#cachedActivatable;
+  }
+
+  /** @override — invalidate cache before re-checking visibility */
+  async render() {
+    // Invalidate cache on every render triggered by settings change
+    this.#cachedActivatable = null;
+    await super.render();
+  }
+
+  /** @override */
+  async buildHTML() {
+    const imgSrc = this.imgSrc;
+    if (!imgSrc) return "";
+
+    return `
+      <div class="haywire-reinforcement-card">
+        <img class="haywire-reinforcement-thumb" src="${escapeHtml(imgSrc)}" alt="Reinforcements" />
+        <button class="haywire-overlay-roll" title="${this.i18n("HAYWIRE.Reinforcement.Roll")}"><i class="fas fa-dice-d20"></i></button>
+        ${this.pinHTML()}
+      </div>`;
+  }
+
+  /** @override */
+  bindEvents() {
+    const card = this.el?.querySelector(".haywire-reinforcement-card");
+    if (!card) return;
+
+    const imgSrc = this.imgSrc;
+    card.addEventListener("mouseenter", () => this.showPreview(imgSrc, "Reinforcements"));
+    card.addEventListener("mouseleave", () => this.hidePreview());
+
+    this.bindPin();
+
+    this.el?.querySelector(".haywire-overlay-roll")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.#rollReinforcementTable();
+    });
+  }
+
+  async #rollReinforcementTable() {
+    const tableName = ReinforcementOverlay.FACTION_TABLE_NAMES[this.faction];
     if (!tableName) return;
 
     const draw = await rollCompendiumTable(tableName);
     if (!draw?.results?.length) return;
 
-    // Check if the result references a support card
     const resultText = (draw.results[0].description ?? draw.results[0].text ?? "").toLowerCase();
-    const cardName = this.SUPPORT_CARD_NAMES[resultText];
+    const cardName = ReinforcementOverlay.SUPPORT_CARD_NAMES[resultText];
     if (!cardName) return;
 
-    // Find the matching support card in the compendium
     const pack = game.packs.get("haywire.opfor-support");
     if (!pack) return;
 
@@ -136,11 +124,10 @@ export class ReinforcementOverlay {
     const card = await pack.getDocument(cardEntry._id);
     if (!card?.img) return;
 
-    // Display the support card in chat (GM whisper)
     await ChatMessage.create({
       content: `<div class="haywire-card-chat">
         <div class="haywire-card-chat-header">
-          <i class="fas fa-crosshairs"></i> ${game.i18n.localize("HAYWIRE.Reinforcement.Support")}
+          <i class="fas fa-crosshairs"></i> ${this.i18n("HAYWIRE.Reinforcement.Support")}
         </div>
         <img class="haywire-card-chat-img" src="${escapeHtml(card.img)}" alt="${escapeHtml(card.name)}" />
       </div>`,
@@ -148,3 +135,5 @@ export class ReinforcementOverlay {
     });
   }
 }
+
+export default new ReinforcementOverlay();
