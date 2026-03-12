@@ -110,6 +110,8 @@
         [x] lié le opfor support au leader opfor
     [x] Changer la sélection de la faction à l'overlay Thread level
     [x] faire disparaitre si les conditions n'apparaissent pas
+    [-] lorsque le token disparait, les opérations ne devraient pas rester, il doit être considéré downer.
+    [-] OPFOR support et reinforcement : si les overlay sont piné ils ne disparaissent pas lorsque le leader est : token supprimer, le leader est downed ou que l'alarme soit arrêtée.
 ### Overlay FOG
 [x] sauvegarde des cartes dans world settings pour ne pas tirer encore la même.
 [x] le premier est un roll
@@ -121,8 +123,10 @@
 [x] chat de la carte tirée
 ### Overlay renfor
 [x] si le roll est une carte support afficher la carte
-[-] noms de carte support dans le code
-    [-] l'alarme sélectionne la faction, set des world settings avec les info
+[x] noms de carte support dans le code
+    [x] l'alarme sélectionne la faction, set des world settings avec les info
+[-] si le reinforcement est piné et le leader out, il est toujours possible de faire le roll (doit être corrigé avec l'overlay général de support s'il n'apparait plus)
+[-] Les reset ne fonctionne pas sur le reinforcement si pined
 
 # Mécanisme de jeu
 [-] Implémenter les mécanismes de jeu
