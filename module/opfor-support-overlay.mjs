@@ -7,6 +7,7 @@
  */
 import { CardPanelOverlay } from "./overlays/card-panel-overlay.mjs";
 import { OpforActivityMixin, parseDropData } from "./overlay-helpers.mjs";
+import { DECKS } from "./game-config.mjs";
 
 export class OpforSupportOverlay extends OpforActivityMixin(CardPanelOverlay) {
   constructor() {
@@ -16,7 +17,7 @@ export class OpforSupportOverlay extends OpforActivityMixin(CardPanelOverlay) {
       panelId: "haywire-opfor-support-panel",
       settingKeys: ["opforSupportCardIds", "threatAlert"],
       cardsSettingKey: "opforSupportCardIds",
-      backcoverImg: "systems/haywire/assets/cards/backcovers/support-opfor.webp",
+      backcoverImg: DECKS.opforSupport.backcover,
       labelKey: "HAYWIRE.OpforSupport.Label",
       iconClass: "fa-skull-crossbones",
     });

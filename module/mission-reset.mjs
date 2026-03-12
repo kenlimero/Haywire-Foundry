@@ -5,19 +5,7 @@
  * @module mission-reset
  */
 
-/** @type {Array<[string, unknown]>} Settings to reset: [key, defaultValue] */
-const RESET_SETTINGS = [
-  ["fogOfWarDrawnCards", []],
-  ["fogOfWarCardId", ""],
-  ["fogOfWarDie", 6],
-  ["supportCardIds", []],
-  ["opforSupportCardIds", []],
-  ["infilCardIds", []],
-  ["operationsCardIds", []],
-  ["threatLevel", 0],
-  ["threatAlert", false],
-  ["opforFaction", ""],
-];
+import { SETTING_DEFAULTS } from "./game-config.mjs";
 
 export class MissionReset {
   /** Register the toolbar buttons via Foundry's scene controls API. */
@@ -74,7 +62,7 @@ export class MissionReset {
   static async #resetAll(deleteTokens) {
     // Reset all world settings in parallel
     await Promise.all(
-      RESET_SETTINGS.map(([key, value]) => game.settings.set("haywire", key, value)),
+      SETTING_DEFAULTS.map(([key, value]) => game.settings.set("haywire", key, value)),
     );
 
     const tokens = canvas.tokens?.placeables ?? [];

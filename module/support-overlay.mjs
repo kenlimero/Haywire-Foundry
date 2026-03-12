@@ -10,6 +10,7 @@
 import { CardPanelOverlay } from "./overlays/card-panel-overlay.mjs";
 import { escapeHtml } from "./overlays/base-overlay.mjs";
 import { parseDropData } from "./overlay-helpers.mjs";
+import { DECKS } from "./game-config.mjs";
 
 export class SupportOverlay extends CardPanelOverlay {
   constructor() {
@@ -19,7 +20,7 @@ export class SupportOverlay extends CardPanelOverlay {
       panelId: "haywire-support-panel",
       settingKeys: ["supportCardIds"],
       cardsSettingKey: "supportCardIds",
-      backcoverImg: "systems/haywire/assets/cards/backcovers/support.webp",
+      backcoverImg: DECKS.support.backcover,
       labelKey: "HAYWIRE.Support.Label",
       iconClass: "fa-shield-alt",
     });

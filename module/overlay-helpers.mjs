@@ -2,6 +2,11 @@
  * Shared constants and utilities for overlay modules.
  * @module overlay-helpers
  */
+import {
+  LEADER_NAME_PATTERN,
+  OPFOR_ACTIVITY_SKILL,
+  COMPENDIUM_PACKS,
+} from "./game-config.mjs";
 
 /**
  * Escape HTML special characters to prevent XSS in dynamic content.
@@ -22,10 +27,6 @@ export function pinSvg(title) {
   return `<span class="haywire-overlay-pin" title="${escapeHtml(title)}"><svg viewBox="0 0 384 512"><path d="M300.8 203.9L290 213.1H273c-7.7 0-15 3.2-20.3 8.5L194.7 279.6 104.4 189.3l58-58c5.3-5.3 8.5-12.6 8.5-20.3V94.1l9.2-10.9C196.3 64.5 220.2 54 245.2 54h48c23.2 0 45.6 8.2 63.1 23L384 101.3 282.7 202.6zM96 297.4l87.6 87.6L57.6 511c-5.8 5.8-14.3 8-22.2 5.7S21.5 508.5 19.3 500.6c-2.3-7.9-.1-16.4 5.7-22.2L96 297.4z"/></svg></span>`;
 }
 
-
-/** OPFOR leader name pattern (used by isOpforActivatable). */
-const LEADER_NAMES = /^(squad commander|cell leader|leader)$/i;
-
 /**
  * Check if OPFOR support/reinforcement overlays should be active.
  * Requires: alert active + at least one non-downed opfor-unit with leader name or "Support" skill.
@@ -45,7 +46,7 @@ export async function isOpforActivatable() {
     const actor = token.actor;
     if (!actor || actor.type !== "opfor-unit") continue;
     if (actor.system.conditions?.has("downed")) continue;
-    if (LEADER_NAMES.test(actor.name)) return true;
+    if (LEADER_NAME_PATTERN.test(actor.name)) return true;
 
     for (const uuid of actor.system.opforSkillIds ?? []) {
       skillUuidsToResolve.push(uuid);
@@ -61,7 +62,7 @@ export async function isOpforActivatable() {
       return null;
     })),
   );
-  return skills.some((skill) => skill?.name?.toLowerCase() === "support");
+  return skills.some((skill) => skill?.name?.toLowerCase() === OPFOR_ACTIVITY_SKILL);
 }
 
 /**
@@ -139,12 +140,12 @@ export async function resolveCardImage(uuid, defaultImg, defaultAlt) {
  * Optionally excludes already-drawn card IDs.
  * @param {string} deckName - Name of the deck to draw from
  * @param {string[]} [excludeIds=[]] - Card _id values to exclude from the draw
- * @returns {Promise<{ uuid: string, card: object, deckId: string } | null>}
+ * @returns {Promise<{ uuid: string, card: { _id: string, name?: string, img?: string, faces?: Array<{img?: string}> }, deckId: string } | null>}
  */
 export async function drawRandomCard(deckName, excludeIds = []) {
-  const pack = game.packs.get("haywire.decks");
+  const pack = game.packs.get(COMPENDIUM_PACKS.decks);
   if (!pack) {
-    console.warn("haywire | drawRandomCard: compendium haywire.decks not found");
+    console.warn(`haywire | drawRandomCard: compendium ${COMPENDIUM_PACKS.decks} not found`);
     return null;
   }
 
@@ -167,7 +168,7 @@ export async function drawRandomCard(deckName, excludeIds = []) {
   if (!available.length) return null;
 
   const picked = available[Math.floor(Math.random() * available.length)];
-  const uuid = `Compendium.haywire.decks.Cards.${deckEntry._id}.Card.${picked._id}`;
+  const uuid = `Compendium.${COMPENDIUM_PACKS.decks}.Cards.${deckEntry._id}.Card.${picked._id}`;
   return { uuid, card: picked, deckId: deckEntry._id };
 }
 
@@ -221,9 +222,9 @@ export function OpforActivityMixin(Base) {
  * @returns {Promise<object|null>} The draw results, or null on failure
  */
 export async function rollCompendiumTable(tableName) {
-  const pack = game.packs.get("haywire.opfor-tables");
+  const pack = game.packs.get(COMPENDIUM_PACKS.opforTables);
   if (!pack) {
-    console.warn("haywire | rollCompendiumTable: compendium haywire.opfor-tables not found");
+    console.warn(`haywire | rollCompendiumTable: compendium ${COMPENDIUM_PACKS.opforTables} not found`);
     return null;
   }
 
@@ -235,6 +236,10 @@ export async function rollCompendiumTable(tableName) {
   }
 
   const table = await pack.getDocument(entry._id);
+  if (!table) {
+    console.warn(`haywire | rollCompendiumTable: failed to load table document "${tableName}"`);
+    return null;
+  }
   return table.draw();
 }
 

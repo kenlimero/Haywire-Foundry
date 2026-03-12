@@ -10,24 +10,26 @@
 import { CardOverlay } from "./overlays/card-overlay.mjs";
 import { escapeHtml } from "./overlays/base-overlay.mjs";
 import { drawRandomCard } from "./overlay-helpers.mjs";
+import { DECKS } from "./game-config.mjs";
+
+/** @type {import("./game-config.mjs").DeckConfig} */
+const FOG_DECK = DECKS.fogOfWar;
 
 export class FogOfWarOverlay extends CardOverlay {
-  static DECK_NAME = "Fog of War";
-
   constructor() {
     super({
       elementId: "haywire-fog-overlay",
       previewId: "haywire-fog-preview",
       settingKeys: ["fogOfWarCardId", "fogOfWarDie"],
-      backcoverImg: "systems/haywire/assets/cards/backcovers/fog.webp",
-      altText: "Fog of War",
+      backcoverImg: FOG_DECK.backcover,
+      altText: FOG_DECK.name,
       cardSettingKey: "fogOfWarCardId",
       labelKey: "HAYWIRE.FogOfWar.Label",
     });
   }
 
   /** @returns {number} Current die target value */
-  get die() { return this.getSetting("fogOfWarDie") || 6; }
+  get die() { return this.getSetting("fogOfWarDie") || FOG_DECK.defaultDie; }
 
   /** @param {number} value */
   async setDie(value) { await this.setSetting("fogOfWarDie", value); }
@@ -121,7 +123,7 @@ export class FogOfWarOverlay extends CardOverlay {
   async #rollCard() {
     let drawnIds = this.drawnCards;
 
-    let result = await drawRandomCard(FogOfWarOverlay.DECK_NAME, drawnIds);
+    let result = await drawRandomCard(FOG_DECK.name, drawnIds);
 
     if (!result) {
       await ChatMessage.create({
@@ -130,7 +132,7 @@ export class FogOfWarOverlay extends CardOverlay {
       });
       drawnIds = [];
       await this.setDrawnCards([]);
-      result = await drawRandomCard(FogOfWarOverlay.DECK_NAME);
+      result = await drawRandomCard(FOG_DECK.name);
     }
 
     if (!result) return;

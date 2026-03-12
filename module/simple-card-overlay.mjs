@@ -62,23 +62,27 @@ export class SimpleCardOverlay extends CardOverlay {
   }
 
   async #rollCard() {
-    const result = await drawRandomCard(this.#deckName);
-    if (!result) return;
-    await this.setCardIds([result.uuid]);
+    try {
+      const result = await drawRandomCard(this.#deckName);
+      if (!result) return;
+      await this.setCardIds([result.uuid]);
 
-    const card = result.card;
-    const faceImg = card.faces?.[0]?.img ?? card.img ?? "";
-    const cardName = card.name ?? "???";
-    const label = this.i18n(this.#chatLabelKey);
+      const card = result.card;
+      const faceImg = card.faces?.[0]?.img ?? card.img ?? "";
+      const cardName = card.name ?? "???";
+      const label = this.i18n(this.#chatLabelKey);
 
-    await ChatMessage.create({
-      content: `<div class="haywire-card-chat">
-        <div class="haywire-card-chat-header">
-          <i class="fas ${this.#iconClass}"></i> ${escapeHtml(label)}
-        </div>
-        <img class="haywire-card-chat-img" src="${escapeHtml(faceImg)}" alt="${escapeHtml(cardName)}" data-action="showCard" data-src="${escapeHtml(faceImg)}" data-title="${escapeHtml(cardName)}"/>
-      </div>`,
-      speaker: { alias: label },
-    });
+      await ChatMessage.create({
+        content: `<div class="haywire-card-chat">
+          <div class="haywire-card-chat-header">
+            <i class="fas ${this.#iconClass}"></i> ${escapeHtml(label)}
+          </div>
+          <img class="haywire-card-chat-img" src="${escapeHtml(faceImg)}" alt="${escapeHtml(cardName)}" data-action="showCard" data-src="${escapeHtml(faceImg)}" data-title="${escapeHtml(cardName)}"/>
+        </div>`,
+        speaker: { alias: label },
+      });
+    } catch (err) {
+      console.error(`haywire | SimpleCardOverlay: rollCard failed for deck "${this.#deckName}"`, err);
+    }
   }
 }

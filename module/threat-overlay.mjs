@@ -10,28 +10,14 @@
 import { BaseOverlay } from "./overlays/base-overlay.mjs";
 import { rollCompendiumTable } from "./overlay-helpers.mjs";
 import opforSupportOverlay from "./opfor-support-overlay.mjs";
+import {
+  FACTION_THREAT_PATHS,
+  FACTION_THREAT_TABLES,
+  FACTION_FOLDER_TO_KEY,
+  COMPENDIUM_PACKS,
+} from "./game-config.mjs";
 
 export class ThreatOverlay extends BaseOverlay {
-  /** @type {Record<string, string>} Faction key → threat card image path prefix */
-  static FACTION_PATHS = {
-    cartels: "systems/haywire/assets/opfor_cartels/cartel_threat_level_",
-    insurgents: "systems/haywire/assets/opfor_insurgents/insurgents_threat_level_",
-    russians: "systems/haywire/assets/opfor_russians/russians_threat_level_",
-  };
-
-  /** @type {Record<string, string>} Faction key → threat table name prefix */
-  static FACTION_TABLE_NAMES = {
-    cartels: "Cartel Threat Level",
-    insurgents: "Insurgent Threat Level",
-    russians: "Russian Threat Level",
-  };
-
-  /** @type {Record<string, string>} Compendium folder name → setting key */
-  static FACTION_KEYS = {
-    Cartel: "cartels",
-    Insurgents: "insurgents",
-    Russians: "russians",
-  };
 
   constructor() {
     super({
@@ -142,7 +128,7 @@ export class ThreatOverlay extends BaseOverlay {
     const level = this.level;
     if (level <= 0) return;
 
-    const pathPrefix = ThreatOverlay.FACTION_PATHS[this.faction];
+    const pathPrefix = FACTION_THREAT_PATHS[this.faction];
     if (!pathPrefix) return;
 
     const src = `${pathPrefix}${String(level).padStart(2, "0")}.webp`;
@@ -151,25 +137,38 @@ export class ThreatOverlay extends BaseOverlay {
 
   async #rollThreatTable() {
     const level = this.level;
-    const prefix = ThreatOverlay.FACTION_TABLE_NAMES[this.faction];
+    const prefix = FACTION_THREAT_TABLES[this.faction];
     if (!prefix || level <= 0) return;
-    await rollCompendiumTable(`${prefix} ${level}`);
+    try {
+      await rollCompendiumTable(`${prefix} ${level}`);
+    } catch (err) {
+      console.error("haywire | ThreatOverlay: rollThreatTable failed", err);
+    }
   }
 
   async #showFactionDialog() {
-    const pack = game.packs.get("haywire.opfor-support");
+    const pack = game.packs.get(COMPENDIUM_PACKS.opforSupport);
     if (!pack) {
-      ui.notifications.error("Compendium haywire.opfor-support not found.");
+      ui.notifications.error(`Compendium ${COMPENDIUM_PACKS.opforSupport} not found.`);
       return;
     }
 
-    const index = await pack.getIndex({ fields: ["folder"] });
+    let index;
+    try {
+      index = await pack.getIndex({ fields: ["folder"] });
+    } catch (err) {
+      console.error("haywire | ThreatOverlay: failed to load compendium index", err);
+      ui.notifications.error("Failed to load opfor-support compendium.");
+      return;
+    }
+
     const folders = pack.folders;
     if (!folders.size) {
       ui.notifications.warn("No folders found in opfor-support compendium.");
       return;
     }
 
+    /** @type {import("foundry").DialogV2Button[]} */
     const buttons = [];
     for (const folder of folders) {
       buttons.push({
@@ -188,8 +187,9 @@ export class ThreatOverlay extends BaseOverlay {
   }
 
   /**
-   * @param {Collection} index
-   * @param {Folder} folder
+   * Import all support cards from a faction folder into the opfor support overlay.
+   * @param {Collection} index - Compendium index
+   * @param {Folder} folder - Faction folder
    */
   async #importFaction(index, folder) {
     const entries = index.filter((e) => e.folder === folder._id);
@@ -198,16 +198,23 @@ export class ThreatOverlay extends BaseOverlay {
       return;
     }
 
-    const factionKey = ThreatOverlay.FACTION_KEYS[folder.name];
-    if (factionKey) {
-      await this.setSetting("opforFaction", factionKey);
-      if (this.level === 0) await this.setLevel(1);
+    const factionKey = FACTION_FOLDER_TO_KEY[folder.name];
+    if (!factionKey) {
+      console.warn(`haywire | ThreatOverlay: unknown faction folder "${folder.name}"`);
+      return;
     }
 
-    await opforSupportOverlay.setCardEntries([]);
-    const uuids = entries.map((e) => `Compendium.haywire.opfor-support.Item.${e._id}`);
-    await opforSupportOverlay.addCards(uuids);
-    ui.notifications.info(`${entries.length} ${folder.name} support cards imported.`);
+    try {
+      await this.setSetting("opforFaction", factionKey);
+      if (this.level === 0) await this.setLevel(1);
+      await opforSupportOverlay.setCardEntries([]);
+      const uuids = entries.map((e) => `Compendium.${COMPENDIUM_PACKS.opforSupport}.Item.${e._id}`);
+      await opforSupportOverlay.addCards(uuids);
+      ui.notifications.info(`${entries.length} ${folder.name} support cards imported.`);
+    } catch (err) {
+      console.error(`haywire | ThreatOverlay: importFaction failed for "${folder.name}"`, err);
+      ui.notifications.error("Failed to import faction support cards.");
+    }
   }
 }
 

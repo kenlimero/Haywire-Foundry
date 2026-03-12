@@ -44,6 +44,7 @@ import { UnitSheet } from "./module/sheets/unit-sheet.mjs";
 import { SupportSheet } from "./module/sheets/support-sheet.mjs";
 
 import { escapeHtml } from "./module/overlay-helpers.mjs";
+import { FACTION_CHOICES, DEFAULT_FACTION, DECKS, STATUS_EFFECTS } from "./module/game-config.mjs";
 
 /* ─── Settings Registration ──────────────────────────────────────────────── */
 
@@ -54,8 +55,8 @@ const WORLD_SETTINGS = [
     hint: "HAYWIRE.Threat.FactionHint",
     config: true,
     type: String,
-    default: "cartels",
-    choices: { cartels: "Cartel", insurgents: "Insurgents", russians: "Russians" },
+    default: DEFAULT_FACTION,
+    choices: FACTION_CHOICES,
   }],
   ["threatLevel", { name: "HAYWIRE.Threat.Label", type: Number, default: 0, range: { min: 0, max: 9, step: 1 } }],
   ["threatAlert", { name: "HAYWIRE.Threat.Alert", type: Boolean, default: false }],
@@ -64,7 +65,7 @@ const WORLD_SETTINGS = [
   ["infilCardIds", { name: "HAYWIRE.Infil.Label", type: Array, default: [] }],
   ["operationsCardIds", { name: "HAYWIRE.Operations.Label", type: Array, default: [] }],
   ["fogOfWarCardId", { name: "HAYWIRE.FogOfWar.Label", type: String, default: "" }],
-  ["fogOfWarDie", { name: "HAYWIRE.FogOfWar.DieHint", type: Number, default: 6 }],
+  ["fogOfWarDie", { name: "HAYWIRE.FogOfWar.DieHint", type: Number, default: DECKS.fogOfWar.defaultDie }],
   ["fogOfWarDrawnCards", { name: "Fog of War Drawn Cards", type: Array, default: [] }],
 ];
 
@@ -146,18 +147,7 @@ Hooks.once("init", () => {
   };
 
   // Replace default token conditions with Haywire's
-  CONFIG.statusEffects = [
-    { id: "downed", name: "HAYWIRE.Conditions.Downed", img: "systems/haywire/assets/tokens/downed.webp" },
-    { id: "hidden", name: "HAYWIRE.Conditions.Hidden", img: "systems/haywire/assets/tokens/hidden.webp" },
-    { id: "injured", name: "HAYWIRE.Conditions.Injured", img: "systems/haywire/assets/tokens/injured.webp" },
-    { id: "overwatch", name: "HAYWIRE.Conditions.Overwatch", img: "systems/haywire/assets/tokens/overwatch.webp" },
-    { id: "sup-1", name: "HAYWIRE.Suppression.1", img: "systems/haywire/assets/icons/sup-1.svg" },
-    { id: "sup-2", name: "HAYWIRE.Suppression.2", img: "systems/haywire/assets/icons/sup-2.svg" },
-    { id: "sup-3", name: "HAYWIRE.Suppression.3", img: "systems/haywire/assets/icons/sup-3.svg" },
-    { id: "sup-4", name: "HAYWIRE.Suppression.4", img: "systems/haywire/assets/icons/sup-4.svg" },
-    { id: "sup-5", name: "HAYWIRE.Suppression.5", img: "systems/haywire/assets/icons/sup-5.svg" },
-    { id: "sup-6", name: "HAYWIRE.Suppression.6", img: "systems/haywire/assets/icons/sup-6.svg" },
-  ];
+  CONFIG.statusEffects = STATUS_EFFECTS;
 
   // Preload templates
   foundry.applications.handlebars.loadTemplates([
@@ -183,28 +173,30 @@ Hooks.once("init", () => {
 
 /* ─── Simple Card Overlay Instances ──────────────────────────────────────── */
 
+const infilDeck = DECKS.infiltration;
 const infilOverlay = new SimpleCardOverlay({
-  settingKey: "infilCardIds",
-  deckName: "Infiltration",
+  settingKey: infilDeck.settingKey,
+  deckName: infilDeck.name,
   elId: "haywire-infil-overlay",
   previewId: "haywire-infil-preview",
-  backcover: "systems/haywire/assets/cards/backcovers/infil.webp",
-  altText: "Infil",
-  labelKey: "HAYWIRE.Infil.Label",
-  chatLabelKey: "HAYWIRE.Infil.CardDrawn",
-  iconClass: "fa-id-card",
+  backcover: infilDeck.backcover,
+  altText: infilDeck.altText,
+  labelKey: infilDeck.labelKey,
+  chatLabelKey: infilDeck.chatLabelKey,
+  iconClass: infilDeck.iconClass,
 });
 
+const opsDeck = DECKS.operations;
 const operationsOverlay = new SimpleCardOverlay({
-  settingKey: "operationsCardIds",
-  deckName: "Operations",
+  settingKey: opsDeck.settingKey,
+  deckName: opsDeck.name,
   elId: "haywire-operations-overlay",
   previewId: "haywire-operations-preview",
-  backcover: "systems/haywire/assets/cards/backcovers/operation.webp",
-  altText: "Operations",
-  labelKey: "HAYWIRE.Operations.Label",
-  chatLabelKey: "HAYWIRE.Operations.CardDrawn",
-  iconClass: "fa-map",
+  backcover: opsDeck.backcover,
+  altText: opsDeck.altText,
+  labelKey: opsDeck.labelKey,
+  chatLabelKey: opsDeck.chatLabelKey,
+  iconClass: opsDeck.iconClass,
 });
 
 /* ─── Ready Hook — Initialize Overlays ───────────────────────────────────── */

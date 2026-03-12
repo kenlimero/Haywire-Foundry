@@ -44,6 +44,7 @@
 
 # Compendiums
 [x] Compendiums : le bouton import ne fonctionne pas
+[-] transformer les deck en tables
 ## Classes
 [x] le compendium de classe doit être trier par tier
 [x] créer les groupes d'intervention. Composé de plusieurs classes se sont des équipes prêtent à l'action.
@@ -120,6 +121,8 @@
 [x] chat de la carte tirée
 ### Overlay renfor
 [x] si le roll est une carte support afficher la carte
+[-] noms de carte support dans le code
+    [-] l'alarme sélectionne la faction, set des world settings avec les info
 
 # Mécanisme de jeu
 [-] Implémenter les mécanismes de jeu

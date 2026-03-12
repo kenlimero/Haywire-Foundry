@@ -8,34 +8,14 @@
  */
 import { BaseOverlay, escapeHtml } from "./overlays/base-overlay.mjs";
 import { rollCompendiumTable, OpforActivityMixin } from "./overlay-helpers.mjs";
+import {
+  FACTION_REINFORCEMENT_TABLES,
+  FACTION_REINFORCEMENT_PATHS,
+  REINFORCEMENT_SUPPORT_CARDS,
+  COMPENDIUM_PACKS,
+} from "./game-config.mjs";
 
 export class ReinforcementOverlay extends OpforActivityMixin(BaseOverlay) {
-  /** @type {Record<string, string>} Faction key → reinforcement table name */
-  static FACTION_TABLE_NAMES = {
-    cartels: "Cartel Reinforcements",
-    insurgents: "Insurgent Reinforcements",
-    russians: "Russian Reinforcements",
-  };
-
-  /** @type {Record<string, string>} Faction key → reinforcement card image path */
-  static FACTION_CARD_PATHS = {
-    cartels: "systems/haywire/assets/opfor_cartels/reinforcements.webp",
-    insurgents: "systems/haywire/assets/opfor_insurgents/reinforcements.webp",
-    russians: "systems/haywire/assets/opfor_russians/reinforcements.webp",
-  };
-
-  /** Map reinforcement result text (lowercased) to opfor-support card name. */
-  static SUPPORT_CARD_NAMES = {
-    "blend in support": "Blend In",
-    "human shield support": "Human Shield",
-    "heli sniper support": "Heli Sniper",
-    "chemical strike": "Chemical Strike",
-    "hidden sniper": "Hidden Sniper",
-    "mortar shelling": "Mortar Shelling",
-    "fpv drone": "FPV Drone",
-    "artillery barrage": "Artillery Barrage",
-    "medallon mine": "Medallon Mine",
-  };
 
   constructor() {
     super({
@@ -49,7 +29,7 @@ export class ReinforcementOverlay extends OpforActivityMixin(BaseOverlay) {
   get faction() { return this.getSetting("opforFaction") || ""; }
 
   /** @returns {string|undefined} Card image path for current faction */
-  get imgSrc() { return ReinforcementOverlay.FACTION_CARD_PATHS[this.faction]; }
+  get imgSrc() { return FACTION_REINFORCEMENT_PATHS[this.faction]; }
 
   /** @override */
   async buildHTML() {
@@ -81,36 +61,46 @@ export class ReinforcementOverlay extends OpforActivityMixin(BaseOverlay) {
     });
   }
 
+  /** Roll on the faction's reinforcement table and post support card to chat. */
   async #rollReinforcementTable() {
-    const tableName = ReinforcementOverlay.FACTION_TABLE_NAMES[this.faction];
+    const tableName = FACTION_REINFORCEMENT_TABLES[this.faction];
     if (!tableName) return;
 
-    const draw = await rollCompendiumTable(tableName);
-    if (!draw?.results?.length) return;
+    try {
+      const draw = await rollCompendiumTable(tableName);
+      if (!draw?.results?.length) return;
 
-    const resultText = (draw.results[0].description ?? draw.results[0].text ?? "").toLowerCase();
-    const cardName = ReinforcementOverlay.SUPPORT_CARD_NAMES[resultText];
-    if (!cardName) return;
+      const resultText = (draw.results[0].description ?? draw.results[0].text ?? "").toLowerCase();
+      const cardName = REINFORCEMENT_SUPPORT_CARDS[resultText];
+      if (!cardName) return;
 
-    const pack = game.packs.get("haywire.opfor-support");
-    if (!pack) return;
+      const pack = game.packs.get(COMPENDIUM_PACKS.opforSupport);
+      if (!pack) return;
 
-    const index = await pack.getIndex();
-    const cardEntry = index.find((e) => e.name === cardName);
-    if (!cardEntry) return;
+      const index = await pack.getIndex();
+      const cardEntry = index.find((e) => e.name === cardName);
+      if (!cardEntry) {
+        console.warn(`haywire | ReinforcementOverlay: support card "${cardName}" not found in compendium`);
+        return;
+      }
 
-    const card = await pack.getDocument(cardEntry._id);
-    if (!card?.img) return;
+      const card = await pack.getDocument(cardEntry._id);
+      if (!card) return;
+      const imgSrc = card.faces?.[0]?.img ?? card.img;
+      if (!imgSrc) return;
 
-    await ChatMessage.create({
-      content: `<div class="haywire-card-chat">
-        <div class="haywire-card-chat-header">
-          <i class="fas fa-crosshairs"></i> ${this.i18n("HAYWIRE.Reinforcement.Support")}
-        </div>
-        <img class="haywire-card-chat-img" src="${escapeHtml(card.img)}" alt="${escapeHtml(card.name)}" />
-      </div>`,
-      whisper: game.users.filter((u) => u.isGM).map((u) => u.id),
-    });
+      await ChatMessage.create({
+        content: `<div class="haywire-card-chat">
+          <div class="haywire-card-chat-header">
+            <i class="fas fa-crosshairs"></i> ${this.i18n("HAYWIRE.Reinforcement.Support")}
+          </div>
+          <img class="haywire-card-chat-img" src="${escapeHtml(imgSrc)}" alt="${escapeHtml(card.name ?? "")}" />
+        </div>`,
+        whisper: game.users.filter((u) => u.isGM).map((u) => u.id),
+      });
+    } catch (err) {
+      console.error("haywire | ReinforcementOverlay: rollReinforcementTable failed", err);
+    }
   }
 }
 
