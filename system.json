@@ -1,8 +1,8 @@
 {
   "id": "haywire",
-  "title": "Haywirer",
+  "title": "Haywire",
   "description": "Système FoundryVTT pour le wargame tactique solo/coop HAYWIRE V2",
-  "version": "0.200",
+  "version": "0.201",
   "compatibility": {
     "minimum": "13",
     "verified": "13",
